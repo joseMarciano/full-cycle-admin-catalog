@@ -139,4 +139,27 @@ public class CategoryTest {
 
         Assertions.assertDoesNotThrow(() -> actualCategory.validate(new ThrowsValidationHandler()));
     }
+    @Test
+    public void givenAValidIsActive_whenCallNewCategory_thenShouldOk() {
+        final var expectedName = "Filmes";
+        final var expectedDescription = "The category most watched";
+        final var expectedIsActive = false;
+
+
+        final var actualCategory = Category.newCategory(
+                expectedName,
+                expectedDescription,
+                expectedIsActive
+        );
+
+        Assertions.assertNotNull(actualCategory);
+        Assertions.assertNotNull(actualCategory.getId());
+        Assertions.assertEquals(expectedName, actualCategory.getName());
+        Assertions.assertEquals(expectedDescription, actualCategory.getDescription());
+        Assertions.assertEquals(expectedIsActive, actualCategory.isActive());
+        Assertions.assertNotNull(actualCategory.getCreatedAt());
+        Assertions.assertNotNull(actualCategory.getUpdatedAt());
+        Assertions.assertNotNull(actualCategory.getDeletedAt());
+
+    }
 }

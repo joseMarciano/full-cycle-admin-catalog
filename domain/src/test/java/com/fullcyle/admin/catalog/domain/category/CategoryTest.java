@@ -95,4 +95,36 @@ public class CategoryTest {
         Assertions.assertEquals(1, actualException.getErrors().size());
 
     }
+
+
+    @Test
+    public void givenAnInvalidNameLengthGreaterThan255_whenCallNewCategoryAndValidate_thenShouldReceiveError() {
+        final var expectedName = """
+                A nível organizacional, o início da atividade geral de formação de atitudes acarreta um processo de ref
+                ormulação e modernização das condições inegavelmente apropriadas. Não obstante, o desafiador cenário glo
+                balizado agrega valor ao estabelecimento do processo de comunicação como um todo. Percebemos, cada vez
+                mais, que a consolidação das estruturas representa uma abertura para a melhoria das diretrizes de
+                desenvolvimento para o futuro.
+                """;
+
+        final var expectedErrorMessage = "'name' must be between 3 and 255 characters";
+        final var expectedDescription = "The category most watched";
+        final var expectedIsActive = true;
+
+
+        final var actualCategory = Category.newCategory(
+                expectedName,
+                expectedDescription,
+                expectedIsActive
+        );
+
+        var actualException = Assertions.assertThrows(DomainException.class, () ->
+                actualCategory.validate(new ThrowsValidationHandler()));
+
+        Assertions.assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
+        Assertions.assertEquals(1, actualException.getErrors().size());
+
+    }
+
+
 }

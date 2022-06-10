@@ -96,7 +96,6 @@ public class CategoryTest {
 
     }
 
-
     @Test
     public void givenAnInvalidNameLengthGreaterThan255_whenCallNewCategoryAndValidate_thenShouldReceiveError() {
         final var expectedName = """
@@ -125,6 +124,19 @@ public class CategoryTest {
         Assertions.assertEquals(1, actualException.getErrors().size());
 
     }
+    @Test
+    public void givenAnValidDescriptionEmpty_whenCallNewCategoryAndValidate_thenShouldOk() {
+        final var expectedName = "Filmes";
+        final var expectedDescription = "   ";
+        final var expectedIsActive = true;
 
 
+        final var actualCategory = Category.newCategory(
+                expectedName,
+                expectedDescription,
+                expectedIsActive
+        );
+
+        Assertions.assertDoesNotThrow(() -> actualCategory.validate(new ThrowsValidationHandler()));
+    }
 }

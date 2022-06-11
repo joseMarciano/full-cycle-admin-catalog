@@ -56,6 +56,14 @@ public class Category extends AggregateRoot<CategoryID> {
         return this;
     }
 
+    public Category activate() {
+        var now = Instant.now();
+        this.deletedAt = null;
+        this.active = true;
+        this.updatedAt = now;
+        return this;
+    }
+
     public CategoryID getId() {
         return this.id;
     }

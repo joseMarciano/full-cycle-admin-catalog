@@ -2,7 +2,10 @@ package com.fullcyle.admin.catalog.application.category.create;
 
 import com.fullcyle.admin.catalog.domain.category.Category;
 import com.fullcyle.admin.catalog.domain.category.CategoryGateway;
+import com.fullcyle.admin.catalog.domain.validation.handler.Notification;
 import com.fullcyle.admin.catalog.domain.validation.handler.ThrowsValidationHandler;
+import io.vavr.API;
+import io.vavr.control.Either;
 
 import java.util.Objects;
 
@@ -15,7 +18,9 @@ public class DefaultCreateCategoryUseCase extends CreateCategoryUseCase {
     }
 
     @Override
-    public CreateCategoryOutput execute(final CreateCategoryCommand aCommand) {
+    public Either<Notification, CreateCategoryOutput> execute(final CreateCategoryCommand aCommand) {
+
+        final var notification = Notification.create();
 
         Category aCategory = Category.newCategory(
                 aCommand.name(),
@@ -23,8 +28,15 @@ public class DefaultCreateCategoryUseCase extends CreateCategoryUseCase {
                 aCommand.isActive()
         );
 
-        aCategory.validate(new ThrowsValidationHandler());
+        aCategory.validate(notification);
 
-        return CreateCategoryOutput.from(this.categoryGateway.create(aCategory));
+
+        return notification.hasErrors() ? API.Left(notification) : create(aCategory);
+    }
+
+    private Either<Notification, CreateCategoryOutput> create(Category aCategory) {
+        return API.Try(() -> this.categoryGateway.create(aCategory))
+                .toEither()
+                .bimap(Notification::create, CreateCategoryOutput::from);
     }
 }

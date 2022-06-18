@@ -3,6 +3,8 @@ package com.fullcyle.admin.catalog.application.category.update;
 import com.fullcyle.admin.catalog.application.category.create.CreateCategoryCommand;
 import com.fullcyle.admin.catalog.domain.category.Category;
 import com.fullcyle.admin.catalog.domain.category.CategoryGateway;
+import com.fullcyle.admin.catalog.domain.category.CategoryID;
+import com.fullcyle.admin.catalog.domain.exceptions.DomainException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -158,6 +160,40 @@ public class UpdateCategoryUseCaseTest {
                                 && aCategory.getCreatedAt().isBefore(aUpdatedCategory.getUpdatedAt())
                                 && Objects.nonNull(aUpdatedCategory.getDeletedAt())
         ));
+    }
+
+    @Test
+    public void givenACommandWithInvalidID__whenCallsUpdateCategory_shouldReturnNotFoundException() {
+
+        final var expectedName = "Filmes";
+        final var expectedDescription = "Most watched";
+        final var expectedActive = true;
+        final var expectedId = "any_id";
+        final var expectedErrorMessage = "Category with ID any_id was not found";
+        final var expectedErrorCount = 1;
+
+
+        final var aCommand = UpdateCategoryCommand.with(
+                expectedId,
+                expectedName,
+                expectedDescription,
+                expectedActive
+        );
+
+        when(categoryGateway.findById(eq(CategoryID.from(expectedId))))
+                .thenReturn(Optional.empty());
+
+
+        DomainException actualException =
+                assertThrows(DomainException.class, () -> useCase.execute(aCommand).getLeft());
+
+
+        assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
+        assertEquals(expectedErrorCount, actualException.getErrors().size());
+
+        verify(categoryGateway, times(1)).findById(eq(CategoryID.from(expectedId)));
+        verify(categoryGateway, times(0)).update(any());
+
     }
 
 }

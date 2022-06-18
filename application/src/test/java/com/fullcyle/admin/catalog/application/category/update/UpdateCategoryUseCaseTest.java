@@ -12,8 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Objects;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -109,6 +108,56 @@ public class UpdateCategoryUseCaseTest {
         verify(categoryGateway, times(1)).findById(eq(expectedId));
         verify(categoryGateway, times(0)).update(any());
 
+    }
+
+    @Test
+    public void givenAValidInactivateCommand_whenCallsUpdateCategory_shouldReturnInactiveCategoryId() {
+        final var aCategory = Category.newCategory(
+                "Film",
+                null,
+                true
+        );
+
+        assertTrue(aCategory.isActive());
+        assertNull(aCategory.getDeletedAt());
+
+        final var expectedName = "Filmes";
+        final var expectedDescription = "Most watched";
+        final var expectedActive = false;
+        final var expectedId = aCategory.getId();
+
+
+        final var aCommand = UpdateCategoryCommand.with(
+                expectedId.getValue(),
+                expectedName,
+                expectedDescription,
+                expectedActive
+        );
+
+        when(categoryGateway.findById(eq(expectedId)))
+                .thenReturn(Optional.of(aCategory.clone()));
+
+        when(categoryGateway.update(any()))
+                .thenAnswer(returnsFirstArg());
+
+
+        final var actualOutput = useCase.execute(aCommand).get();
+
+        assertNotNull(actualOutput);
+        assertNotNull(actualOutput.id());
+
+        verify(categoryGateway, times(1)).findById(eq(expectedId));
+        verify(categoryGateway, times(1)).update(argThat(
+                aUpdatedCategory ->
+                        Objects.equals(expectedName, aUpdatedCategory.getName())
+                                && Objects.equals(expectedDescription, aUpdatedCategory.getDescription())
+                                && Objects.equals(expectedActive, aUpdatedCategory.isActive())
+                                && Objects.equals(expectedId, aUpdatedCategory.getId())
+                                && Objects.equals(aCategory.getCreatedAt(), aUpdatedCategory.getCreatedAt())
+                                && Objects.nonNull(aCategory.getUpdatedAt())
+                                && aCategory.getCreatedAt().isBefore(aUpdatedCategory.getUpdatedAt())
+                                && Objects.nonNull(aUpdatedCategory.getDeletedAt())
+        ));
     }
 
 }

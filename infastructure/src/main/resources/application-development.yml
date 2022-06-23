@@ -1,3 +1,9 @@
+mysql:
+    url: localhost:3306
+    username: root
+    password: 123456
+    schema: adm_videos
+
 server:
   undertow:
     threads:

@@ -24,5 +24,6 @@
 ![Badge](https://img.shields.io/badge/MySQL--%236DB33F?style=for-the-badge&logo=MySQL&color=4479A1)
 ![Badge](https://img.shields.io/badge/Apache_Kafka--%2347A248?style=for-the-badge&logo=ApacheKafka&color=231F20)
 ![Badge](https://img.shields.io/badge/RabbitMQ--%2347A248?style=for-the-badge&logo=RabbitMQ&color=FF6600)
+![Badge](https://img.shields.io/badge/FlyWay--%2347A248?style=for-the-badge&logo=Flyway&color=CC0200)
 
 

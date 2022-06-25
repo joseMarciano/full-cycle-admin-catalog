@@ -26,6 +26,8 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl # https://blog.actorsfit.com/a?ID=00650-efe17e96-96d4-42a1-98ad-4c0c6cec7d46
     properties:
       "[hibernate.dialect]": org.hibernate.dialect.MySQL5InnoDBDialect
       "[hibernate.generate_statistics]": true

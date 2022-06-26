@@ -1,6 +1,7 @@
 package com.fullcyle.admin.catalog.infastructure.category;
 
 import com.fullcyle.admin.catalog.domain.category.Category;
+import com.fullcyle.admin.catalog.domain.category.CategoryID;
 import com.fullcyle.admin.catalog.infastructure.MySQLGatewayTest;
 import com.fullcyle.admin.catalog.infastructure.category.persistence.CategoryJpaEntity;
 import com.fullcyle.admin.catalog.infastructure.category.persistence.CategoryRepository;
@@ -86,6 +87,24 @@ public class CategoryMySQLGatewayTest {
         assertTrue(aCategory.getCreatedAt().isBefore(actualEntity.getUpdatedAt()));
         assertNull(aCategory.getDeletedAt());
 
+    }
+    @Test
+    public void givenAPrePersistedCategoryAndValidCategoryId_whenTryToDeleteIt_shouldDeleteCategory(){
+        final var aCategory = Category.newCategory("Film", null, true);
+
+        assertEquals(0, categoryRepository.count());
+        categoryRepository.saveAndFlush(CategoryJpaEntity.from(aCategory));
+        assertEquals(1, categoryRepository.count());
+
+        categoryGateway.deleteById(aCategory.getId());
+        assertEquals(0, categoryRepository.count());
+
+    }
+    @Test
+    public void givenAInvalidCategoryId_whenTryToDeleteIt_shouldDeleteCategory(){
+        assertEquals(0, categoryRepository.count());
+        categoryGateway.deleteById(CategoryID.from("invalid"));
+        assertEquals(0, categoryRepository.count());
     }
 
 }

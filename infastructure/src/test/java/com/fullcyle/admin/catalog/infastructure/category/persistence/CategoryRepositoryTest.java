@@ -1,7 +1,7 @@
 package com.fullcyle.admin.catalog.infastructure.category.persistence;
 
 import com.fullcyle.admin.catalog.domain.category.Category;
-import com.fullcyle.admin.catalog.infastructure.MySQLGatewayTest;
+import com.fullcyle.admin.catalog.MySQLGatewayTest;
 import org.hibernate.PropertyValueException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -3,7 +3,7 @@ package com.fullcyle.admin.catalog.infastructure.category;
 import com.fullcyle.admin.catalog.domain.category.Category;
 import com.fullcyle.admin.catalog.domain.category.CategoryID;
 import com.fullcyle.admin.catalog.domain.category.CategorySearchQuery;
-import com.fullcyle.admin.catalog.infastructure.MySQLGatewayTest;
+import com.fullcyle.admin.catalog.MySQLGatewayTest;
 import com.fullcyle.admin.catalog.infastructure.category.persistence.CategoryJpaEntity;
 import com.fullcyle.admin.catalog.infastructure.category.persistence.CategoryRepository;
 import org.junit.jupiter.api.Test;

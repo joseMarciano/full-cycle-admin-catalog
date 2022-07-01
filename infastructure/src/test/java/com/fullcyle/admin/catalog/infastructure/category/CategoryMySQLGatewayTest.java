@@ -195,7 +195,7 @@ public class CategoryMySQLGatewayTest {
         assertEquals(expectedPerPage, actualResult.perPage());
         assertEquals(expectedTotal, actualResult.total());
         assertEquals(expectedTotal, actualResult.total());
-        assertEquals(expectedPerPage, actualResult.items().size());
+        assertEquals(expectedTotal, actualResult.items().size());
     }
 
     @Test

@@ -4,7 +4,10 @@ import com.fullcyle.admin.catalog.domain.AggregateRoot;
 import com.fullcyle.admin.catalog.domain.validation.ValidationHandler;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
+
+import static java.util.Objects.nonNull;
 
 public class Category extends AggregateRoot<CategoryID> implements Cloneable {
 
@@ -112,16 +115,23 @@ public class Category extends AggregateRoot<CategoryID> implements Cloneable {
         return active;
     }
 
+    //TODO JM: create a generic truncated for all Instant class
     public Instant getCreatedAt() {
-        return createdAt;
+        return nonNull(createdAt)
+                ? createdAt.truncatedTo(ChronoUnit.MICROS)
+                : null;
     }
 
     public Instant getUpdatedAt() {
-        return updatedAt;
+        return nonNull(updatedAt)
+                ? updatedAt.truncatedTo(ChronoUnit.MICROS)
+                : null;
     }
 
     public Instant getDeletedAt() {
-        return deletedAt;
+        return nonNull(deletedAt)
+                ? deletedAt.truncatedTo(ChronoUnit.MICROS)
+                : null;
     }
 
     @Override

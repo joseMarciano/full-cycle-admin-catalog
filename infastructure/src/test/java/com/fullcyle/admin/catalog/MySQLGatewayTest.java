@@ -16,7 +16,7 @@ import static org.springframework.context.annotation.FilterType.REGEX;
 @ActiveProfiles("test") // to configure H2 instead MySql
 @DataJpaTest
 @ComponentScan(includeFilters = {
-        @ComponentScan.Filter(type = REGEX, pattern = ".*[MySQLGateway]")
+        @ComponentScan.Filter(type = REGEX, pattern = ".[MySQLGateway]")
 })
 @ExtendWith(CleanUpExtension.class)
 public @interface MySQLGatewayTest {

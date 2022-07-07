@@ -2,17 +2,14 @@ package com.fullcyle.admin.catalog.infastructure.api;
 
 
 import com.fullcyle.admin.catalog.domain.pagination.Pagination;
-import io.swagger.v3.oas.annotations.Hidden;
+import com.fullcyle.admin.catalog.infastructure.category.models.CreateCategoryApiInput;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("categories")
 @Tag(name = "Categories")
@@ -24,11 +21,11 @@ public interface CategoryAPI {
     )
     @Operation(summary = "Create a new category")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Created successfully"),
-        @ApiResponse(responseCode = "422", description = "A validation error was thrown"),
-        @ApiResponse(responseCode = "500", description = "An internal server error was thrown"),
+            @ApiResponse(responseCode = "201", description = "Created successfully"),
+            @ApiResponse(responseCode = "422", description = "A validation error was thrown"),
+            @ApiResponse(responseCode = "500", description = "An internal server error was thrown"),
     })
-    ResponseEntity<?> createCategory();
+    ResponseEntity<?> createCategory(@RequestBody CreateCategoryApiInput input);
 
 
     @GetMapping
@@ -44,6 +41,6 @@ public interface CategoryAPI {
             @RequestParam(required = false, defaultValue = "10") final int perPage,
             @RequestParam(required = false, defaultValue = "name") final String sort,
             @RequestParam(name = "dir", required = false, defaultValue = "asc") final String direction
-            );
+    );
 
 }

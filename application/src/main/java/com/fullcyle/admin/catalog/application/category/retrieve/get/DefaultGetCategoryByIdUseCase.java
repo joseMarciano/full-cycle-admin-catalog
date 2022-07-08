@@ -1,9 +1,10 @@
 package com.fullcyle.admin.catalog.application.category.retrieve.get;
 
+import com.fullcyle.admin.catalog.domain.category.Category;
 import com.fullcyle.admin.catalog.domain.category.CategoryGateway;
 import com.fullcyle.admin.catalog.domain.category.CategoryID;
 import com.fullcyle.admin.catalog.domain.exceptions.DomainException;
-import com.fullcyle.admin.catalog.domain.validation.Error;
+import com.fullcyle.admin.catalog.domain.exceptions.NotFoundException;
 
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -25,8 +26,9 @@ public class DefaultGetCategoryByIdUseCase extends GetCategoryByIdUseCase {
     }
 
     private Supplier<DomainException> notFound(CategoryID anCategoryId) {
-        return () -> DomainException.with(
-                new Error("Category with ID %s was not found".formatted(anCategoryId.getValue()))
+        return () -> NotFoundException.with(
+                Category.class,
+                anCategoryId
         );
     }
 }

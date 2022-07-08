@@ -4,7 +4,7 @@ import com.fullcyle.admin.catalog.IntegrationTest;
 import com.fullcyle.admin.catalog.domain.category.Category;
 import com.fullcyle.admin.catalog.domain.category.CategoryGateway;
 import com.fullcyle.admin.catalog.domain.category.CategoryID;
-import com.fullcyle.admin.catalog.domain.exceptions.DomainException;
+import com.fullcyle.admin.catalog.domain.exceptions.NotFoundException;
 import com.fullcyle.admin.catalog.infastructure.category.persistence.CategoryJpaEntity;
 import com.fullcyle.admin.catalog.infastructure.category.persistence.CategoryRepository;
 import org.junit.jupiter.api.Assertions;
@@ -68,7 +68,7 @@ public class GetCategoryByIdUseCaseIT {
         doReturn(Optional.empty())
                 .when(categoryGateway).findById(eq(expectedId));
 
-        final var actualException = Assertions.assertThrows(DomainException.class,
+        final var actualException = Assertions.assertThrows(NotFoundException.class,
                 () -> useCase.execute(expectedId.getValue())
         );
 

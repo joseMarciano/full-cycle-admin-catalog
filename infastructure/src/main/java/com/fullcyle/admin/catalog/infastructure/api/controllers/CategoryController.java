@@ -5,8 +5,10 @@ import com.fullcyle.admin.catalog.application.category.create.CreateCategoryOutp
 import com.fullcyle.admin.catalog.application.category.create.CreateCategoryUseCase;
 import com.fullcyle.admin.catalog.application.category.delete.DeleteCategoryUseCase;
 import com.fullcyle.admin.catalog.application.category.retrieve.get.GetCategoryByIdUseCase;
+import com.fullcyle.admin.catalog.application.category.retrieve.list.ListCategoriesUseCase;
 import com.fullcyle.admin.catalog.application.category.update.UpdateCategoryCommand;
 import com.fullcyle.admin.catalog.application.category.update.UpdateCategoryUseCase;
+import com.fullcyle.admin.catalog.domain.category.CategorySearchQuery;
 import com.fullcyle.admin.catalog.domain.pagination.Pagination;
 import com.fullcyle.admin.catalog.domain.validation.handler.Notification;
 import com.fullcyle.admin.catalog.infastructure.api.CategoryAPI;
@@ -18,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
-import java.util.Objects;
 import java.util.function.Function;
 
 import static java.util.Objects.requireNonNull;
@@ -32,15 +33,18 @@ public class CategoryController implements CategoryAPI {
     private final GetCategoryByIdUseCase getCategoryByIdUseCase;
     private final UpdateCategoryUseCase updateCategoryUseCase;
     private final DeleteCategoryUseCase deleteCategoryUseCase;
+    private final ListCategoriesUseCase listCategoriesUseCase;
 
     public CategoryController(final CreateCategoryUseCase createCategoryUseCase,
                               final GetCategoryByIdUseCase getCategoryByIdUseCase,
                               UpdateCategoryUseCase updateCategoryUseCase,
-                              DeleteCategoryUseCase deleteCategoryUseCase) {
+                              DeleteCategoryUseCase deleteCategoryUseCase,
+                              ListCategoriesUseCase listCategoriesUseCase) {
         this.createCategoryUseCase = requireNonNull(createCategoryUseCase);
         this.getCategoryByIdUseCase = requireNonNull(getCategoryByIdUseCase);
         this.updateCategoryUseCase = requireNonNull(updateCategoryUseCase);
         this.deleteCategoryUseCase = requireNonNull(deleteCategoryUseCase);
+        this.listCategoriesUseCase = listCategoriesUseCase;
     }
 
     @Override
@@ -63,7 +67,8 @@ public class CategoryController implements CategoryAPI {
 
     @Override
     public Pagination<?> listCategories(String search, int page, int perPage, String sort, String direction) {
-        return null;
+        final var query = new CategorySearchQuery(page, perPage, search, sort, direction);
+        return this.listCategoriesUseCase.execute(query);
     }
 
     @Override

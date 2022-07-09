@@ -5,18 +5,16 @@ import com.fullcyle.admin.catalog.domain.category.Category;
 import com.fullcyle.admin.catalog.domain.category.CategorySearchQuery;
 import com.fullcyle.admin.catalog.infastructure.category.persistence.CategoryJpaEntity;
 import com.fullcyle.admin.catalog.infastructure.category.persistence.CategoryRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @IntegrationTest
 public class ListCategoryUseCaseIT {
@@ -122,7 +120,7 @@ public class ListCategoryUseCaseIT {
             final int expectedItemsCount,
             final long expectedTotal,
             final String expectedCategoryName
-    ){
+    ) {
 
         final var expectedTerms = "";
 
@@ -157,7 +155,7 @@ public class ListCategoryUseCaseIT {
             final int expectedItemsCount,
             final long expectedTotal,
             final String expectedCategoriesName
-    ){
+    ) {
 
         final var expectedTerms = "";
         final var expectedSort = "name";

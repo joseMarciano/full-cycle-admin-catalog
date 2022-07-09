@@ -4,6 +4,7 @@ package com.fullcyle.admin.catalog.infastructure.api;
 import com.fullcyle.admin.catalog.domain.pagination.Pagination;
 import com.fullcyle.admin.catalog.infastructure.category.models.CategoryApiOutput;
 import com.fullcyle.admin.catalog.infastructure.category.models.CreateCategoryApiInput;
+import com.fullcyle.admin.catalog.infastructure.category.models.UpdateCategoryApiInput;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -53,6 +54,18 @@ public interface CategoryAPI {
     })
     CategoryApiOutput getById(
             @PathVariable String id
+    );
+
+    @PutMapping(value = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Update a category by identifier")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Category update successfully"),
+            @ApiResponse(responseCode = "404", description = "Category was not found"),
+            @ApiResponse(responseCode = "500", description = "An internal server error was thrown"),
+    })
+    ResponseEntity<?> updateById(
+            @PathVariable String id,
+            @RequestBody UpdateCategoryApiInput input
     );
 
 }

@@ -4,11 +4,15 @@ import com.fullcyle.admin.catalog.application.category.create.CreateCategoryComm
 import com.fullcyle.admin.catalog.application.category.create.CreateCategoryOutput;
 import com.fullcyle.admin.catalog.application.category.create.CreateCategoryUseCase;
 import com.fullcyle.admin.catalog.application.category.retrieve.get.GetCategoryByIdUseCase;
+import com.fullcyle.admin.catalog.application.category.update.UpdateCategoryCommand;
+import com.fullcyle.admin.catalog.application.category.update.UpdateCategoryOutput;
+import com.fullcyle.admin.catalog.application.category.update.UpdateCategoryUseCase;
 import com.fullcyle.admin.catalog.domain.pagination.Pagination;
 import com.fullcyle.admin.catalog.domain.validation.handler.Notification;
 import com.fullcyle.admin.catalog.infastructure.api.CategoryAPI;
 import com.fullcyle.admin.catalog.infastructure.category.models.CategoryApiOutput;
 import com.fullcyle.admin.catalog.infastructure.category.models.CreateCategoryApiInput;
+import com.fullcyle.admin.catalog.infastructure.category.models.UpdateCategoryApiInput;
 import com.fullcyle.admin.catalog.infastructure.category.presenters.CategoryApiPresenter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,10 +30,14 @@ public class CategoryController implements CategoryAPI {
     private final CreateCategoryUseCase createCategoryUseCase;
     private final GetCategoryByIdUseCase getCategoryByIdUseCase;
 
+    private final UpdateCategoryUseCase updateCategoryUseCase;
+
     public CategoryController(final CreateCategoryUseCase createCategoryUseCase,
-                              final GetCategoryByIdUseCase getCategoryByIdUseCase) {
+                              final GetCategoryByIdUseCase getCategoryByIdUseCase,
+                              UpdateCategoryUseCase updateCategoryUseCase) {
         this.createCategoryUseCase = Objects.requireNonNull(createCategoryUseCase);
         this.getCategoryByIdUseCase = Objects.requireNonNull(getCategoryByIdUseCase);
+        this.updateCategoryUseCase = updateCategoryUseCase;
     }
 
     @Override
@@ -56,7 +64,23 @@ public class CategoryController implements CategoryAPI {
     }
 
     @Override
-    public CategoryApiOutput getById(String id) {
+    public CategoryApiOutput getById(final String id) {
         return CategoryApiPresenter.present.apply(this.getCategoryByIdUseCase.execute(id));
+    }
+
+    @Override
+    public ResponseEntity<?> updateById(final String id, final UpdateCategoryApiInput input) {
+        final var aCommand = UpdateCategoryCommand.with(
+                id,
+                input.name(),
+                input.description(),
+                ofNullable(input.active()).orElse(true)
+        );
+
+        final Function<Notification, ResponseEntity<?>> onError = (output) ->
+                ResponseEntity.unprocessableEntity().body(output);
+
+        return this.updateCategoryUseCase.execute(aCommand)
+                .fold(onError, ResponseEntity::ok);
     }
 }

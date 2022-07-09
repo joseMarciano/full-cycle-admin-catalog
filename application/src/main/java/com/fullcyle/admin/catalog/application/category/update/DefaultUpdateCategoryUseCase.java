@@ -4,12 +4,14 @@ import com.fullcyle.admin.catalog.domain.category.Category;
 import com.fullcyle.admin.catalog.domain.category.CategoryGateway;
 import com.fullcyle.admin.catalog.domain.category.CategoryID;
 import com.fullcyle.admin.catalog.domain.exceptions.DomainException;
+import com.fullcyle.admin.catalog.domain.exceptions.NotFoundException;
 import com.fullcyle.admin.catalog.domain.validation.Error;
 import com.fullcyle.admin.catalog.domain.validation.handler.Notification;
 import io.vavr.API;
 import io.vavr.control.Either;
 
 import java.util.Objects;
+import java.util.function.Supplier;
 
 public class DefaultUpdateCategoryUseCase extends UpdateCategoryUseCase {
 
@@ -28,7 +30,7 @@ public class DefaultUpdateCategoryUseCase extends UpdateCategoryUseCase {
 
 
         final var aCategory = this.categoryGateway.findById(anId)
-                .orElseThrow(() -> notFound(anId));
+                .orElseThrow(notFound(anId));
 
         final var notification = Notification.create();
         aCategory.update(aName, aDescription, isActive)
@@ -43,9 +45,7 @@ public class DefaultUpdateCategoryUseCase extends UpdateCategoryUseCase {
                 .bimap(Notification::create, UpdateCategoryOutput::from);
     }
 
-    private DomainException notFound(CategoryID anId) {
-        return DomainException.with(
-                new Error("Category with ID %s was not found".formatted(anId.getValue()))
-        );
+    private Supplier<DomainException> notFound(CategoryID anId) {
+        return () -> NotFoundException.with(Category.class, anId);
     }
 }

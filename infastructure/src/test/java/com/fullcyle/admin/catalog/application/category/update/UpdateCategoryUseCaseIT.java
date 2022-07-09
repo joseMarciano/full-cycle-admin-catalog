@@ -5,6 +5,7 @@ import com.fullcyle.admin.catalog.domain.category.Category;
 import com.fullcyle.admin.catalog.domain.category.CategoryGateway;
 import com.fullcyle.admin.catalog.domain.category.CategoryID;
 import com.fullcyle.admin.catalog.domain.exceptions.DomainException;
+import com.fullcyle.admin.catalog.domain.exceptions.NotFoundException;
 import com.fullcyle.admin.catalog.infastructure.category.persistence.CategoryJpaEntity;
 import com.fullcyle.admin.catalog.infastructure.category.persistence.CategoryRepository;
 import org.junit.jupiter.api.Assertions;
@@ -67,10 +68,10 @@ public class UpdateCategoryUseCaseIT {
 
         assertNotNull(actualOutput);
         assertNotNull(actualOutput.id());
-        assertEquals(expectedId.getValue(), actualOutput.id().getValue());
+        assertEquals(expectedId.getValue(), actualOutput.id());
 
         final var actualCategory =
-                repository.findById(actualOutput.id().getValue()).get();
+                repository.findById(actualOutput.id()).get();
 
         Assertions.assertEquals(expectedName, actualCategory.getName());
         Assertions.assertEquals(expectedDescription, actualCategory.getDescription());
@@ -157,7 +158,7 @@ public class UpdateCategoryUseCaseIT {
         assertNotNull(actualOutput.id());
 
         final var actualCategory =
-                repository.findById(actualOutput.id().getValue()).get();
+                repository.findById(actualOutput.id()).get();
 
         Assertions.assertEquals(expectedName, actualCategory.getName());
         Assertions.assertEquals(expectedDescription, actualCategory.getDescription());
@@ -204,11 +205,10 @@ public class UpdateCategoryUseCaseIT {
                 .findById(eq(CategoryID.from(expectedId)));
 
         DomainException actualException =
-                assertThrows(DomainException.class, () -> useCase.execute(aCommand).getLeft());
+                assertThrows(NotFoundException.class, () -> useCase.execute(aCommand).getLeft());
 
 
-        assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
-        assertEquals(expectedErrorCount, actualException.getErrors().size());
+        assertEquals(expectedErrorMessage, actualException.getMessage());
 
         final var actualCategory =
                 repository.findById(aCategory.getId().getValue()).get();

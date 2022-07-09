@@ -5,6 +5,7 @@ import com.fullcyle.admin.catalog.domain.category.Category;
 import com.fullcyle.admin.catalog.domain.category.CategoryGateway;
 import com.fullcyle.admin.catalog.domain.category.CategoryID;
 import com.fullcyle.admin.catalog.domain.exceptions.DomainException;
+import com.fullcyle.admin.catalog.domain.exceptions.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -177,7 +178,6 @@ public class UpdateCategoryUseCaseTest {
         final var expectedActive = true;
         final var expectedId = "any_id";
         final var expectedErrorMessage = "Category with ID any_id was not found";
-        final var expectedErrorCount = 1;
 
 
         final var aCommand = UpdateCategoryCommand.with(
@@ -192,11 +192,11 @@ public class UpdateCategoryUseCaseTest {
 
 
         DomainException actualException =
-                assertThrows(DomainException.class, () -> useCase.execute(aCommand).getLeft());
+                assertThrows(NotFoundException.class, () -> useCase.execute(aCommand).getLeft());
 
 
-        assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
-        assertEquals(expectedErrorCount, actualException.getErrors().size());
+        assertEquals(expectedErrorMessage, actualException.getMessage());
+//        assertEquals(expectedErrorCount, actualException.getErrors().size());
 
         verify(categoryGateway, times(1)).findById(eq(CategoryID.from(expectedId)));
         verify(categoryGateway, times(0)).update(any());

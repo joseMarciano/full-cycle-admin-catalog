@@ -3,9 +3,9 @@ package com.fullcyle.admin.catalog.infastructure.api.controllers;
 import com.fullcyle.admin.catalog.application.category.create.CreateCategoryCommand;
 import com.fullcyle.admin.catalog.application.category.create.CreateCategoryOutput;
 import com.fullcyle.admin.catalog.application.category.create.CreateCategoryUseCase;
+import com.fullcyle.admin.catalog.application.category.delete.DeleteCategoryUseCase;
 import com.fullcyle.admin.catalog.application.category.retrieve.get.GetCategoryByIdUseCase;
 import com.fullcyle.admin.catalog.application.category.update.UpdateCategoryCommand;
-import com.fullcyle.admin.catalog.application.category.update.UpdateCategoryOutput;
 import com.fullcyle.admin.catalog.application.category.update.UpdateCategoryUseCase;
 import com.fullcyle.admin.catalog.domain.pagination.Pagination;
 import com.fullcyle.admin.catalog.domain.validation.handler.Notification;
@@ -21,6 +21,7 @@ import java.net.URI;
 import java.util.Objects;
 import java.util.function.Function;
 
+import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
 
 @RestController
@@ -29,15 +30,17 @@ public class CategoryController implements CategoryAPI {
 
     private final CreateCategoryUseCase createCategoryUseCase;
     private final GetCategoryByIdUseCase getCategoryByIdUseCase;
-
     private final UpdateCategoryUseCase updateCategoryUseCase;
+    private final DeleteCategoryUseCase deleteCategoryUseCase;
 
     public CategoryController(final CreateCategoryUseCase createCategoryUseCase,
                               final GetCategoryByIdUseCase getCategoryByIdUseCase,
-                              UpdateCategoryUseCase updateCategoryUseCase) {
-        this.createCategoryUseCase = Objects.requireNonNull(createCategoryUseCase);
-        this.getCategoryByIdUseCase = Objects.requireNonNull(getCategoryByIdUseCase);
-        this.updateCategoryUseCase = updateCategoryUseCase;
+                              UpdateCategoryUseCase updateCategoryUseCase,
+                              DeleteCategoryUseCase deleteCategoryUseCase) {
+        this.createCategoryUseCase = requireNonNull(createCategoryUseCase);
+        this.getCategoryByIdUseCase = requireNonNull(getCategoryByIdUseCase);
+        this.updateCategoryUseCase = requireNonNull(updateCategoryUseCase);
+        this.deleteCategoryUseCase = requireNonNull(deleteCategoryUseCase);
     }
 
     @Override
@@ -82,5 +85,10 @@ public class CategoryController implements CategoryAPI {
 
         return this.updateCategoryUseCase.execute(aCommand)
                 .fold(onError, ResponseEntity::ok);
+    }
+
+    @Override
+    public void deleteById(final String id) {
+        this.deleteCategoryUseCase.execute(id);
     }
 }

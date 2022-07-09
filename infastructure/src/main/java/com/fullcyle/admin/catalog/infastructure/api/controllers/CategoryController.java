@@ -5,6 +5,7 @@ import com.fullcyle.admin.catalog.application.category.create.CreateCategoryOutp
 import com.fullcyle.admin.catalog.application.category.create.CreateCategoryUseCase;
 import com.fullcyle.admin.catalog.application.category.delete.DeleteCategoryUseCase;
 import com.fullcyle.admin.catalog.application.category.retrieve.get.GetCategoryByIdUseCase;
+import com.fullcyle.admin.catalog.application.category.retrieve.list.CategoryListOutput;
 import com.fullcyle.admin.catalog.application.category.retrieve.list.ListCategoriesUseCase;
 import com.fullcyle.admin.catalog.application.category.update.UpdateCategoryCommand;
 import com.fullcyle.admin.catalog.application.category.update.UpdateCategoryUseCase;
@@ -12,9 +13,10 @@ import com.fullcyle.admin.catalog.domain.category.CategorySearchQuery;
 import com.fullcyle.admin.catalog.domain.pagination.Pagination;
 import com.fullcyle.admin.catalog.domain.validation.handler.Notification;
 import com.fullcyle.admin.catalog.infastructure.api.CategoryAPI;
-import com.fullcyle.admin.catalog.infastructure.category.models.CategoryApiOutput;
-import com.fullcyle.admin.catalog.infastructure.category.models.CreateCategoryApiInput;
-import com.fullcyle.admin.catalog.infastructure.category.models.UpdateCategoryApiInput;
+import com.fullcyle.admin.catalog.infastructure.category.models.CategoryListResponse;
+import com.fullcyle.admin.catalog.infastructure.category.models.CategoryResponse;
+import com.fullcyle.admin.catalog.infastructure.category.models.CreateCategoryRequest;
+import com.fullcyle.admin.catalog.infastructure.category.models.UpdateCategoryRequest;
 import com.fullcyle.admin.catalog.infastructure.category.presenters.CategoryApiPresenter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,7 +50,7 @@ public class CategoryController implements CategoryAPI {
     }
 
     @Override
-    public ResponseEntity<?> createCategory(CreateCategoryApiInput input) {
+    public ResponseEntity<?> createCategory(CreateCategoryRequest input) {
         final var aCommand = CreateCategoryCommand.with(
                 input.name(),
                 input.description(),
@@ -66,18 +68,19 @@ public class CategoryController implements CategoryAPI {
     }
 
     @Override
-    public Pagination<?> listCategories(String search, int page, int perPage, String sort, String direction) {
+    public Pagination<CategoryListResponse> listCategories(String search, int page, int perPage, String sort, String direction) {
         final var query = new CategorySearchQuery(page, perPage, search, sort, direction);
-        return this.listCategoriesUseCase.execute(query);
+        return this.listCategoriesUseCase.execute(query)
+                .map(CategoryApiPresenter::present);
     }
 
     @Override
-    public CategoryApiOutput getById(final String id) {
-        return CategoryApiPresenter.present.apply(this.getCategoryByIdUseCase.execute(id));
+    public CategoryResponse getById(final String id) {
+        return CategoryApiPresenter.present(this.getCategoryByIdUseCase.execute(id));
     }
 
     @Override
-    public ResponseEntity<?> updateById(final String id, final UpdateCategoryApiInput input) {
+    public ResponseEntity<?> updateById(final String id, final UpdateCategoryRequest input) {
         final var aCommand = UpdateCategoryCommand.with(
                 id,
                 input.name(),

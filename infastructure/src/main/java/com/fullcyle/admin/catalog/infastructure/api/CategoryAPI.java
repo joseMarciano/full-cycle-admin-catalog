@@ -2,9 +2,10 @@ package com.fullcyle.admin.catalog.infastructure.api;
 
 
 import com.fullcyle.admin.catalog.domain.pagination.Pagination;
-import com.fullcyle.admin.catalog.infastructure.category.models.CategoryApiOutput;
-import com.fullcyle.admin.catalog.infastructure.category.models.CreateCategoryApiInput;
-import com.fullcyle.admin.catalog.infastructure.category.models.UpdateCategoryApiInput;
+import com.fullcyle.admin.catalog.infastructure.category.models.CategoryListResponse;
+import com.fullcyle.admin.catalog.infastructure.category.models.CategoryResponse;
+import com.fullcyle.admin.catalog.infastructure.category.models.CreateCategoryRequest;
+import com.fullcyle.admin.catalog.infastructure.category.models.UpdateCategoryRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -28,7 +29,7 @@ public interface CategoryAPI {
             @ApiResponse(responseCode = "422", description = "A validation error was thrown"),
             @ApiResponse(responseCode = "500", description = "An internal server error was thrown"),
     })
-    ResponseEntity<?> createCategory(@RequestBody CreateCategoryApiInput input);
+    ResponseEntity<?> createCategory(@RequestBody CreateCategoryRequest input);
 
 
     @GetMapping
@@ -38,7 +39,7 @@ public interface CategoryAPI {
             @ApiResponse(responseCode = "422", description = "A invalid parameter was received"),
             @ApiResponse(responseCode = "500", description = "An internal server error was thrown"),
     })
-    Pagination<?> listCategories(
+    Pagination<CategoryListResponse> listCategories(
             @RequestParam(required = false, defaultValue = "") final String search,
             @RequestParam(required = false, defaultValue = "0") final int page,
             @RequestParam(required = false, defaultValue = "10") final int perPage,
@@ -53,7 +54,7 @@ public interface CategoryAPI {
             @ApiResponse(responseCode = "404", description = "Category was not found"),
             @ApiResponse(responseCode = "500", description = "An internal server error was thrown"),
     })
-    CategoryApiOutput getById(
+    CategoryResponse getById(
             @PathVariable String id
     );
 
@@ -66,7 +67,7 @@ public interface CategoryAPI {
     })
     ResponseEntity<?> updateById(
             @PathVariable String id,
-            @RequestBody UpdateCategoryApiInput input
+            @RequestBody UpdateCategoryRequest input
     );
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

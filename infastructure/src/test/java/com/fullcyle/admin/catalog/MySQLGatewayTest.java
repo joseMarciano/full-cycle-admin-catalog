@@ -18,6 +18,6 @@ import static org.springframework.context.annotation.FilterType.REGEX;
 @ComponentScan(includeFilters = {
         @ComponentScan.Filter(type = REGEX, pattern = ".[MySQLGateway]")
 })
-@ExtendWith(CleanUpExtension.class)
+@ExtendWith(MySQLCleanUpExtension.class)
 public @interface MySQLGatewayTest {
 }

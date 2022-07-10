@@ -13,6 +13,6 @@ import java.lang.annotation.*;
 @Inherited
 @SpringBootTest(classes = WebServerConfig.class)
 @ExtendWith(MySQLCleanUpExtension.class)
-@ActiveProfiles("test") // to configure H2 instead MySql
+@ActiveProfiles("test-integration") // to configure H2 instead MySql
 public @interface IntegrationTest {
 }

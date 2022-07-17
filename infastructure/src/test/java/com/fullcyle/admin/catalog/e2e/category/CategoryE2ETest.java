@@ -145,6 +145,44 @@ public class CategoryE2ETest {
         ;
     }
 
+    @Test
+    public void asACatalogAdminIShouldBeAbleToGetANewCategoryByIdentifier() throws Exception {
+        Assertions.assertTrue(MY_SQL_CONTAINER.isRunning());
+        Assertions.assertEquals(0, categoryRepository.count());
+
+        final var expectedName = "Filmes";
+        final var expectedDescription = "Most watched";
+        final var expectedActive = true;
+
+        final var actualId = givenACategory(expectedName, expectedDescription, expectedActive);
+
+        final var actualCategory = retrieveACategory(actualId.getValue());
+
+        Assertions.assertEquals(expectedName, actualCategory.name());
+        Assertions.assertEquals(expectedDescription, actualCategory.description());
+        Assertions.assertEquals(expectedActive, actualCategory.active());
+        Assertions.assertNotNull(actualCategory.updatedAt());
+        Assertions.assertNotNull(actualCategory.createdAt());
+        Assertions.assertNull(actualCategory.deletedAt());
+
+    }
+
+    @Test
+    public void asACatalogAdminIShouldBeAbleToSeeATreatedErrorByGettingANotFoundCategory() throws Exception {
+        Assertions.assertTrue(MY_SQL_CONTAINER.isRunning());
+        Assertions.assertEquals(0, categoryRepository.count());
+
+        final var aRequest =
+                MockMvcRequestBuilders.get("/categories/{id}", "123")
+                        .contentType(MediaType.APPLICATION_JSON);
+
+        final var json = this.mvc.perform(aRequest)
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message",
+                        Matchers.equalTo("Category with ID 123 was not found")));
+    }
+
+
     private ResultActions listCategories(final int page, final int perPage, String film) throws Exception {
         return listCategories(page, perPage, film, "", "");
     }

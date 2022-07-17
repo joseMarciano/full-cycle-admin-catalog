@@ -6,6 +6,8 @@
 - To learn about Kafka
 - To improve my knowledges in microservices
 - To learn about RabbitMq
+- Apply concepts about TDD and DDD
+- Apply clean architecture 
 
 
 ## :wrench: Architecture fluxogram

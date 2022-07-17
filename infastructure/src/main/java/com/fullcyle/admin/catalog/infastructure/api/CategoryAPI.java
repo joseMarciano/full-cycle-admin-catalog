@@ -47,7 +47,7 @@ public interface CategoryAPI {
             @RequestParam(name = "dir", required = false, defaultValue = "asc") final String direction
     );
 
-    @GetMapping(value = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Get a category by identifier")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Category retrieved successfully"),
@@ -71,7 +71,7 @@ public interface CategoryAPI {
     );
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping(value = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Delete a category by identifier")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Category deleted successfully"),

@@ -5,7 +5,6 @@ import com.fullcyle.admin.catalog.application.category.create.CreateCategoryOutp
 import com.fullcyle.admin.catalog.application.category.create.CreateCategoryUseCase;
 import com.fullcyle.admin.catalog.application.category.delete.DeleteCategoryUseCase;
 import com.fullcyle.admin.catalog.application.category.retrieve.get.GetCategoryByIdUseCase;
-import com.fullcyle.admin.catalog.application.category.retrieve.list.CategoryListOutput;
 import com.fullcyle.admin.catalog.application.category.retrieve.list.ListCategoriesUseCase;
 import com.fullcyle.admin.catalog.application.category.update.UpdateCategoryCommand;
 import com.fullcyle.admin.catalog.application.category.update.UpdateCategoryUseCase;

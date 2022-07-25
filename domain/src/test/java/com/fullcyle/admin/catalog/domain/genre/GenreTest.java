@@ -2,7 +2,7 @@ package com.fullcyle.admin.catalog.domain.genre;
 
 
 import com.fullcyle.admin.catalog.domain.exceptions.DomainException;
-import com.fullcyle.admin.catalog.domain.validation.handler.ThrowsValidationHandler;
+import com.fullcyle.admin.catalog.domain.exceptions.NotificationException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,12 +35,8 @@ public class GenreTest {
         final var expectedErrorCount = 1;
         final var expectedErrorMessage = "'name' should not be null";
 
-
-        final var actualGenre = Genre.newGenre(expectedName, expectedIsActive);
-
-
         final var actualException =
-                assertThrows(DomainException.class, () -> actualGenre.validate(new ThrowsValidationHandler()));
+                assertThrows(NotificationException.class, () -> Genre.newGenre(expectedName, expectedIsActive));
 
 
         assertEquals(expectedErrorCount, actualException.getErrors().size());
@@ -55,11 +51,8 @@ public class GenreTest {
         final var expectedErrorMessage = "'name' should not be empty";
 
 
-        final var actualGenre = Genre.newGenre(expectedName, expectedIsActive);
-
-
         final var actualException =
-                assertThrows(DomainException.class, () -> actualGenre.validate(new ThrowsValidationHandler()));
+                assertThrows(NotificationException.class, () -> Genre.newGenre(expectedName, expectedIsActive));
 
 
         assertEquals(expectedErrorCount, actualException.getErrors().size());
@@ -80,15 +73,10 @@ public class GenreTest {
                 """;
         final var expectedIsActive = true;
         final var expectedErrorCount = 1;
-        final var expectedErrorMessage = "'name' should be between 1 and 255 characters";
-
-
-        final var actualGenre = Genre.newGenre(expectedName, expectedIsActive);
-
+        final var expectedErrorMessage = "'name' must be between 1 and 255 characters";
 
         final var actualException =
-                assertThrows(DomainException.class, () -> actualGenre.validate(new ThrowsValidationHandler()));
-
+                assertThrows(DomainException.class, () -> Genre.newGenre(expectedName, expectedIsActive));
 
         assertEquals(expectedErrorCount, actualException.getErrors().size());
         assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());

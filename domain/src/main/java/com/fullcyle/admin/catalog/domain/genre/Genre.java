@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.fullcyle.admin.catalog.domain.utils.InstantUtils.now;
+
 public class Genre extends AggregateRoot<GenreID> {
 
     private String name;
@@ -22,7 +24,7 @@ public class Genre extends AggregateRoot<GenreID> {
 
     public static Genre newGenre(final String aName, final boolean isActive) {
         final var anId = GenreID.unique();
-        final var now = Instant.now();
+        final var now = now();
         final var deletedAt = isActive ? null : now;
 
         return new Genre(anId, aName, isActive, new ArrayList<>(), now, now, deletedAt);
@@ -71,7 +73,7 @@ public class Genre extends AggregateRoot<GenreID> {
         final var notification = Notification.create();
         validate(notification);
 
-        if(notification.hasErrors()) {
+        if (notification.hasErrors()) {
             throw new NotificationException("Failed to create a Aggregate Genre", notification);
         }
     }
@@ -103,5 +105,23 @@ public class Genre extends AggregateRoot<GenreID> {
 
     public Instant getDeletedAt() {
         return deletedAt;
+    }
+
+    public Genre deactivate() {
+        final var now = now();
+        this.active = false;
+        if (getDeletedAt() == null) {
+            this.deletedAt = now;
+        }
+
+        this.updatedAt = now;
+        return this;
+    }
+
+    public Genre activate() {
+        this.deletedAt = null;
+        this.active = true;
+        this.updatedAt = now();
+        return this;
     }
 }

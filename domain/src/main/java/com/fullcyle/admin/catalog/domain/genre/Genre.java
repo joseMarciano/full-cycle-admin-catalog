@@ -2,7 +2,9 @@ package com.fullcyle.admin.catalog.domain.genre;
 
 import com.fullcyle.admin.catalog.domain.AggregateRoot;
 import com.fullcyle.admin.catalog.domain.category.CategoryID;
+import com.fullcyle.admin.catalog.domain.exceptions.NotificationException;
 import com.fullcyle.admin.catalog.domain.validation.ValidationHandler;
+import com.fullcyle.admin.catalog.domain.validation.handler.Notification;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -65,11 +67,18 @@ public class Genre extends AggregateRoot<GenreID> {
         this.createdAt = aCreatedAt;
         this.updatedAt = aUpdatedAt;
         this.deletedAt = aDeletedAt;
+
+        final var notification = Notification.create();
+        validate(notification);
+
+        if(notification.hasErrors()) {
+            throw new NotificationException("Failed to create a Aggregate Genre", notification);
+        }
     }
 
     @Override
-    public void validate(final ValidationHandler handler) {
-
+    public void validate(final ValidationHandler anHandler) {
+        new GenreValidator(this, anHandler).validate();
     }
 
     public String getName() {

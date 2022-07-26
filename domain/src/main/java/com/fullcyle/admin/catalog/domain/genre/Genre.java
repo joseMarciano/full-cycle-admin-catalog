@@ -113,6 +113,22 @@ public class Genre extends AggregateRoot<GenreID> {
         return this;
     }
 
+    public Genre addCategory(final CategoryID aCategoryID) {
+        if (aCategoryID == null) return this;
+
+        this.categories.add(aCategoryID);
+        this.updatedAt = now();
+        return this;
+    }
+
+    public Genre removeCategory(final CategoryID aCategoryID) {
+        if (aCategoryID == null) return this;
+
+        this.categories.remove(aCategoryID);
+        this.updatedAt = now();
+        return this;
+    }
+
 
     public String getName() {
         return name;

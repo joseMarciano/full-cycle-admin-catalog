@@ -3,8 +3,8 @@ package com.fullcyle.admin.catalog.infastructure.category;
 import com.fullcyle.admin.catalog.domain.category.Category;
 import com.fullcyle.admin.catalog.domain.category.CategoryGateway;
 import com.fullcyle.admin.catalog.domain.category.CategoryID;
-import com.fullcyle.admin.catalog.domain.category.CategorySearchQuery;
 import com.fullcyle.admin.catalog.domain.pagination.Pagination;
+import com.fullcyle.admin.catalog.domain.pagination.SearchQuery;
 import com.fullcyle.admin.catalog.infastructure.category.persistence.CategoryJpaEntity;
 import com.fullcyle.admin.catalog.infastructure.category.persistence.CategoryRepository;
 import com.fullcyle.admin.catalog.infastructure.utils.SpecificationUtils;
@@ -50,7 +50,7 @@ public class CategoryMySQLGateway implements CategoryGateway {
     }
 
     @Override
-    public Pagination<Category> findAll(final CategorySearchQuery aQuery) {
+    public Pagination<Category> findAll(final SearchQuery aQuery) {
         final var page = PageRequest.of(
                 aQuery.page(),
                 aQuery.perPage(),

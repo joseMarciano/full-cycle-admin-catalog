@@ -1,9 +1,9 @@
 package com.fullcyle.admin.catalog.infastructure.category;
 
+import com.fullcyle.admin.catalog.MySQLGatewayTest;
 import com.fullcyle.admin.catalog.domain.category.Category;
 import com.fullcyle.admin.catalog.domain.category.CategoryID;
-import com.fullcyle.admin.catalog.domain.category.CategorySearchQuery;
-import com.fullcyle.admin.catalog.MySQLGatewayTest;
+import com.fullcyle.admin.catalog.domain.pagination.SearchQuery;
 import com.fullcyle.admin.catalog.infastructure.category.persistence.CategoryJpaEntity;
 import com.fullcyle.admin.catalog.infastructure.category.persistence.CategoryRepository;
 import org.junit.jupiter.api.Test;
@@ -163,7 +163,7 @@ public class CategoryMySQLGatewayTest {
 
         assertEquals(3, categoryRepository.count());
 
-        final var query = new CategorySearchQuery(
+        final var query = new SearchQuery(
                 0, 1, "", "name", "asc"
         );
 
@@ -185,7 +185,7 @@ public class CategoryMySQLGatewayTest {
         final var expectedTotal = 0;
 
 
-        final var query = new CategorySearchQuery(
+        final var query = new SearchQuery(
                 0, 1, "", "name", "asc"
         );
 
@@ -219,7 +219,7 @@ public class CategoryMySQLGatewayTest {
         assertEquals(3, categoryRepository.count());
 
         //Page 0
-        var query = new CategorySearchQuery(
+        var query = new SearchQuery(
                 0, 1, "", "name", "asc"
         );
 
@@ -233,7 +233,7 @@ public class CategoryMySQLGatewayTest {
         assertEquals(documentaries.getId(), actualResult.items().get(0).getId());
 
         //Page 1
-        query = new CategorySearchQuery(
+        query = new SearchQuery(
                 1, 1, "", "name", "asc"
         );
 
@@ -248,7 +248,7 @@ public class CategoryMySQLGatewayTest {
         assertEquals(filmes.getId(), actualResult.items().get(0).getId());
 
         //Page 2
-        query = new CategorySearchQuery(
+        query = new SearchQuery(
                 2, 1, "", "name", "asc"
         );
 
@@ -283,7 +283,7 @@ public class CategoryMySQLGatewayTest {
 
         assertEquals(3, categoryRepository.count());
 
-        final var query = new CategorySearchQuery(
+        final var query = new SearchQuery(
                 0, 1, "doc", "name", "asc"
         );
 
@@ -317,7 +317,7 @@ public class CategoryMySQLGatewayTest {
 
         assertEquals(3, categoryRepository.count());
 
-        final var query = new CategorySearchQuery(
+        final var query = new SearchQuery(
                 0, 1, "MAIS ASSISTIDA", "name", "asc"
         );
 

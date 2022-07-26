@@ -2,7 +2,7 @@ package com.fullcyle.admin.catalog.application.category.retrieve.list;
 
 import com.fullcyle.admin.catalog.IntegrationTest;
 import com.fullcyle.admin.catalog.domain.category.Category;
-import com.fullcyle.admin.catalog.domain.category.CategorySearchQuery;
+import com.fullcyle.admin.catalog.domain.pagination.SearchQuery;
 import com.fullcyle.admin.catalog.infastructure.category.persistence.CategoryJpaEntity;
 import com.fullcyle.admin.catalog.infastructure.category.persistence.CategoryRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,7 +50,7 @@ public class ListCategoryUseCaseIT {
         final var expectedItemsCount = 0;
         final var expectedItemsTotal = 0;
 
-        final var aQuery = new CategorySearchQuery(
+        final var aQuery = new SearchQuery(
                 expectedPage,
                 expectedPerPage,
                 expectedTerms,
@@ -87,7 +87,7 @@ public class ListCategoryUseCaseIT {
         final var expectedSort = "name";
         final var expectedDirection = "asc";
 
-        final var aQuery = new CategorySearchQuery(
+        final var aQuery = new SearchQuery(
                 expectedPage,
                 expectedPerPage,
                 expectedTerms,
@@ -124,7 +124,7 @@ public class ListCategoryUseCaseIT {
 
         final var expectedTerms = "";
 
-        final var aQuery = new CategorySearchQuery(
+        final var aQuery = new SearchQuery(
                 expectedPage,
                 expectedPerPage,
                 expectedTerms,
@@ -161,7 +161,7 @@ public class ListCategoryUseCaseIT {
         final var expectedSort = "name";
         final var expectedDirection = "asc";
 
-        final var aQuery = new CategorySearchQuery(
+        final var aQuery = new SearchQuery(
                 expectedPage,
                 expectedPerPage,
                 expectedTerms,

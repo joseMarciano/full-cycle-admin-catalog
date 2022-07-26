@@ -8,8 +8,8 @@ import com.fullcyle.admin.catalog.application.category.retrieve.get.GetCategoryB
 import com.fullcyle.admin.catalog.application.category.retrieve.list.ListCategoriesUseCase;
 import com.fullcyle.admin.catalog.application.category.update.UpdateCategoryCommand;
 import com.fullcyle.admin.catalog.application.category.update.UpdateCategoryUseCase;
-import com.fullcyle.admin.catalog.domain.category.CategorySearchQuery;
 import com.fullcyle.admin.catalog.domain.pagination.Pagination;
+import com.fullcyle.admin.catalog.domain.pagination.SearchQuery;
 import com.fullcyle.admin.catalog.domain.validation.handler.Notification;
 import com.fullcyle.admin.catalog.infastructure.api.CategoryAPI;
 import com.fullcyle.admin.catalog.infastructure.category.models.CategoryListResponse;
@@ -68,7 +68,7 @@ public class CategoryController implements CategoryAPI {
 
     @Override
     public Pagination<CategoryListResponse> listCategories(String search, int page, int perPage, String sort, String direction) {
-        final var query = new CategorySearchQuery(page, perPage, search, sort, direction);
+        final var query = new SearchQuery(page, perPage, search, sort, direction);
         return this.listCategoriesUseCase.execute(query)
                 .map(CategoryApiPresenter::present);
     }

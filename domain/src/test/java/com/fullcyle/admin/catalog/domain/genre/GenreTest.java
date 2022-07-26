@@ -1,9 +1,11 @@
 package com.fullcyle.admin.catalog.domain.genre;
 
 
-import com.fullcyle.admin.catalog.domain.exceptions.DomainException;
+import com.fullcyle.admin.catalog.domain.category.CategoryID;
 import com.fullcyle.admin.catalog.domain.exceptions.NotificationException;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -76,7 +78,7 @@ public class GenreTest {
         final var expectedErrorMessage = "'name' must be between 1 and 255 characters";
 
         final var actualException =
-                assertThrows(DomainException.class, () -> Genre.newGenre(expectedName, expectedIsActive));
+                assertThrows(NotificationException.class, () -> Genre.newGenre(expectedName, expectedIsActive));
 
         assertEquals(expectedErrorCount, actualException.getErrors().size());
         assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
@@ -132,5 +134,96 @@ public class GenreTest {
         assertEquals(actualCreatedAt, actualGenre.getCreatedAt());
         assertTrue(actualUpdatedAt.isBefore(actualGenre.getUpdatedAt()));
         assertNull(actualGenre.getDeletedAt());
+    }
+
+    @Test
+    public void givenAnValidInactiveGenre_whenCallUpdateWithActivate_shouldReceiveGenreUpdated() {
+        final var expectedName = "Ação";
+        final var expectedIsActive = true;
+        final var expectedCategories = List.of(CategoryID.from("123"));
+
+
+        final var actualGenre = Genre.newGenre("acao", false);
+        assertFalse(actualGenre.isActive());
+        assertNotNull(actualGenre.getDeletedAt());
+
+        final var actualCreatedAt = actualGenre.getCreatedAt();
+        final var actualUpdatedAt = actualGenre.getUpdatedAt();
+
+        actualGenre.update(expectedName, expectedIsActive, expectedCategories);
+
+        assertNotNull(actualGenre.getId());
+        assertEquals(expectedName, actualGenre.getName());
+        assertEquals(expectedIsActive, actualGenre.isActive());
+        assertEquals(expectedCategories, actualGenre.getCategories());
+        assertEquals(actualCreatedAt, actualGenre.getCreatedAt());
+        assertTrue(actualUpdatedAt.isBefore(actualGenre.getUpdatedAt()));
+        assertNull(actualGenre.getDeletedAt());
+    }
+
+    @Test
+    public void givenAnValidActiveGenre_whenCallUpdateWithInactivate_shouldReceiveGenreUpdated() {
+        final var expectedName = "Ação";
+        final var expectedIsActive = false;
+        final var expectedCategories = List.of(CategoryID.from("123"));
+
+
+        final var actualGenre = Genre.newGenre("acao", true);
+        assertTrue(actualGenre.isActive());
+        assertNull(actualGenre.getDeletedAt());
+
+        final var actualCreatedAt = actualGenre.getCreatedAt();
+        final var actualUpdatedAt = actualGenre.getUpdatedAt();
+
+        actualGenre.update(expectedName, expectedIsActive, expectedCategories);
+
+        assertNotNull(actualGenre.getId());
+        assertEquals(expectedName, actualGenre.getName());
+        assertEquals(expectedIsActive, actualGenre.isActive());
+        assertEquals(expectedCategories, actualGenre.getCategories());
+        assertEquals(actualCreatedAt, actualGenre.getCreatedAt());
+        assertTrue(actualUpdatedAt.isBefore(actualGenre.getUpdatedAt()));
+        assertNotNull(actualGenre.getDeletedAt());
+    }
+
+    @Test
+    public void givenAnValidGenre_whenCallUpdateWithEmptyName_shouldReceiveNotificationException() {
+        final var expectedName = " ";
+        final var expectedIsActive = false;
+        final var expectedCategories = List.of(CategoryID.from("123"));
+        final var expectedErrorCount = 1;
+        final var expectedErrorMessage = "'name' should not be empty";
+
+
+        final var actualGenre = Genre.newGenre("Ação", true);
+        assertTrue(actualGenre.isActive());
+        assertNull(actualGenre.getDeletedAt());
+
+        final var actualException =
+                assertThrows(NotificationException.class, () -> actualGenre.update(expectedName, expectedIsActive, expectedCategories));
+
+        assertEquals(expectedErrorCount, actualException.getErrors().size());
+        assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
+    }
+
+
+    @Test
+    public void givenAnValidGenre_whenCallUpdateWithNullName_shouldReceiveNotificationException() {
+        final String expectedName = null;
+        final var expectedIsActive = true;
+        final var expectedCategories = List.of(CategoryID.from("123"));
+        final var expectedErrorCount = 1;
+        final var expectedErrorMessage = "'name' should not be null";
+
+
+        final var actualGenre = Genre.newGenre("Ação", false);
+        assertFalse(actualGenre.isActive());
+        assertNotNull(actualGenre.getDeletedAt());
+
+        final var actualException =
+                assertThrows(NotificationException.class, () -> actualGenre.update(expectedName, expectedIsActive, expectedCategories));
+
+        assertEquals(expectedErrorCount, actualException.getErrors().size());
+        assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
     }
 }

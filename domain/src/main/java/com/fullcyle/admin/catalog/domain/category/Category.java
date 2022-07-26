@@ -4,10 +4,9 @@ import com.fullcyle.admin.catalog.domain.AggregateRoot;
 import com.fullcyle.admin.catalog.domain.validation.ValidationHandler;
 
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
-import static java.util.Objects.nonNull;
+import static com.fullcyle.admin.catalog.domain.utils.InstantUtils.now;
 
 public class Category extends AggregateRoot<CategoryID> implements Cloneable {
 
@@ -38,7 +37,7 @@ public class Category extends AggregateRoot<CategoryID> implements Cloneable {
 
     public static Category newCategory(final String aName, final String aDescription, final boolean isActive) {
         final var id = CategoryID.unique();
-        final var now = Instant.now();
+        final var now = now();
         final var deletedAt = isActive ? null : now;
         return new Category(id, aName, aDescription, isActive, now, now, deletedAt);
     }
@@ -67,7 +66,7 @@ public class Category extends AggregateRoot<CategoryID> implements Cloneable {
     }
 
     public Category deactivate() {
-        var now = Instant.now();
+        var now = now();
         if (getDeletedAt() == null) {
             this.deletedAt = now;
         }
@@ -78,7 +77,7 @@ public class Category extends AggregateRoot<CategoryID> implements Cloneable {
     }
 
     public Category activate() {
-        var now = Instant.now();
+        var now = now();
         this.deletedAt = null;
         this.active = true;
         this.updatedAt = now;
@@ -94,7 +93,7 @@ public class Category extends AggregateRoot<CategoryID> implements Cloneable {
 
         this.name = aName;
         this.description = aDescription;
-        this.updatedAt = Instant.now();
+        this.updatedAt = now();
 
         return this;
     }
@@ -115,23 +114,17 @@ public class Category extends AggregateRoot<CategoryID> implements Cloneable {
         return active;
     }
 
-    //TODO JM: create a generic truncated for all Instant class
+
     public Instant getCreatedAt() {
-        return nonNull(createdAt)
-                ? createdAt.truncatedTo(ChronoUnit.MICROS)
-                : null;
+        return createdAt;
     }
 
     public Instant getUpdatedAt() {
-        return nonNull(updatedAt)
-                ? updatedAt.truncatedTo(ChronoUnit.MICROS)
-                : null;
+        return updatedAt;
     }
 
     public Instant getDeletedAt() {
-        return nonNull(deletedAt)
-                ? deletedAt.truncatedTo(ChronoUnit.MICROS)
-                : null;
+        return deletedAt;
     }
 
     @Override

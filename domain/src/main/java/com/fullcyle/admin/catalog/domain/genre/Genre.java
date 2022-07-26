@@ -70,18 +70,47 @@ public class Genre extends AggregateRoot<GenreID> {
         this.updatedAt = aUpdatedAt;
         this.deletedAt = aDeletedAt;
 
-        final var notification = Notification.create();
-        validate(notification);
-
-        if (notification.hasErrors()) {
-            throw new NotificationException("Failed to create a Aggregate Genre", notification);
-        }
+        selfValidate();
     }
 
     @Override
     public void validate(final ValidationHandler anHandler) {
         new GenreValidator(this, anHandler).validate();
     }
+
+    public Genre update(
+            final String aName,
+            final boolean isActive,
+            final List<CategoryID> categories) {
+
+        this.name = aName;
+        this.categories = new ArrayList<>(categories);
+
+        if (isActive) activate();
+        else deactivate();
+
+        selfValidate();
+        return this;
+    }
+
+    public Genre deactivate() {
+        final var now = now();
+        this.active = false;
+        if (getDeletedAt() == null) {
+            this.deletedAt = now;
+        }
+
+        this.updatedAt = now;
+        return this;
+    }
+
+    public Genre activate() {
+        this.deletedAt = null;
+        this.active = true;
+        this.updatedAt = now();
+        return this;
+    }
+
 
     public String getName() {
         return name;
@@ -107,21 +136,12 @@ public class Genre extends AggregateRoot<GenreID> {
         return deletedAt;
     }
 
-    public Genre deactivate() {
-        final var now = now();
-        this.active = false;
-        if (getDeletedAt() == null) {
-            this.deletedAt = now;
+    private void selfValidate() {
+        final var notification = Notification.create();
+        validate(notification);
+
+        if (notification.hasErrors()) {
+            throw new NotificationException("Failed to create a Aggregate Genre", notification);
         }
-
-        this.updatedAt = now;
-        return this;
-    }
-
-    public Genre activate() {
-        this.deletedAt = null;
-        this.active = true;
-        this.updatedAt = now();
-        return this;
     }
 }

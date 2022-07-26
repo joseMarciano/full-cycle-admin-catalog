@@ -12,6 +12,8 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.fullcyle.admin.catalog.domain.utils.InstantUtils.now;
+import static java.util.Collections.emptyList;
+import static java.util.Optional.ofNullable;
 
 public class Genre extends AggregateRoot<GenreID> {
 
@@ -84,7 +86,7 @@ public class Genre extends AggregateRoot<GenreID> {
             final List<CategoryID> categories) {
 
         this.name = aName;
-        this.categories = new ArrayList<>(categories);
+        this.categories = new ArrayList<>(ofNullable(categories).orElse(emptyList()));
 
         if (isActive) activate();
         else deactivate();

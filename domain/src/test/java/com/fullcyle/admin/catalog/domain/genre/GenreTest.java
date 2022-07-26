@@ -5,6 +5,7 @@ import com.fullcyle.admin.catalog.domain.category.CategoryID;
 import com.fullcyle.admin.catalog.domain.exceptions.NotificationException;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -225,5 +226,27 @@ public class GenreTest {
 
         assertEquals(expectedErrorCount, actualException.getErrors().size());
         assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
+    }
+
+    @Test
+    public void givenAnValidGenre_whenCallUpdateWithNullCategories_shouldReceiveOK() {
+        final String expectedName = "Ação";
+        final var expectedIsActive = true;
+        final List<CategoryID> expectedCategories = Collections.emptyList();
+
+
+        final var actualGenre = Genre.newGenre(expectedName, expectedIsActive);
+        final var actualCreatedAt = actualGenre.getCreatedAt();
+        final var actualUpdatedAt = actualGenre.getUpdatedAt();
+
+
+        assertDoesNotThrow(() -> actualGenre.update(expectedName, expectedIsActive, null));
+        assertNotNull(actualGenre.getId());
+        assertEquals(expectedName, actualGenre.getName());
+        assertEquals(expectedIsActive, actualGenre.isActive());
+        assertEquals(expectedCategories, actualGenre.getCategories());
+        assertEquals(actualCreatedAt, actualGenre.getCreatedAt());
+        assertTrue(actualUpdatedAt.isBefore(actualGenre.getUpdatedAt()));
+        assertNull(actualGenre.getDeletedAt());
     }
 }

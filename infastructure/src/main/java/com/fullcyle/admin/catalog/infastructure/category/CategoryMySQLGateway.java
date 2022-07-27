@@ -14,6 +14,8 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -75,7 +77,15 @@ public class CategoryMySQLGateway implements CategoryGateway {
         );
     }
 
+    @Override
+    public List<CategoryID> existsByIds(Iterable<CategoryID> ids) {
+        //TODO: Implements when arrive in infra layer
+        return Collections.emptyList();
+    }
+
     private Category save(Category aCategory) {
         return this.repository.save(CategoryJpaEntity.from(aCategory)).toAgregate();
     }
+
+
 }

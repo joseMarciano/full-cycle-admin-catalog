@@ -120,6 +120,13 @@ public class Genre extends AggregateRoot<GenreID> {
         this.updatedAt = now();
         return this;
     }
+    public Genre addCategories(final List<CategoryID> categories) {
+        if (categories == null || categories.isEmpty()) return this;
+
+        this.categories.addAll(categories);
+        this.updatedAt = now();
+        return this;
+    }
 
     public Genre removeCategory(final CategoryID aCategoryID) {
         if (aCategoryID == null) return this;
@@ -128,6 +135,8 @@ public class Genre extends AggregateRoot<GenreID> {
         this.updatedAt = now();
         return this;
     }
+
+
 
 
     public String getName() {

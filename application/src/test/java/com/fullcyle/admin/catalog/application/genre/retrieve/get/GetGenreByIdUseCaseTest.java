@@ -1,7 +1,6 @@
-package com.fullcyle.admin.catalog.application.genre.retrieve;
+package com.fullcyle.admin.catalog.application.genre.retrieve.get;
 
 import com.fullcyle.admin.catalog.application.UseCaseTest;
-import com.fullcyle.admin.catalog.application.genre.retrieve.get.DefaultGetGenreByIdUseCase;
 import com.fullcyle.admin.catalog.domain.category.CategoryID;
 import com.fullcyle.admin.catalog.domain.exceptions.NotFoundException;
 import com.fullcyle.admin.catalog.domain.genre.Genre;

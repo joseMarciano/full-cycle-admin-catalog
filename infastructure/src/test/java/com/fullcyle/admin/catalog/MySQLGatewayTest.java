@@ -15,9 +15,10 @@ import static org.springframework.context.annotation.FilterType.REGEX;
 @Inherited
 @ActiveProfiles("test-integration") // to configure H2 instead MySql
 @DataJpaTest
-@ComponentScan(includeFilters = {
-        @ComponentScan.Filter(type = REGEX, pattern = ".[MySQLGateway]")
-})
+@ComponentScan(
+        basePackages = {"com.fullcyle.admin.catalog"},
+        includeFilters = {@ComponentScan.Filter(type = REGEX, pattern = ".[MySQLGateway]")}
+)
 @ExtendWith(MySQLCleanUpExtension.class)
 public @interface MySQLGatewayTest {
 }

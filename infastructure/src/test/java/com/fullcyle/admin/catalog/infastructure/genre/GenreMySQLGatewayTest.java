@@ -4,6 +4,7 @@ import com.fullcyle.admin.catalog.MySQLGatewayTest;
 import com.fullcyle.admin.catalog.domain.category.Category;
 import com.fullcyle.admin.catalog.domain.category.CategoryID;
 import com.fullcyle.admin.catalog.domain.genre.Genre;
+import com.fullcyle.admin.catalog.domain.genre.GenreID;
 import com.fullcyle.admin.catalog.infastructure.category.CategoryMySQLGateway;
 import com.fullcyle.admin.catalog.infastructure.genre.persistence.GenreJpaEntity;
 import com.fullcyle.admin.catalog.infastructure.genre.persistence.GenreRepository;
@@ -150,6 +151,7 @@ public class GenreMySQLGatewayTest {
         assertNull(persistedGenre.getDeletedAt());
 
     }
+
     @Test
     public void givenAValidGenreWithCategories_whenCallsUpdateGenreCleaning_shouldPersistGenre() {
         final var filmes =
@@ -236,6 +238,7 @@ public class GenreMySQLGatewayTest {
         assertNull(persistedGenre.getDeletedAt());
 
     }
+
     @Test
     public void givenAValidActiveeGenre_whenCallsUpdateGenreInactivating_shouldPersistGenre() {
         final var expectedName = "Ação";
@@ -274,5 +277,21 @@ public class GenreMySQLGatewayTest {
         assertTrue(aGenre.getUpdatedAt().isBefore(persistedGenre.getUpdatedAt()));
         assertNotNull(persistedGenre.getDeletedAt());
 
+    }
+
+    @Test
+    public void givenAPrePersistedGenre_whenCallsDeleteById_shouldDeleteGenre() {
+        final var aGenre = Genre.newGenre("Ação", true);
+        genreRepository.saveAndFlush(GenreJpaEntity.from(aGenre));
+        assertEquals(1, genreRepository.count());
+        genreMySQLGateway.deleteById(aGenre.getId());
+        assertEquals(0, genreRepository.count());
+    }
+
+    @Test
+    public void givenAnInvalidGenre_whenCallsDeleteById_shouldReturnOK() {
+        assertEquals(0, genreRepository.count());
+        genreMySQLGateway.deleteById(GenreID.from("123"));
+        assertEquals(0, genreRepository.count());
     }
 }

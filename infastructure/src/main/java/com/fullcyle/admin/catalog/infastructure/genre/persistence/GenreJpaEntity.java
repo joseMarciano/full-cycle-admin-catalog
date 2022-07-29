@@ -35,7 +35,7 @@ public class GenreJpaEntity {
     @Column(name = "UPDATED_AT", nullable = false, columnDefinition = "DATETIME(6)")
     private Instant updatedAt;
 
-    @Column(name = "DELETED_AT", nullable = false, columnDefinition = "DATETIME(6)")
+    @Column(name = "DELETED_AT", columnDefinition = "DATETIME(6)")
     private Instant deletedAt;
 
     public GenreJpaEntity() {

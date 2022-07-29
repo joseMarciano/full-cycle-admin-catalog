@@ -41,7 +41,8 @@ public class GenreMySQLGateway implements GenreGateway {
 
     @Override
     public Optional<Genre> findById(GenreID anId) {
-        return Optional.empty();
+        return this.genreRepository.findById(anId.getValue())
+                .map(GenreJpaEntity::toAggreate);
     }
 
     @Override

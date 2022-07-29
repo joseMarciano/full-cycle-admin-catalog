@@ -13,6 +13,7 @@ public class GenreCategoryJpaEntity {
     private GenreCategoryID id;
 
     @ManyToOne
+    @JoinColumn(name = "ID_GENRES")
     @MapsId("genreId")
     private GenreJpaEntity genre;
 

@@ -19,6 +19,7 @@
 
 ## :ballot_box_with_check: Progress of the project
 - [x] Initialize application
+- [x] CRUD Categories
 
 
 ### :robot: Back-end:

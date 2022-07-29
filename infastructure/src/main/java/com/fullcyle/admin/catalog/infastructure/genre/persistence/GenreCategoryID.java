@@ -2,10 +2,11 @@ package com.fullcyle.admin.catalog.infastructure.genre.persistence;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
-public class GenreCategoryID {
+public class GenreCategoryID implements Serializable {
 
     @Column(name = "ID_GENRES", nullable = false)
     private String genreId;

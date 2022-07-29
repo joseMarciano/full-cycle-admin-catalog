@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 import java.util.Objects;
 import java.util.Optional;
 
+import static java.util.Objects.isNull;
+
 @Component
 public class GenreMySQLGateway implements GenreGateway {
 
@@ -23,13 +25,18 @@ public class GenreMySQLGateway implements GenreGateway {
 
 
     @Override
-    public Genre create(Genre aGenre) {
+    public Genre create(final Genre aGenre) {
         return save(aGenre);
     }
 
     @Override
-    public void deleteById(GenreID anID) {
+    public void deleteById(final GenreID anID) {
+        final var aGenreId = anID.getValue();
 
+        if (isNull(aGenreId) || aGenreId.isBlank() || !this.genreRepository.existsById(aGenreId))
+            return;
+
+        this.genreRepository.deleteById(aGenreId);
     }
 
     @Override

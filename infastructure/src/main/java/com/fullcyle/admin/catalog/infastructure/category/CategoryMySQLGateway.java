@@ -61,9 +61,7 @@ public class CategoryMySQLGateway implements CategoryGateway {
 
         final var specification = Optional.ofNullable(aQuery.terms())
                 .filter(term -> !term.isBlank())
-                .map(term -> SpecificationUtils
-                        .<CategoryJpaEntity>like("name", term)
-                        .or(SpecificationUtils.like("description", term)))
+                .map(this::assembleSpecification)
                 .orElse(null);
 
         final var pageResult = this.repository.findAll(Specification.where(specification), page);
@@ -75,6 +73,12 @@ public class CategoryMySQLGateway implements CategoryGateway {
                 pageResult.getTotalElements(),
                 pageResult.map(CategoryJpaEntity::toAgregate).toList()
         );
+    }
+
+    private Specification<CategoryJpaEntity> assembleSpecification(final String terms) {
+        return SpecificationUtils
+                .<CategoryJpaEntity>like("name", terms)
+                .or(SpecificationUtils.like("description", terms));
     }
 
     @Override

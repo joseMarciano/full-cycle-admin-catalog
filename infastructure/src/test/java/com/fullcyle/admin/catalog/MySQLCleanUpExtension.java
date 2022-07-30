@@ -4,7 +4,6 @@ import com.fullcyle.admin.catalog.infastructure.category.persistence.CategoryRep
 import com.fullcyle.admin.catalog.infastructure.genre.persistence.GenreRepository;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -25,10 +24,6 @@ class MySQLCleanUpExtension implements BeforeEachCallback {
                 applicationContext.getBean(GenreRepository.class),
                 applicationContext.getBean(CategoryRepository.class)
         ));
-
-        final var em = applicationContext.getBean(TestEntityManager.class);
-        em.flush(); // force commit of all query generated  on clearUp
-        em.clear();
     }
 
     private void cleanUp(Collection<CrudRepository> repositories) {

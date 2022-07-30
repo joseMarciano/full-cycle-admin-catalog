@@ -331,4 +331,40 @@ public class CategoryMySQLGatewayTest {
         assertEquals(filmes.getId(), actualResult.items().get(0).getId());
     }
 
+    @Test
+    public void givenPrePersistedCategories_whenCallsExistsByIds_shouldReturnIds() {
+        //given
+        final var filmes = Category.newCategory("Filmes", "A categoria mais assistida", true);
+        final var series = Category.newCategory("Séries", "Uma categoria assistida", true);
+        final var documentaries = Category.newCategory("Documentários", "A categoria menos assistida", true);
+        final var expectedIds = List.of(
+                filmes.getId(),
+                series.getId(),
+                documentaries.getId()
+        );
+
+        final var ids = List.of(
+                filmes.getId(),
+                series.getId(),
+                documentaries.getId(),
+                CategoryID.from("123")
+        );
+
+        assertEquals(0, categoryRepository.count());
+
+        categoryRepository.saveAllAndFlush(List.of(
+                CategoryJpaEntity.from(filmes),
+                CategoryJpaEntity.from(series),
+                CategoryJpaEntity.from(documentaries)
+        ));
+
+        assertEquals(3, categoryRepository.count());
+
+        //when
+        final var actualResult = categoryGateway.existsByIds(ids);
+
+        //then
+        assertTrue(actualResult.size() == expectedIds.size() && actualResult.containsAll(expectedIds));
+    }
+
 }

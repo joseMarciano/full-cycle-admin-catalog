@@ -14,9 +14,9 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 @Component
 public class CategoryMySQLGateway implements CategoryGateway {
@@ -82,9 +82,14 @@ public class CategoryMySQLGateway implements CategoryGateway {
     }
 
     @Override
-    public List<CategoryID> existsByIds(Iterable<CategoryID> ids) {
-        //TODO: Implements when arrive in infra layer
-        return Collections.emptyList();
+    public List<CategoryID> existsByIds(Iterable<CategoryID> categoryIDs) {
+        final var ids = StreamSupport.stream(categoryIDs.spliterator(), false)
+                .map(CategoryID::getValue)
+                .toList();
+        return this.repository.existsByIds(ids)
+                .stream()
+                .map(CategoryID::from)
+                .toList();
     }
 
     private Category save(Category aCategory) {

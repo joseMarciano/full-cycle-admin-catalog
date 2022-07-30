@@ -7,6 +7,10 @@ import com.fullcyle.admin.catalog.domain.pagination.Pagination;
 import com.fullcyle.admin.catalog.domain.pagination.SearchQuery;
 import com.fullcyle.admin.catalog.infastructure.genre.persistence.GenreJpaEntity;
 import com.fullcyle.admin.catalog.infastructure.genre.persistence.GenreRepository;
+import com.fullcyle.admin.catalog.infastructure.utils.SpecificationUtils;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -52,7 +56,30 @@ public class GenreMySQLGateway implements GenreGateway {
 
     @Override
     public Pagination<Genre> findAll(SearchQuery aQuery) {
-        return null;
+        final var page = PageRequest.of(
+                aQuery.page(),
+                aQuery.perPage(),
+                Sort.by(Sort.Direction.fromString(aQuery.direction()), aQuery.sort())
+        );
+
+        final var specification = Optional.ofNullable(aQuery.terms())
+                .filter(term -> !term.isBlank())
+                .map(this::asembleSpecification)
+                .orElse(null);
+
+        final var pageResult = this.genreRepository.findAll(Specification.where(specification), page);
+
+
+        return new Pagination<>(
+                pageResult.getNumber(),
+                pageResult.getSize(),
+                pageResult.getTotalElements(),
+                pageResult.map(GenreJpaEntity::toAggreate).toList()
+        );
+    }
+
+    private Specification<GenreJpaEntity> asembleSpecification(final String terms) {
+        return SpecificationUtils.<GenreJpaEntity>like("name", terms);
     }
 
     private Genre save(Genre aGenre) {

@@ -3,6 +3,8 @@ package com.fullcyle.admin.catalog.infastructure.api.controllers;
 import com.fullcyle.admin.catalog.application.genre.create.CreateGenreCommand;
 import com.fullcyle.admin.catalog.application.genre.create.CreateGenreUseCase;
 import com.fullcyle.admin.catalog.application.genre.retrieve.get.GetGenreByIdUseCase;
+import com.fullcyle.admin.catalog.application.genre.update.UpdateGenreCommand;
+import com.fullcyle.admin.catalog.application.genre.update.UpdateGenreUseCase;
 import com.fullcyle.admin.catalog.domain.pagination.Pagination;
 import com.fullcyle.admin.catalog.infastructure.api.GenreAPI;
 import com.fullcyle.admin.catalog.infastructure.genre.models.CreateGenreRequest;
@@ -14,7 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
-import java.util.Objects;
+
+import static java.util.Objects.requireNonNull;
 
 @RestController
 public class GenreController implements GenreAPI {
@@ -22,10 +25,14 @@ public class GenreController implements GenreAPI {
     private final CreateGenreUseCase createGenreUseCase;
     private final GetGenreByIdUseCase getGenreByIdUseCase;
 
+    private final UpdateGenreUseCase updateGenreUseCase;
+
     public GenreController(final CreateGenreUseCase createGenreUseCase,
-                           final GetGenreByIdUseCase getGenreByIdUseCase) {
-        this.createGenreUseCase = Objects.requireNonNull(createGenreUseCase);
-        this.getGenreByIdUseCase =  Objects.requireNonNull(getGenreByIdUseCase);
+                           final GetGenreByIdUseCase getGenreByIdUseCase,
+                           final UpdateGenreUseCase updateGenreUseCase) {
+        this.createGenreUseCase = requireNonNull(createGenreUseCase);
+        this.getGenreByIdUseCase = requireNonNull(getGenreByIdUseCase);
+        this.updateGenreUseCase = requireNonNull(updateGenreUseCase);
     }
 
     @Override
@@ -58,7 +65,16 @@ public class GenreController implements GenreAPI {
 
     @Override
     public ResponseEntity<?> updateById(final String id, final UpdateGenreRequest body) {
-        return null;
+        final var aCommand = UpdateGenreCommand.with(
+                id,
+                body.name(),
+                body.isActive(),
+                body.categories()
+        );
+
+        final var ouput = updateGenreUseCase.execute(aCommand);
+
+        return ResponseEntity.ok(ouput);
     }
 
     @Override

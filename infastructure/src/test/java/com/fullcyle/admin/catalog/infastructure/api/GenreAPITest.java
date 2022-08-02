@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fullcyle.admin.catalog.ControllerTest;
 import com.fullcyle.admin.catalog.application.genre.create.CreateGenreOutput;
 import com.fullcyle.admin.catalog.application.genre.create.CreateGenreUseCase;
+import com.fullcyle.admin.catalog.application.genre.delete.DeleteGenreUseCase;
 import com.fullcyle.admin.catalog.application.genre.retrieve.get.GenreOutput;
 import com.fullcyle.admin.catalog.application.genre.retrieve.get.GetGenreByIdUseCase;
 import com.fullcyle.admin.catalog.application.genre.update.UpdateGenreOutput;
@@ -49,6 +50,9 @@ public class GenreAPITest {
 
     @MockBean
     private UpdateGenreUseCase updateGenreUseCase;
+
+    @MockBean
+    private DeleteGenreUseCase deleteGenreUseCase;
 
     @Test
     public void givenAValidCommand_whenCallsCreateGenre_shouldReturnGenreId() throws Exception {
@@ -267,6 +271,25 @@ public class GenreAPITest {
                         && Objects.equals(expectedIsActive, cmd.isActive())
         ));
 
+    }
+
+    @Test
+    public void givenAValidId_whenCallsDeleteGenre_shouldBeOK() throws Exception {
+        //given
+        final var expectedId = "132";
+        //when
+
+        doNothing()
+                .when(deleteGenreUseCase).execute(expectedId);
+
+        final var aRequest = MockMvcRequestBuilders.delete("/genres/{id}", expectedId)
+                .accept(MediaType.APPLICATION_JSON);
+
+        final var aResponse = this.mvc.perform(aRequest);
+        //then
+        aResponse.andExpect(MockMvcResultMatchers.status().isNoContent());
+
+        verify(deleteGenreUseCase).execute(expectedId);
     }
 
 }

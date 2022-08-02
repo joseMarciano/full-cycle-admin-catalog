@@ -2,6 +2,7 @@ package com.fullcyle.admin.catalog.infastructure.api.controllers;
 
 import com.fullcyle.admin.catalog.application.genre.create.CreateGenreCommand;
 import com.fullcyle.admin.catalog.application.genre.create.CreateGenreUseCase;
+import com.fullcyle.admin.catalog.application.genre.delete.DeleteGenreUseCase;
 import com.fullcyle.admin.catalog.application.genre.retrieve.get.GetGenreByIdUseCase;
 import com.fullcyle.admin.catalog.application.genre.update.UpdateGenreCommand;
 import com.fullcyle.admin.catalog.application.genre.update.UpdateGenreUseCase;
@@ -27,12 +28,15 @@ public class GenreController implements GenreAPI {
 
     private final UpdateGenreUseCase updateGenreUseCase;
 
+    private final DeleteGenreUseCase deleteGenreUseCase;
     public GenreController(final CreateGenreUseCase createGenreUseCase,
                            final GetGenreByIdUseCase getGenreByIdUseCase,
-                           final UpdateGenreUseCase updateGenreUseCase) {
+                           final UpdateGenreUseCase updateGenreUseCase,
+                           final DeleteGenreUseCase deleteGenreUseCase) {
         this.createGenreUseCase = requireNonNull(createGenreUseCase);
         this.getGenreByIdUseCase = requireNonNull(getGenreByIdUseCase);
         this.updateGenreUseCase = requireNonNull(updateGenreUseCase);
+        this.deleteGenreUseCase = requireNonNull(deleteGenreUseCase);
     }
 
     @Override
@@ -79,6 +83,6 @@ public class GenreController implements GenreAPI {
 
     @Override
     public void deleteById(final String id) {
-
+        this.deleteGenreUseCase.execute(id);
     }
 }

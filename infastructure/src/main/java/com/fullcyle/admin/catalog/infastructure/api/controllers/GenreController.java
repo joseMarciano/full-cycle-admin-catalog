@@ -2,24 +2,30 @@ package com.fullcyle.admin.catalog.infastructure.api.controllers;
 
 import com.fullcyle.admin.catalog.application.genre.create.CreateGenreCommand;
 import com.fullcyle.admin.catalog.application.genre.create.CreateGenreUseCase;
+import com.fullcyle.admin.catalog.application.genre.retrieve.get.GetGenreByIdUseCase;
 import com.fullcyle.admin.catalog.domain.pagination.Pagination;
 import com.fullcyle.admin.catalog.infastructure.api.GenreAPI;
 import com.fullcyle.admin.catalog.infastructure.genre.models.CreateGenreRequest;
 import com.fullcyle.admin.catalog.infastructure.genre.models.GenreListResponse;
 import com.fullcyle.admin.catalog.infastructure.genre.models.GenreResponse;
 import com.fullcyle.admin.catalog.infastructure.genre.models.UpdateGenreRequest;
+import com.fullcyle.admin.catalog.infastructure.genre.presenters.GenreApiPresenter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.Objects;
 
 @RestController
 public class GenreController implements GenreAPI {
 
     private final CreateGenreUseCase createGenreUseCase;
+    private final GetGenreByIdUseCase getGenreByIdUseCase;
 
-    public GenreController(CreateGenreUseCase createGenreUseCase) {
-        this.createGenreUseCase = createGenreUseCase;
+    public GenreController(final CreateGenreUseCase createGenreUseCase,
+                           final GetGenreByIdUseCase getGenreByIdUseCase) {
+        this.createGenreUseCase = Objects.requireNonNull(createGenreUseCase);
+        this.getGenreByIdUseCase =  Objects.requireNonNull(getGenreByIdUseCase);
     }
 
     @Override
@@ -47,7 +53,7 @@ public class GenreController implements GenreAPI {
 
     @Override
     public GenreResponse getById(final String id) {
-        return null;
+        return GenreApiPresenter.present(getGenreByIdUseCase.execute(id));
     }
 
     @Override

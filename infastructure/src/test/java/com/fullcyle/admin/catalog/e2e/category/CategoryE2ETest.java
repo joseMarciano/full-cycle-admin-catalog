@@ -4,7 +4,6 @@ import com.fullcyle.admin.catalog.E2ETest;
 import com.fullcyle.admin.catalog.e2e.MockDsl;
 import com.fullcyle.admin.catalog.infastructure.category.models.UpdateCategoryRequest;
 import com.fullcyle.admin.catalog.infastructure.category.persistence.CategoryRepository;
-import com.fullcyle.admin.catalog.infastructure.configuration.json.Json;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -199,11 +198,7 @@ public class CategoryE2ETest implements MockDsl {
 
         final var aRequestBody = new UpdateCategoryRequest(expectedName, expectedDescription, expectedActive);
 
-        final var aRequest = MockMvcRequestBuilders.put("/categories/{id}", actualId.getValue())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(Json.writeValueAsString(aRequestBody));
-
-        this.mvc.perform(aRequest)
+        updateACategory(actualId, aRequestBody)
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
         final var actualCategory = categoryRepository.findById(actualId.getValue()).get();
@@ -233,11 +228,7 @@ public class CategoryE2ETest implements MockDsl {
 
         final var aRequestBody = new UpdateCategoryRequest(expectedName, expectedDescription, expectedActive);
 
-        final var aRequest = MockMvcRequestBuilders.put("/categories/{id}", actualId.getValue())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(Json.writeValueAsString(aRequestBody));
-
-        this.mvc.perform(aRequest)
+        updateACategory(actualId, aRequestBody)
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
         final var actualCategory = categoryRepository.findById(actualId.getValue()).get();
@@ -265,11 +256,7 @@ public class CategoryE2ETest implements MockDsl {
 
         final var aRequestBody = new UpdateCategoryRequest(expectedName, expectedDescription, expectedActive);
 
-        final var aRequest = MockMvcRequestBuilders.put("/categories/{id}", actualId.getValue())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(Json.writeValueAsString(aRequestBody));
-
-        this.mvc.perform(aRequest)
+        updateACategory(actualId, aRequestBody)
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
         final var actualCategory = categoryRepository.findById(actualId.getValue()).get();
@@ -291,11 +278,7 @@ public class CategoryE2ETest implements MockDsl {
 
         final var actualId = givenACategory("Filmes", null, true);
 
-        final var request =
-                MockMvcRequestBuilders.delete("/categories/{id}", actualId.getValue())
-                        .contentType(MediaType.APPLICATION_JSON);
-
-        this.mvc.perform(request)
+        deleteACategory(actualId)
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
 
         Assertions.assertFalse(this.categoryRepository.existsById(actualId.getValue()));

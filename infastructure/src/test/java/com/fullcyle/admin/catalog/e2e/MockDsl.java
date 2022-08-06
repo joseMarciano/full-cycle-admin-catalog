@@ -5,6 +5,7 @@ import com.fullcyle.admin.catalog.domain.category.CategoryID;
 import com.fullcyle.admin.catalog.domain.genre.GenreID;
 import com.fullcyle.admin.catalog.infastructure.category.models.CategoryResponse;
 import com.fullcyle.admin.catalog.infastructure.category.models.CreateCategoryRequest;
+import com.fullcyle.admin.catalog.infastructure.category.models.UpdateCategoryRequest;
 import com.fullcyle.admin.catalog.infastructure.configuration.json.Json;
 import com.fullcyle.admin.catalog.infastructure.genre.models.CreateGenreRequest;
 import org.springframework.http.MediaType;
@@ -19,6 +20,11 @@ import java.util.function.Function;
 public interface MockDsl {
 
     MockMvc mvc();
+
+    default ResultActions deleteACategory(final Identifier anId) throws Exception {
+        return this.delete("/categories", anId);
+    }
+
 
     default CategoryID givenACategory(String aName, String aDescription, boolean isActive) throws Exception {
         final var aRequestBody = new CreateCategoryRequest(aName, aDescription, isActive);
@@ -53,6 +59,10 @@ public interface MockDsl {
 
     default CategoryResponse retrieveACategory(final Identifier anId) throws Exception {
         return this.retrieve("/categories", anId, CategoryResponse.class);
+    }
+
+    default ResultActions updateACategory(final Identifier anId, final UpdateCategoryRequest aRequest) throws Exception {
+        return this.update("/categories", anId, aRequest);
     }
 
 
@@ -108,6 +118,23 @@ public interface MockDsl {
                 .getContentAsString();
 
         return Json.readValue(json, clazz);
+    }
+
+    private ResultActions delete(final String url, final Identifier anId) throws Exception {
+        final var aRequest =
+                MockMvcRequestBuilders.delete("%s/%s".formatted(url, anId.getValue()))
+                        .contentType(MediaType.APPLICATION_JSON);
+
+        return this.mvc().perform(aRequest);
+    }
+
+    private ResultActions update(final String url, final Identifier anId, final Object aRequestBody) throws Exception {
+        final var aRequest =
+                MockMvcRequestBuilders.put("%s/%s".formatted(url, anId.getValue()), anId.getValue())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(Json.writeValueAsString(aRequestBody));
+
+        return this.mvc().perform(aRequest);
     }
 
 }

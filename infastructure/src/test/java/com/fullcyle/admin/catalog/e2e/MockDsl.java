@@ -8,6 +8,7 @@ import com.fullcyle.admin.catalog.infastructure.category.models.CreateCategoryRe
 import com.fullcyle.admin.catalog.infastructure.category.models.UpdateCategoryRequest;
 import com.fullcyle.admin.catalog.infastructure.configuration.json.Json;
 import com.fullcyle.admin.catalog.infastructure.genre.models.CreateGenreRequest;
+import com.fullcyle.admin.catalog.infastructure.genre.models.GenreResponse;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -49,13 +50,17 @@ public interface MockDsl {
     }
 
     default ResultActions listGenres(final int page,
-                                         final int perPage,
-                                         final String search,
-                                         final String sort,
-                                         final String direction) throws Exception {
+                                     final int perPage,
+                                     final String search,
+                                     final String sort,
+                                     final String direction) throws Exception {
         return this.list("/genres", page, perPage, search, sort, direction);
     }
 
+
+    default GenreResponse retrieveAGenre(final Identifier anId) throws Exception {
+        return this.retrieve("/genres", anId, GenreResponse.class);
+    }
 
     default ResultActions listCategories(final int page, final int perPage, String film) throws Exception {
         return listCategories(page, perPage, film, "", "");
@@ -72,7 +77,6 @@ public interface MockDsl {
                                          final String direction) throws Exception {
         return this.list("/categories", page, perPage, search, sort, direction);
     }
-
 
     default CategoryResponse retrieveACategory(final Identifier anId) throws Exception {
         return this.retrieve("/categories", anId, CategoryResponse.class);

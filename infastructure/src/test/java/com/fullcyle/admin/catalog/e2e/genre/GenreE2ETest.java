@@ -9,9 +9,11 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -177,6 +179,47 @@ public class GenreE2ETest implements MockDsl {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.items[1].name", Matchers.equalTo("Drama")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.items[2].name", Matchers.equalTo("Ação")))
         ;
+    }
+
+    @Test
+    public void asACatalogAdminIShouldBeAbleToGetAGenreByItsIdentifier() throws Exception {
+        Assertions.assertTrue(MY_SQL_CONTAINER.isRunning());
+        Assertions.assertEquals(0, genreRepository.count());
+
+        final var expectedName = "Drama";
+        final var expectedActive = true;
+
+        final var expectedCategories = List.of(givenACategory("Filmes", null, true));
+
+        final var actualId = givenAGenre(expectedName, expectedActive, expectedCategories);
+
+        final var actualGenre = retrieveAGenre(actualId);
+
+        Assertions.assertEquals(expectedName, actualGenre.name());
+        Assertions.assertTrue(
+                expectedCategories.size() == actualGenre.categories().size()
+                        && mapTo(expectedCategories, CategoryID::getValue).containsAll(actualGenre.categories())
+        );
+        Assertions.assertEquals(expectedActive, actualGenre.active());
+        Assertions.assertNotNull(actualGenre.updatedAt());
+        Assertions.assertNotNull(actualGenre.createdAt());
+        Assertions.assertNull(actualGenre.deletedAt());
+
+    }
+
+    @Test
+    public void asACatalogAdminIShouldBeAbleToSeeATreatedErrorByGettingANotFoundCategory() throws Exception {
+        Assertions.assertTrue(MY_SQL_CONTAINER.isRunning());
+        Assertions.assertEquals(0, genreRepository.count());
+
+        final var aRequest =
+                MockMvcRequestBuilders.get("/genres/{id}", "123")
+                        .contentType(MediaType.APPLICATION_JSON);
+
+        this.mvc.perform(aRequest)
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message",
+                        Matchers.equalTo("Genre with ID 123 was not found")));
     }
 
 }

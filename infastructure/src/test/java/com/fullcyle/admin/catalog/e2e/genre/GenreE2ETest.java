@@ -3,10 +3,12 @@ package com.fullcyle.admin.catalog.e2e.genre;
 
 import com.fullcyle.admin.catalog.E2ETest;
 import com.fullcyle.admin.catalog.domain.category.CategoryID;
+import com.fullcyle.admin.catalog.domain.genre.GenreID;
 import com.fullcyle.admin.catalog.e2e.MockDsl;
 import com.fullcyle.admin.catalog.infastructure.genre.models.UpdateGenreRequest;
 import com.fullcyle.admin.catalog.infastructure.genre.persistence.GenreRepository;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -322,6 +324,32 @@ public class GenreE2ETest implements MockDsl {
         assertNotNull(actualGenre.getCreatedAt());
         assertTrue(actualGenre.getCreatedAt().isBefore(actualGenre.getUpdatedAt()));
         assertNull(actualGenre.getDeletedAt());
+
+    }
+
+
+    @Test
+    public void asACatalogAdminIShouldBeAbleToDeleteGenreByIdentifier() throws Exception {
+        Assertions.assertTrue(MY_SQL_CONTAINER.isRunning());
+        Assertions.assertEquals(0, genreRepository.count());
+
+        final var actualId = givenAGenre("Ação", false, List.of());
+
+        deleteAGenre(actualId)
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+
+        Assertions.assertFalse(this.genreRepository.existsById(actualId.getValue()));
+
+    }
+
+    @Test
+    public void asACatalogAdminIShouldNotSeeAErrorByDeletingANotExistentGenre() throws Exception {
+        Assertions.assertTrue(MY_SQL_CONTAINER.isRunning());
+        Assertions.assertEquals(0, genreRepository.count());
+
+        deleteAGenre(GenreID.from("123"))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+        Assertions.assertEquals(0, genreRepository.count());
 
     }
 

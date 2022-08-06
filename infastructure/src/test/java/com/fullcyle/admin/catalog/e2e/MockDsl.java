@@ -9,6 +9,7 @@ import com.fullcyle.admin.catalog.infastructure.category.models.UpdateCategoryRe
 import com.fullcyle.admin.catalog.infastructure.configuration.json.Json;
 import com.fullcyle.admin.catalog.infastructure.genre.models.CreateGenreRequest;
 import com.fullcyle.admin.catalog.infastructure.genre.models.GenreResponse;
+import com.fullcyle.admin.catalog.infastructure.genre.models.UpdateGenreRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -62,6 +63,11 @@ public interface MockDsl {
         return this.retrieve("/genres", anId, GenreResponse.class);
     }
 
+    default ResultActions updateAGenre(final Identifier anId, final UpdateGenreRequest aRequest) throws Exception {
+        return this.update("/genres", anId, aRequest);
+    }
+
+
     default ResultActions listCategories(final int page, final int perPage, String film) throws Exception {
         return listCategories(page, perPage, film, "", "");
     }
@@ -85,7 +91,6 @@ public interface MockDsl {
     default ResultActions updateACategory(final Identifier anId, final UpdateCategoryRequest aRequest) throws Exception {
         return this.update("/categories", anId, aRequest);
     }
-
 
     default <A, D> List<D> mapTo(final List<A> actual, final Function<A, D> mapper) {
         return actual.stream().map(mapper).toList();

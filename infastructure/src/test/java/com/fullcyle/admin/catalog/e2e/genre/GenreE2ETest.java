@@ -5,11 +5,14 @@ import com.fullcyle.admin.catalog.E2ETest;
 import com.fullcyle.admin.catalog.domain.category.CategoryID;
 import com.fullcyle.admin.catalog.e2e.MockDsl;
 import com.fullcyle.admin.catalog.infastructure.genre.persistence.GenreRepository;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -30,7 +33,7 @@ public class GenreE2ETest implements MockDsl {
 
 
     @Container
-    private static final MySQLContainer MYSQL_CONTAINER = new MySQLContainer("mysql:latest")
+    private static final MySQLContainer MY_SQL_CONTAINER = new MySQLContainer("mysql:latest")
             .withPassword("123456")
             .withUsername("root")
             .withDatabaseName("adm_videos");
@@ -38,7 +41,7 @@ public class GenreE2ETest implements MockDsl {
 
     @DynamicPropertySource
     public static void setDatasourceProperties(final DynamicPropertyRegistry registry) {
-        registry.add("mysql.port", () -> MYSQL_CONTAINER.getMappedPort(3306));
+        registry.add("mysql.port", () -> MY_SQL_CONTAINER.getMappedPort(3306));
     }
 
     @Override
@@ -48,7 +51,7 @@ public class GenreE2ETest implements MockDsl {
 
     @Test
     public void asACatalogAdminIShouldBeAbleToCreateANewGenreWithValidValues() throws Exception {
-        assertTrue(MYSQL_CONTAINER.isRunning());
+        assertTrue(MY_SQL_CONTAINER.isRunning());
         assertEquals(0, genreRepository.count());
 
         final var expectedName = "Ação";
@@ -71,7 +74,7 @@ public class GenreE2ETest implements MockDsl {
 
     @Test
     public void asACatalogAdminIShouldBeAbleToCreateANewGenreWithCategories() throws Exception {
-        assertTrue(MYSQL_CONTAINER.isRunning());
+        assertTrue(MY_SQL_CONTAINER.isRunning());
         assertEquals(0, genreRepository.count());
 
         final var filmes = givenACategory("Filmes", null, true);
@@ -92,6 +95,88 @@ public class GenreE2ETest implements MockDsl {
         assertNotNull(actualGenre.getCreatedAt());
         assertNull(actualGenre.getDeletedAt());
 
+    }
+
+
+    @Test
+    public void asACatalogAdminIShouldBeAbleToNavigateThroughAllGenres() throws Exception {
+        Assertions.assertTrue(MY_SQL_CONTAINER.isRunning());
+        Assertions.assertEquals(0, genreRepository.count());
+
+        givenAGenre("Ação", true, List.of());
+        givenAGenre("Esportes", true, List.of());
+        givenAGenre("Drama", true, List.of());
+
+        listGenres(0, 1)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.current_page", Matchers.equalTo(0)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.per_page", Matchers.equalTo(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.total", Matchers.equalTo(3)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items", Matchers.hasSize(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items[0].name", Matchers.equalTo("Ação")));
+
+        listGenres(1, 1)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.current_page", Matchers.equalTo(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.per_page", Matchers.equalTo(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.total", Matchers.equalTo(3)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items", Matchers.hasSize(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items[0].name", Matchers.equalTo("Drama")));
+
+        listGenres(2, 1)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.current_page", Matchers.equalTo(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.per_page", Matchers.equalTo(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.total", Matchers.equalTo(3)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items", Matchers.hasSize(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items[0].name", Matchers.equalTo("Esportes")));
+
+        listGenres(3, 1)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.current_page", Matchers.equalTo(3)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.per_page", Matchers.equalTo(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.total", Matchers.equalTo(3)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items", Matchers.hasSize(0)));
+
+    }
+
+    @Test
+    public void asACatalogAdminIShouldBeAbleToSearchBetweenAllGenres() throws Exception {
+        Assertions.assertTrue(MY_SQL_CONTAINER.isRunning());
+        Assertions.assertEquals(0, genreRepository.count());
+
+        givenAGenre("Ação", true, List.of());
+        givenAGenre("Esportes", true, List.of());
+        givenAGenre("Drama", true, List.of());
+
+        listGenres(0, 1, "dr")
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.current_page", Matchers.equalTo(0)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.per_page", Matchers.equalTo(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.total", Matchers.equalTo(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items", Matchers.hasSize(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items[0].name", Matchers.equalTo("Drama")));
+    }
+
+    @Test
+    public void asACatalogAdminIShouldBeAbleToSortAllCategoriesByNameDesc() throws Exception {
+        Assertions.assertTrue(MY_SQL_CONTAINER.isRunning());
+        Assertions.assertEquals(0, genreRepository.count());
+
+        givenAGenre("Ação", true, List.of());
+        givenAGenre("Esportes", true, List.of());
+        givenAGenre("Drama", true, List.of());
+
+        listGenres(0, 3, "", "name", "desc")
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.current_page", Matchers.equalTo(0)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.per_page", Matchers.equalTo(3)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.total", Matchers.equalTo(3)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items", Matchers.hasSize(3)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items[0].name", Matchers.equalTo("Esportes")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items[1].name", Matchers.equalTo("Drama")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items[2].name", Matchers.equalTo("Ação")))
+        ;
     }
 
 }

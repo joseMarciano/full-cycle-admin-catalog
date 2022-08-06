@@ -40,6 +40,23 @@ public interface MockDsl {
         return GenreID.from(actualId);
     }
 
+    default ResultActions listGenres(final int page, final int perPage, String film) throws Exception {
+        return listGenres(page, perPage, film, "", "");
+    }
+
+    default ResultActions listGenres(final int page, final int perPage) throws Exception {
+        return listGenres(page, perPage, "", "", "");
+    }
+
+    default ResultActions listGenres(final int page,
+                                         final int perPage,
+                                         final String search,
+                                         final String sort,
+                                         final String direction) throws Exception {
+        return this.list("/genres", page, perPage, search, sort, direction);
+    }
+
+
     default ResultActions listCategories(final int page, final int perPage, String film) throws Exception {
         return listCategories(page, perPage, film, "", "");
     }

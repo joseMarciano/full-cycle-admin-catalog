@@ -1,9 +1,8 @@
 package com.fullcyle.admin.catalog.e2e.category;
 
 import com.fullcyle.admin.catalog.E2ETest;
-import com.fullcyle.admin.catalog.domain.category.CategoryID;
+import com.fullcyle.admin.catalog.e2e.MockDsl;
 import com.fullcyle.admin.catalog.infastructure.category.models.CategoryResponse;
-import com.fullcyle.admin.catalog.infastructure.category.models.CreateCategoryRequest;
 import com.fullcyle.admin.catalog.infastructure.category.models.UpdateCategoryRequest;
 import com.fullcyle.admin.catalog.infastructure.category.persistence.CategoryRepository;
 import com.fullcyle.admin.catalog.infastructure.configuration.json.Json;
@@ -24,7 +23,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 @E2ETest
 @Testcontainers
-public class CategoryE2ETest {
+public class CategoryE2ETest implements MockDsl {
 
     @Autowired
     private MockMvc mvc;
@@ -41,6 +40,11 @@ public class CategoryE2ETest {
         final var mapperPort = MY_SQL_CONTAINER.getMappedPort(3306);
         System.out.printf("Container is running on port %s\n", mapperPort);
         registry.add("mysql.port", () -> mapperPort);
+    }
+
+    @Override
+    public MockMvc mvc() {
+        return this.mvc;
     }
 
     @Test
@@ -338,19 +342,6 @@ public class CategoryE2ETest {
                 .getContentAsString();
 
         return Json.readValue(json, CategoryResponse.class);
-    }
-
-    private CategoryID givenACategory(String aName, String aDescription, boolean isActive) throws Exception {
-        final var aRequestBody = new CreateCategoryRequest(aName, aDescription, isActive);
-
-        final var aRequest = MockMvcRequestBuilders.post("/categories").contentType(MediaType.APPLICATION_JSON).content(Json.writeValueAsString(aRequestBody));
-
-        final var actualId = this.mvc.perform(aRequest)
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andReturn().getResponse()
-                .getHeader("Location").replace("/categories/", "");
-
-        return CategoryID.from(actualId);
     }
 
 }

@@ -39,6 +39,19 @@ public class CastMember extends AggregateRoot<CastMemberID> {
     }
 
 
+    public CastMember update(final String aName, final CastMemberType aType) {
+        final var now = InstantUtils.now();
+
+        this.name = aName;
+        this.type = aType;
+        this.updatedAt = now;
+
+        selfValidate();
+
+        return this;
+    }
+
+
     @Override
     public void validate(final ValidationHandler aHandler) {
         new CastMemberValidator(aHandler, this).validate();

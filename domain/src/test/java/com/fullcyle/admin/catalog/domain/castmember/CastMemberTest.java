@@ -88,4 +88,115 @@ public class CastMemberTest {
         Assertions.assertEquals(expectedErrorCount, actualException.getErrors().size());
         Assertions.assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
     }
+
+    public void givenAValidCastMember_whenCallUpdate_shouldReceiveUpdated() {
+        final var expectedName = "Vin Diesel";
+        final var expectedType = CastMemberType.ACTOR;
+
+        final var actualMember = CastMember.newMember("vubd", CastMemberType.DIRECTOR);
+
+        Assertions.assertNotNull(actualMember);
+        Assertions.assertNotNull(actualMember.getId());
+
+        final var actualID = actualMember.getId();
+        final var actualCreatedAt = actualMember.getCreatedAt();
+        final var actualUpdatedAt = actualMember.getUpdatedAt();
+
+
+        actualMember.update(expectedName, expectedType);
+
+        Assertions.assertEquals(actualID, actualMember.getId());
+        Assertions.assertEquals(expectedName, actualMember.getName());
+        Assertions.assertEquals(expectedType, actualMember.getType());
+        Assertions.assertEquals(actualCreatedAt, actualMember.getCreatedAt());
+        Assertions.assertTrue(actualCreatedAt.isBefore(actualMember.getUpdatedAt()));
+        Assertions.assertTrue(actualUpdatedAt.isBefore(actualMember.getUpdatedAt()));
+
+    }
+
+    public void givenAValidCastMember_whenCallUpdateWithInvalidNullName_shouldReceiveNotification() {
+        final String expectedName = null;
+        final var expectedType = CastMemberType.ACTOR;
+        final var expectedErrorCount = 1;
+        final var expectedErrorMessage = "'name' should not be null";
+
+
+        final var actualMember = CastMember.newMember("vubd", CastMemberType.DIRECTOR);
+
+        Assertions.assertNotNull(actualMember);
+        Assertions.assertNotNull(actualMember.getId());
+
+        final var actualException =
+                Assertions.assertThrows(NotificationException.class, () -> actualMember.update(expectedName, expectedType));
+
+        Assertions.assertNotNull(actualException);
+        Assertions.assertEquals(expectedErrorCount, actualException.getErrors().size());
+        Assertions.assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
+    }
+
+    public void givenAValidCastMember_whenCallUpdateWithInvalidEmptyName_shouldReceiveNotification() {
+        final String expectedName = null;
+        final var expectedType = CastMemberType.ACTOR;
+        final var expectedErrorCount = 1;
+        final var expectedErrorMessage = "'name' should not be empty";
+
+
+        final var actualMember = CastMember.newMember("vubd", CastMemberType.DIRECTOR);
+
+        Assertions.assertNotNull(actualMember);
+        Assertions.assertNotNull(actualMember.getId());
+
+        final var actualException =
+                Assertions.assertThrows(NotificationException.class, () -> actualMember.update(expectedName, expectedType));
+
+        Assertions.assertNotNull(actualException);
+        Assertions.assertEquals(expectedErrorCount, actualException.getErrors().size());
+        Assertions.assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
+    }
+
+    public void givenAValidCastMember_whenCallUpdateWithInvalidNullType_shouldReceiveNotification() {
+        final var expectedName = "Vin Diesel";
+        final CastMemberType expectedType = null;
+        final var expectedErrorCount = 1;
+        final var expectedErrorMessage = "'type' should not be null";
+
+
+        final var actualMember = CastMember.newMember("vubd", CastMemberType.DIRECTOR);
+
+        Assertions.assertNotNull(actualMember);
+        Assertions.assertNotNull(actualMember.getId());
+
+        final var actualException =
+                Assertions.assertThrows(NotificationException.class, () -> actualMember.update(expectedName, expectedType));
+
+        Assertions.assertNotNull(actualException);
+        Assertions.assertEquals(expectedErrorCount, actualException.getErrors().size());
+        Assertions.assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
+    }
+
+    public void givenAValidCastMember_whenCallUpdateWithNameMoreThan255_shouldReceiveNotification() {
+        final var expectedName = """
+                A nível organizacional, o início da atividade geral de formação de atitudes acarreta um processo de ref
+                ormulação e modernização das condições inegavelmente apropriadas. Não obstante, o desafiador cenário glo
+                balizado agrega valor ao estabelecimento do processo de comunicação como um todo. Percebemos, cada vez
+                mais, que a consolidação das estruturas representa uma abertura para a melhoria das diretrizes de
+                desenvolvimento para o futuro.
+                """;
+        final var expectedType = CastMemberType.ACTOR;
+        final var expectedErrorCount = 1;
+        final var expectedErrorMessage = "'name' must be between 1 and 255 characters";
+
+
+        final var actualMember = CastMember.newMember("vubd", CastMemberType.DIRECTOR);
+
+        Assertions.assertNotNull(actualMember);
+        Assertions.assertNotNull(actualMember.getId());
+
+        final var actualException =
+                Assertions.assertThrows(NotificationException.class, () -> actualMember.update(expectedName, expectedType));
+
+        Assertions.assertNotNull(actualException);
+        Assertions.assertEquals(expectedErrorCount, actualException.getErrors().size());
+        Assertions.assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
+    }
 }

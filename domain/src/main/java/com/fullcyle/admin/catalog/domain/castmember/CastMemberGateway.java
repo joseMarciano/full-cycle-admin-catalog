@@ -1,6 +1,5 @@
 package com.fullcyle.admin.catalog.domain.castmember;
 
-import com.fullcyle.admin.catalog.domain.genre.Genre;
 import com.fullcyle.admin.catalog.domain.pagination.Pagination;
 import com.fullcyle.admin.catalog.domain.pagination.SearchQuery;
 
@@ -16,5 +15,5 @@ public interface CastMemberGateway {
 
     CastMember update(CastMember aGenre);
 
-    Pagination<Genre> findAll(SearchQuery aQuery);
+    Pagination<CastMember> findAll(SearchQuery aQuery);
 }

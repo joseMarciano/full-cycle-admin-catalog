@@ -13,7 +13,7 @@ public interface CastMemberGateway {
 
     Optional<CastMember> findById(CastMemberID anId);
 
-    CastMember update(CastMember aGenre);
+    CastMember update(CastMember aCastMember);
 
     Pagination<CastMember> findAll(SearchQuery aQuery);
 }

@@ -19,7 +19,10 @@
 
 ## :ballot_box_with_check: Progress of the project
 - [x] Initialize application
-- [x] CRUD Categories
+- [x] Implementation about Categories
+- [x] Implementation about Genres
+- [] Implementation about CastMembers ⚠  *in progress*
+- [] Implementation about Videos
 
 
 ### :robot: Back-end:

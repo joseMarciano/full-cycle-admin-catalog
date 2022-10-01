@@ -21,8 +21,8 @@
 - [x] Initialize application
 - [x] Implementation about Categories
 - [x] Implementation about Genres
-- [] Implementation about CastMembers ⚠  *in progress*
-- [] Implementation about Videos
+- [ ] Implementation about CastMembers ⚠  *in progress*
+- [ ] Implementation about Videos
 
 
 ### :robot: Back-end:

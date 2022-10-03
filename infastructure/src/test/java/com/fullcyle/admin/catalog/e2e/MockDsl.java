@@ -36,6 +36,11 @@ public interface MockDsl {
         return CastMemberID.from(actualId);
     }
 
+    default ResultActions givenACastMemberResult(String aName, CastMemberType aType) throws Exception {
+        final var aRequestBody = new CreateCastMemberRequest(aName, aType);
+        return this.givenResult("/cast_members", aRequestBody);
+    }
+
     /**
      * Category
      */
@@ -117,6 +122,16 @@ public interface MockDsl {
 
     default <A, D> List<D> mapTo(final List<A> actual, final Function<A, D> mapper) {
         return actual.stream().map(mapper).toList();
+    }
+
+    private ResultActions givenResult(final String url, final Object body) throws Exception {
+        final var aRequest =
+                MockMvcRequestBuilders.post(url)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(Json.writeValueAsString(body));
+
+        return this.mvc()
+                .perform(aRequest);
     }
 
     private String given(final String url, final Object body) throws Exception {

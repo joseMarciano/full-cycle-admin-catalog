@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -18,8 +19,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static com.fullcyle.admin.catalog.Fixture.CastMember.type;
 import static com.fullcyle.admin.catalog.Fixture.name;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @E2ETest
@@ -164,6 +164,39 @@ public class CastMemberE2ETest implements MockDsl {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.items[1].name", Matchers.equalTo("Johnny")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.items[2].name", Matchers.equalTo("John")))
         ;
+    }
+
+    @Test
+    public void asACatalogAdminIShouldBeAbleToGetACastMemberByItsIdentifier() throws Exception {
+        assertTrue(MY_SQL_CONTAINER.isRunning());
+        assertEquals(0, castMemberRepository.count());
+
+        final var expectedName = name();
+        final var expectedType = type();
+
+        final var actualId = givenACastMember(expectedName, expectedType);
+
+        final var actualCastMember = retrieveACastMember(actualId);
+
+        assertEquals(expectedName, actualCastMember.name());
+        assertEquals(expectedType, actualCastMember.type());
+        assertNotNull(actualCastMember.updatedAt());
+        assertNotNull(actualCastMember.createdAt());
+    }
+
+    @Test
+    public void asACatalogAdminIShouldBeAbleToSeeATreatedErrorByGettingANotFoundCastMember() throws Exception {
+        assertTrue(MY_SQL_CONTAINER.isRunning());
+        assertEquals(0, castMemberRepository.count());
+
+        final var aRequest =
+                MockMvcRequestBuilders.get("/cast_members/{id}", "123")
+                        .contentType(MediaType.APPLICATION_JSON);
+
+        this.mvc.perform(aRequest)
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message",
+                        Matchers.equalTo("CastMember with ID 123 was not found")));
     }
 
 

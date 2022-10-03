@@ -5,6 +5,7 @@ import com.fullcyle.admin.catalog.domain.castmember.CastMemberID;
 import com.fullcyle.admin.catalog.domain.castmember.CastMemberType;
 import com.fullcyle.admin.catalog.domain.category.CategoryID;
 import com.fullcyle.admin.catalog.domain.genre.GenreID;
+import com.fullcyle.admin.catalog.infastructure.castmember.models.CastMemberResponse;
 import com.fullcyle.admin.catalog.infastructure.castmember.models.CreateCastMemberRequest;
 import com.fullcyle.admin.catalog.infastructure.category.models.CategoryResponse;
 import com.fullcyle.admin.catalog.infastructure.category.models.CreateCategoryRequest;
@@ -55,6 +56,10 @@ public interface MockDsl {
                                           final String sort,
                                           final String direction) throws Exception {
         return this.list("/cast_members", page, perPage, search, sort, direction);
+    }
+
+    default CastMemberResponse retrieveACastMember(final Identifier anId) throws Exception {
+        return this.retrieve("/cast_members", anId, CastMemberResponse.class);
     }
 
 

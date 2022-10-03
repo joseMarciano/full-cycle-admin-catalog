@@ -2,6 +2,7 @@ package com.fullcyle.admin.catalog.e2e.castmember;
 
 import com.fullcyle.admin.catalog.E2ETest;
 import com.fullcyle.admin.catalog.e2e.MockDsl;
+import com.fullcyle.admin.catalog.infastructure.castmember.models.UpdateCastMemberRequest;
 import com.fullcyle.admin.catalog.infastructure.castmember.persistence.CastMemberRepository;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -19,6 +20,8 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static com.fullcyle.admin.catalog.Fixture.CastMember.type;
 import static com.fullcyle.admin.catalog.Fixture.name;
+import static com.fullcyle.admin.catalog.domain.castmember.CastMemberType.ACTOR;
+import static com.fullcyle.admin.catalog.domain.castmember.CastMemberType.DIRECTOR;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -197,6 +200,33 @@ public class CastMemberE2ETest implements MockDsl {
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message",
                         Matchers.equalTo("CastMember with ID 123 was not found")));
+    }
+
+    @Test
+    public void asACatalogAdminIShouldBeAbleToUpdateACastMemberByItsIdentifier() throws Exception {
+        assertTrue(MY_SQL_CONTAINER.isRunning());
+        assertEquals(0, castMemberRepository.count());
+
+
+        final var actualId = givenACastMember("Vin", DIRECTOR);
+
+        final var expectedName = "Vin Diesel";
+        final var expectedType = ACTOR;
+
+        final var aRequestBody = new UpdateCastMemberRequest(expectedName, expectedType);
+
+        updateACastMember(actualId, aRequestBody)
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        final var actualCastMember = castMemberRepository.findById(actualId.getValue()).get();
+
+
+        assertEquals(expectedName, actualCastMember.getName());
+        assertEquals(expectedType, actualCastMember.getType());
+        assertNotNull(actualCastMember.getUpdatedAt());
+        assertNotNull(actualCastMember.getCreatedAt());
+        assertTrue(actualCastMember.getCreatedAt().isBefore(actualCastMember.getUpdatedAt()));
+
     }
 
 

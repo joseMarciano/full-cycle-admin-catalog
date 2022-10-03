@@ -7,6 +7,7 @@ import com.fullcyle.admin.catalog.domain.category.CategoryID;
 import com.fullcyle.admin.catalog.domain.genre.GenreID;
 import com.fullcyle.admin.catalog.infastructure.castmember.models.CastMemberResponse;
 import com.fullcyle.admin.catalog.infastructure.castmember.models.CreateCastMemberRequest;
+import com.fullcyle.admin.catalog.infastructure.castmember.models.UpdateCastMemberRequest;
 import com.fullcyle.admin.catalog.infastructure.category.models.CategoryResponse;
 import com.fullcyle.admin.catalog.infastructure.category.models.CreateCategoryRequest;
 import com.fullcyle.admin.catalog.infastructure.category.models.UpdateCategoryRequest;
@@ -62,6 +63,9 @@ public interface MockDsl {
         return this.retrieve("/cast_members", anId, CastMemberResponse.class);
     }
 
+    default ResultActions updateACastMember(final Identifier anId, final UpdateCastMemberRequest aRequest) throws Exception {
+        return this.update("/cast_members", anId, aRequest);
+    }
 
     /**
      * Category

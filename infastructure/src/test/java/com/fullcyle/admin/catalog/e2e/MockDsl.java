@@ -26,6 +26,20 @@ public interface MockDsl {
 
     MockMvc mvc();
 
+    /**
+     * Cast Member
+     */
+
+    default CastMemberID givenACastMember(String aName, CastMemberType aType) throws Exception {
+        final var aRequestBody = new CreateCastMemberRequest(aName, aType);
+        final var actualId = this.given("/cast_members", aRequestBody);
+        return CastMemberID.from(actualId);
+    }
+
+    /**
+     * Category
+     */
+
     default ResultActions deleteACategory(final Identifier anId) throws Exception {
         return this.delete("/categories", anId);
     }
@@ -36,6 +50,33 @@ public interface MockDsl {
         return CategoryID.from(actualId);
     }
 
+    default ResultActions listCategories(final int page, final int perPage, String film) throws Exception {
+        return listCategories(page, perPage, film, "", "");
+    }
+
+    default ResultActions listCategories(final int page, final int perPage) throws Exception {
+        return listCategories(page, perPage, "", "", "");
+    }
+
+    default ResultActions listCategories(final int page,
+                                         final int perPage,
+                                         final String search,
+                                         final String sort,
+                                         final String direction) throws Exception {
+        return this.list("/categories", page, perPage, search, sort, direction);
+    }
+
+    default CategoryResponse retrieveACategory(final Identifier anId) throws Exception {
+        return this.retrieve("/categories", anId, CategoryResponse.class);
+    }
+
+    default ResultActions updateACategory(final Identifier anId, final UpdateCategoryRequest aRequest) throws Exception {
+        return this.update("/categories", anId, aRequest);
+    }
+
+    /**
+     * Genre
+     */
 
     default GenreID givenAGenre(final String aName, final boolean isActive, final List<CategoryID> categories) throws Exception {
         final var aRequestBody = new CreateGenreRequest(aName, mapTo(categories, CategoryID::getValue), isActive);
@@ -73,36 +114,6 @@ public interface MockDsl {
         return this.delete("/genres", anId);
     }
 
-
-    default ResultActions listCategories(final int page, final int perPage, String film) throws Exception {
-        return listCategories(page, perPage, film, "", "");
-    }
-
-    default ResultActions listCategories(final int page, final int perPage) throws Exception {
-        return listCategories(page, perPage, "", "", "");
-    }
-
-    default ResultActions listCategories(final int page,
-                                         final int perPage,
-                                         final String search,
-                                         final String sort,
-                                         final String direction) throws Exception {
-        return this.list("/categories", page, perPage, search, sort, direction);
-    }
-
-    default CategoryResponse retrieveACategory(final Identifier anId) throws Exception {
-        return this.retrieve("/categories", anId, CategoryResponse.class);
-    }
-
-    default ResultActions updateACategory(final Identifier anId, final UpdateCategoryRequest aRequest) throws Exception {
-        return this.update("/categories", anId, aRequest);
-    }
-
-    default CastMemberID givenACastMember(String aName, CastMemberType aType) throws Exception {
-        final var aRequestBody = new CreateCastMemberRequest(aName, aType);
-        final var actualId = this.given("/cast_members", aRequestBody);
-        return CastMemberID.from(actualId);
-    }
 
     default <A, D> List<D> mapTo(final List<A> actual, final Function<A, D> mapper) {
         return actual.stream().map(mapper).toList();

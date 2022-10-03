@@ -1,6 +1,7 @@
 package com.fullcyle.admin.catalog.e2e.castmember;
 
 import com.fullcyle.admin.catalog.E2ETest;
+import com.fullcyle.admin.catalog.domain.castmember.CastMemberID;
 import com.fullcyle.admin.catalog.e2e.MockDsl;
 import com.fullcyle.admin.catalog.infastructure.castmember.models.UpdateCastMemberRequest;
 import com.fullcyle.admin.catalog.infastructure.castmember.persistence.CastMemberRepository;
@@ -226,6 +227,31 @@ public class CastMemberE2ETest implements MockDsl {
         assertNotNull(actualCastMember.getUpdatedAt());
         assertNotNull(actualCastMember.getCreatedAt());
         assertTrue(actualCastMember.getCreatedAt().isBefore(actualCastMember.getUpdatedAt()));
+
+    }
+
+    @Test
+    public void asACatalogAdminIShouldBeAbleToDeleteCastMemberByIdentifier() throws Exception {
+        Assertions.assertTrue(MY_SQL_CONTAINER.isRunning());
+        Assertions.assertEquals(0, castMemberRepository.count());
+
+        final var actualId = givenACastMember(name(), type());
+
+        deleteACastMember(actualId)
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+
+        Assertions.assertFalse(this.castMemberRepository.existsById(actualId.getValue()));
+
+    }
+
+    @Test
+    public void asACatalogAdminIShouldNotSeeAErrorByDeletingANotExistentCastMember() throws Exception {
+        Assertions.assertTrue(MY_SQL_CONTAINER.isRunning());
+        Assertions.assertEquals(0, castMemberRepository.count());
+
+        deleteACastMember(CastMemberID.from("123"))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+        Assertions.assertEquals(0, castMemberRepository.count());
 
     }
 

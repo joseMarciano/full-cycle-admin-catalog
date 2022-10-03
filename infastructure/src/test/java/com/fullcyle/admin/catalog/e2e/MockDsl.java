@@ -41,6 +41,23 @@ public interface MockDsl {
         return this.givenResult("/cast_members", aRequestBody);
     }
 
+    default ResultActions listCastMembers(final int page, final int perPage, String film) throws Exception {
+        return listCastMembers(page, perPage, film, "", "");
+    }
+
+    default ResultActions listCastMembers(final int page, final int perPage) throws Exception {
+        return listCastMembers(page, perPage, "", "", "");
+    }
+
+    default ResultActions listCastMembers(final int page,
+                                          final int perPage,
+                                          final String search,
+                                          final String sort,
+                                          final String direction) throws Exception {
+        return this.list("/cast_members", page, perPage, search, sort, direction);
+    }
+
+
     /**
      * Category
      */

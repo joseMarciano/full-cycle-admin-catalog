@@ -1,7 +1,6 @@
 package com.fullcyle.admin.catalog.e2e.castmember;
 
 import com.fullcyle.admin.catalog.E2ETest;
-import com.fullcyle.admin.catalog.Fixture;
 import com.fullcyle.admin.catalog.e2e.MockDsl;
 import com.fullcyle.admin.catalog.infastructure.castmember.persistence.CastMemberRepository;
 import org.hamcrest.Matchers;
@@ -17,7 +16,10 @@ import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import static com.fullcyle.admin.catalog.Fixture.CastMember.type;
 import static com.fullcyle.admin.catalog.Fixture.name;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @E2ETest
@@ -52,7 +54,7 @@ public class CastMemberE2ETest implements MockDsl {
         Assertions.assertEquals(0, castMemberRepository.count());
 
         final var expectedName = name();
-        final var expectedType = Fixture.CastMember.type();
+        final var expectedType = type();
 
         final var actualMemberId = givenACastMember(expectedName, expectedType);
         final var actualMember = castMemberRepository.findById(actualMemberId.getValue()).get();
@@ -71,7 +73,7 @@ public class CastMemberE2ETest implements MockDsl {
         Assertions.assertEquals(0, castMemberRepository.count());
 
         final String expectedName = null;
-        final var expectedType = Fixture.CastMember.type();
+        final var expectedType = type();
         final var expectedErrorMessage = "'name' should not be null";
 
         givenACastMemberResult(expectedName, expectedType)
@@ -81,6 +83,87 @@ public class CastMemberE2ETest implements MockDsl {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.errors[0].message", Matchers.equalTo(expectedErrorMessage)));
 
         Assertions.assertEquals(0, castMemberRepository.count());
+    }
+
+    @Test
+    public void asACatalogAdminIShouldBeAbleToNavigateThroughAllCastMembers() throws Exception {
+        assertTrue(MY_SQL_CONTAINER.isRunning());
+        assertEquals(0, castMemberRepository.count());
+
+        givenACastMember("John", type());
+        givenACastMember("Vin Diesel", type());
+        givenACastMember("Johnny", type());
+
+        listCastMembers(0, 1)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.current_page", Matchers.equalTo(0)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.per_page", Matchers.equalTo(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.total", Matchers.equalTo(3)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items", Matchers.hasSize(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items[0].name", Matchers.equalTo("John")));
+
+
+        listCastMembers(1, 1)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.current_page", Matchers.equalTo(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.per_page", Matchers.equalTo(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.total", Matchers.equalTo(3)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items", Matchers.hasSize(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items[0].name", Matchers.equalTo("Johnny")));
+        listCastMembers(2, 1)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.current_page", Matchers.equalTo(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.per_page", Matchers.equalTo(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.total", Matchers.equalTo(3)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items", Matchers.hasSize(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items[0].name", Matchers.equalTo("Vin Diesel")));
+
+        listCastMembers(3, 1)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.current_page", Matchers.equalTo(3)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.per_page", Matchers.equalTo(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.total", Matchers.equalTo(3)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items", Matchers.hasSize(0)));
+
+    }
+
+    @Test
+    public void asACatalogAdminIShouldBeAbleToSearchBetweenAllCastMembers() throws Exception {
+        assertTrue(MY_SQL_CONTAINER.isRunning());
+        assertEquals(0, castMemberRepository.count());
+
+        givenACastMember("John", type());
+        givenACastMember("Vin Diesel", type());
+        givenACastMember("Johnny", type());
+
+        listCastMembers(0, 1, "nny")
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.current_page", Matchers.equalTo(0)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.per_page", Matchers.equalTo(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.total", Matchers.equalTo(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items", Matchers.hasSize(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items[0].name", Matchers.equalTo("Johnny")));
+    }
+
+    @Test
+    public void asACatalogAdminIShouldBeAbleToSortAllCastMembersByNameDesc() throws Exception {
+        assertTrue(MY_SQL_CONTAINER.isRunning());
+        assertEquals(0, castMemberRepository.count());
+
+        givenACastMember("John", type());
+        givenACastMember("Vin Diesel", type());
+        givenACastMember("Johnny", type());
+
+        listCastMembers(0, 3, "", "name", "desc")
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.current_page", Matchers.equalTo(0)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.per_page", Matchers.equalTo(3)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.total", Matchers.equalTo(3)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items", Matchers.hasSize(3)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items[0].name", Matchers.equalTo("Vin Diesel")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items[1].name", Matchers.equalTo("Johnny")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.items[2].name", Matchers.equalTo("John")))
+        ;
     }
 
 

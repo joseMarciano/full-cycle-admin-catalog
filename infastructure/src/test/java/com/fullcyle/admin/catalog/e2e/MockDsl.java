@@ -1,8 +1,11 @@
 package com.fullcyle.admin.catalog.e2e;
 
 import com.fullcyle.admin.catalog.domain.Identifier;
+import com.fullcyle.admin.catalog.domain.castmember.CastMemberID;
+import com.fullcyle.admin.catalog.domain.castmember.CastMemberType;
 import com.fullcyle.admin.catalog.domain.category.CategoryID;
 import com.fullcyle.admin.catalog.domain.genre.GenreID;
+import com.fullcyle.admin.catalog.infastructure.castmember.models.CreateCastMemberRequest;
 import com.fullcyle.admin.catalog.infastructure.category.models.CategoryResponse;
 import com.fullcyle.admin.catalog.infastructure.category.models.CreateCategoryRequest;
 import com.fullcyle.admin.catalog.infastructure.category.models.UpdateCategoryRequest;
@@ -93,6 +96,12 @@ public interface MockDsl {
 
     default ResultActions updateACategory(final Identifier anId, final UpdateCategoryRequest aRequest) throws Exception {
         return this.update("/categories", anId, aRequest);
+    }
+
+    default CastMemberID givenACastMember(String aName, CastMemberType aType) throws Exception {
+        final var aRequestBody = new CreateCastMemberRequest(aName, aType);
+        final var actualId = this.given("/cast_members", aRequestBody);
+        return CastMemberID.from(actualId);
     }
 
     default <A, D> List<D> mapTo(final List<A> actual, final Function<A, D> mapper) {

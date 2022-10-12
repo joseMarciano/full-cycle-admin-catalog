@@ -16,7 +16,7 @@ public class ImageMedia extends ValueObject {
         this.location = Objects.requireNonNull(location);
     }
 
-    public ImageMedia with(final String checksum, final String name, final String location) {
+    public static ImageMedia with(final String checksum, final String name, final String location) {
         return new ImageMedia(checksum, name, location);
     }
 

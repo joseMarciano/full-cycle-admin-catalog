@@ -9,10 +9,7 @@ import com.fullcyle.admin.catalog.domain.validation.ValidationHandler;
 
 import java.time.Instant;
 import java.time.Year;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.Collections.emptySet;
 import static java.util.Optional.ofNullable;
@@ -149,6 +146,61 @@ public class Video extends AggregateRoot<VideoID> {
         );
     }
 
+    public Video update(final String aTitle,
+                        final String aDescription,
+                        final Year aLaunchYear,
+                        final double aDuration,
+                        final boolean wasOpened,
+                        final boolean wasPublished,
+                        final Rating aRating,
+                        final Set<CategoryID> categories,
+                        final Set<GenreID> genres,
+                        final Set<CastMemberID> members) {
+
+        this.title = aTitle;
+        this.description = aDescription;
+        this.lauchedAt = aLaunchYear;
+        this.duration = aDuration;
+        this.opened = wasOpened;
+        this.published = wasPublished;
+        this.rating = aRating;
+        this.updatedAt = InstantUtils.now();
+        this.setCategories(categories)
+                .setCastMembers(members)
+                .setGenres(genres);
+        return this;
+    }
+
+    public Video setBanner(final ImageMedia banner) {
+        this.banner = banner;
+        this.updatedAt = InstantUtils.now();
+        return this;
+    }
+
+    public Video setThumbnail(final ImageMedia thumbnail) {
+        this.thumbnail = thumbnail;
+        this.updatedAt = InstantUtils.now();
+        return this;
+    }
+
+    public Video setThumbnailHalf(final ImageMedia thumbnailHalf) {
+        this.thumbnailHalf = thumbnailHalf;
+        this.updatedAt = InstantUtils.now();
+        return this;
+    }
+
+    public Video setTrailer(final AudioVideoMedia trailer) {
+        this.trailer = trailer;
+        this.updatedAt = InstantUtils.now();
+        return this;
+    }
+
+    public Video setVideo(final AudioVideoMedia video) {
+        this.video = video;
+        this.updatedAt = InstantUtils.now();
+        return this;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -217,88 +269,19 @@ public class Video extends AggregateRoot<VideoID> {
         return castMembers != null ? Collections.unmodifiableSet(castMembers) : emptySet();
     }
 
-    public Video setTitle(final String title) {
-        this.title = title;
+
+    private Video setCategories(final Set<CategoryID> categories) {
+        this.categories = Objects.nonNull(categories) ? new HashSet<>(categories) : emptySet();
         return this;
     }
 
-    public Video setDescription(final String description) {
-        this.description = description;
+    private Video setGenres(final Set<GenreID> genres) {
+        this.genres = Objects.nonNull(genres) ? new HashSet<>(genres) : emptySet();
         return this;
     }
 
-    public Video setLauchedAt(final Year lauchedAt) {
-        this.lauchedAt = lauchedAt;
-        return this;
-    }
-
-    public Video setDuration(final double duration) {
-        this.duration = duration;
-        return this;
-    }
-
-    public Video setRating(final Rating rating) {
-        this.rating = rating;
-        return this;
-    }
-
-    public Video setOpened(final boolean opened) {
-        this.opened = opened;
-        return this;
-    }
-
-    public Video setPublished(final boolean published) {
-        this.published = published;
-        return this;
-    }
-
-    public Video setCreatedAt(final Instant createdAt) {
-        this.createdAt = createdAt;
-        return this;
-    }
-
-    public Video setUpdatedAt(final Instant updatedAt) {
-        this.updatedAt = updatedAt;
-        return this;
-    }
-
-    public Video setBanner(final ImageMedia banner) {
-        this.banner = banner;
-        return this;
-    }
-
-    public Video setThumbnail(final ImageMedia thumbnail) {
-        this.thumbnail = thumbnail;
-        return this;
-    }
-
-    public Video setThumbnailHalf(final ImageMedia thumbnailHalf) {
-        this.thumbnailHalf = thumbnailHalf;
-        return this;
-    }
-
-    public Video setTrailer(final AudioVideoMedia trailer) {
-        this.trailer = trailer;
-        return this;
-    }
-
-    public Video setVideo(final AudioVideoMedia video) {
-        this.video = video;
-        return this;
-    }
-
-    public Video setCategories(final Set<CategoryID> categories) {
-        this.categories = categories != null ? new HashSet<>(categories) : emptySet();
-        return this;
-    }
-
-    public Video setGenres(final Set<GenreID> genres) {
-        this.genres = genres != null ? new HashSet<>(genres) : emptySet();
-        return this;
-    }
-
-    public Video setCastMembers(final Set<CastMemberID> castMembers) {
-        this.castMembers = castMembers != null ? new HashSet<>(castMembers) : emptySet();
+    private Video setCastMembers(final Set<CastMemberID> castMembers) {
+        this.castMembers = Objects.nonNull(castMembers) ? new HashSet<>(castMembers) : emptySet();
         return this;
     }
 }

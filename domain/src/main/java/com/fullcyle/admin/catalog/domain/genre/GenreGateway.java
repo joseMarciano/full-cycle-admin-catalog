@@ -3,6 +3,7 @@ package com.fullcyle.admin.catalog.domain.genre;
 import com.fullcyle.admin.catalog.domain.pagination.Pagination;
 import com.fullcyle.admin.catalog.domain.pagination.SearchQuery;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface GenreGateway {
@@ -16,4 +17,6 @@ public interface GenreGateway {
     Genre update(Genre aGenre);
 
     Pagination<Genre> findAll(SearchQuery aQuery);
+
+    List<GenreID> existsByIds(Iterable<GenreID> ids);
 }

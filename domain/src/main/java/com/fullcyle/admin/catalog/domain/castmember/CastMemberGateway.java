@@ -3,6 +3,7 @@ package com.fullcyle.admin.catalog.domain.castmember;
 import com.fullcyle.admin.catalog.domain.pagination.Pagination;
 import com.fullcyle.admin.catalog.domain.pagination.SearchQuery;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface CastMemberGateway {
@@ -16,4 +17,6 @@ public interface CastMemberGateway {
     CastMember update(CastMember aCastMember);
 
     Pagination<CastMember> findAll(SearchQuery aQuery);
+
+    List<CastMemberID> existsByIds(Iterable<CastMemberID> ids);
 }

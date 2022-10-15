@@ -4,7 +4,7 @@
 - This application is a part of CODEFLIX, a project that simulates a Netflix flux
 - To improve my skills on Spring Boot
 - To learn about Kafka
-- To improve my knowledges in microservices
+- To improve my knowledge in microservices
 - To learn about RabbitMq
 - Apply concepts about TDD and DDD
 - Apply clean architecture 

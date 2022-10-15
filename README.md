@@ -24,7 +24,6 @@
 - [x] Implementation about CastMembers
 - [ ] Implementation about Videos ⚠  *in progress*
 
-
 ### :robot: Back-end:
 ![Badge](https://img.shields.io/badge/Spring_Boot--%236DB33F?style=for-the-badge&logo=SpringBoot&color=6DB33F)
 ![Badge](https://img.shields.io/badge/MySQL--%236DB33F?style=for-the-badge&logo=MySQL&color=4479A1)

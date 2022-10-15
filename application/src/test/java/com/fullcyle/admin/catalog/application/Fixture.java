@@ -6,8 +6,12 @@ import com.fullcyle.admin.catalog.domain.category.Category;
 import com.fullcyle.admin.catalog.domain.genre.Genre;
 import com.fullcyle.admin.catalog.domain.video.Rating;
 import com.fullcyle.admin.catalog.domain.video.Resource;
+import com.fullcyle.admin.catalog.domain.video.Video;
 import com.github.javafaker.Faker;
 import io.vavr.API;
+
+import java.time.Year;
+import java.util.Set;
 
 import static com.fullcyle.admin.catalog.domain.castmember.CastMemberType.ACTOR;
 import static com.fullcyle.admin.catalog.domain.castmember.CastMemberType.DIRECTOR;
@@ -89,6 +93,21 @@ public final class Fixture {
     }
 
     public static final class Videos {
+
+        public static Video systemDesign() {
+            return Video.newVideo(
+                    Fixture.title(),
+                    description(),
+                    Year.of(Fixture.year()),
+                    Fixture.duration(),
+                    Fixture.bool(),
+                    Fixture.bool(),
+                    rating(),
+                    Set.of(Categories.aulas().getId()),
+                    Set.of(Genres.tech().getId()),
+                    Set.of(CastMembers.gabriel().getId(), CastMembers.wesley().getId())
+            );
+        }
 
         public static String description() {
             return FAKER.options()

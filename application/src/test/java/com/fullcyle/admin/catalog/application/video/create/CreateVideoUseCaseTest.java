@@ -111,6 +111,7 @@ public class CreateVideoUseCaseTest extends UseCaseTest {
         verify(castMemberGateway).existsByIds(eq(expectedMembers));
         verify(genreGateway).existsByIds(eq(expectedGenres));
         verify(categoryGateway).existsByIds(eq(expectedCategories));
+        verify(mediaResourceGateway, times(0)).clearResources(any());
 
         verify(videoGateway).create(argThat(actualVideo ->
 
@@ -194,6 +195,7 @@ public class CreateVideoUseCaseTest extends UseCaseTest {
         verify(castMemberGateway).existsByIds(eq(expectedMembers));
         verify(genreGateway).existsByIds(eq(expectedGenres));
         verify(categoryGateway, times(0)).existsByIds(eq(expectedCategories));
+        verify(mediaResourceGateway, times(0)).clearResources(any());
 
         verify(videoGateway).create(argThat(actualVideo ->
 
@@ -277,6 +279,7 @@ public class CreateVideoUseCaseTest extends UseCaseTest {
         verify(castMemberGateway).existsByIds(eq(expectedMembers));
         verify(genreGateway, times(0)).existsByIds(eq(expectedGenres));
         verify(categoryGateway).existsByIds(eq(expectedCategories));
+        verify(mediaResourceGateway, times(0)).clearResources(any());
 
         verify(videoGateway).create(argThat(actualVideo ->
 
@@ -359,6 +362,7 @@ public class CreateVideoUseCaseTest extends UseCaseTest {
         verify(castMemberGateway, times(0)).existsByIds(eq(expectedMembers));
         verify(genreGateway).existsByIds(eq(expectedGenres));
         verify(categoryGateway).existsByIds(eq(expectedCategories));
+        verify(mediaResourceGateway, times(0)).clearResources(any());
 
         verify(videoGateway).create(argThat(actualVideo ->
 
@@ -442,6 +446,7 @@ public class CreateVideoUseCaseTest extends UseCaseTest {
         verify(castMemberGateway).existsByIds(eq(expectedMembers));
         verify(genreGateway).existsByIds(eq(expectedGenres));
         verify(categoryGateway).existsByIds(eq(expectedCategories));
+        verify(mediaResourceGateway, times(0)).clearResources(any());
 
         verify(videoGateway).create(argThat(actualVideo ->
 
@@ -513,6 +518,7 @@ public class CreateVideoUseCaseTest extends UseCaseTest {
         verify(castMemberGateway, times(0)).existsByIds(eq(expectedMembers));
         verify(genreGateway, times(0)).existsByIds(eq(expectedGenres));
         verify(categoryGateway, times(0)).existsByIds(eq(expectedCategories));
+        verify(mediaResourceGateway, times(0)).clearResources(any());
     }
 
     @Test
@@ -565,6 +571,7 @@ public class CreateVideoUseCaseTest extends UseCaseTest {
         verify(castMemberGateway, times(0)).existsByIds(eq(expectedMembers));
         verify(genreGateway, times(0)).existsByIds(eq(expectedGenres));
         verify(categoryGateway, times(0)).existsByIds(eq(expectedCategories));
+        verify(mediaResourceGateway, times(0)).clearResources(any());
     }
 
     @Test
@@ -617,6 +624,7 @@ public class CreateVideoUseCaseTest extends UseCaseTest {
         verify(castMemberGateway, times(0)).existsByIds(eq(expectedMembers));
         verify(genreGateway, times(0)).existsByIds(eq(expectedGenres));
         verify(categoryGateway, times(0)).existsByIds(eq(expectedCategories));
+        verify(mediaResourceGateway, times(0)).clearResources(any());
     }
 
     @Test
@@ -669,6 +677,7 @@ public class CreateVideoUseCaseTest extends UseCaseTest {
         verify(castMemberGateway, times(0)).existsByIds(eq(expectedMembers));
         verify(genreGateway, times(0)).existsByIds(eq(expectedGenres));
         verify(categoryGateway, times(0)).existsByIds(eq(expectedCategories));
+        verify(mediaResourceGateway, times(0)).clearResources(any());
     }
 
     @Test
@@ -721,6 +730,7 @@ public class CreateVideoUseCaseTest extends UseCaseTest {
         verify(castMemberGateway, times(0)).existsByIds(eq(expectedMembers));
         verify(genreGateway, times(0)).existsByIds(eq(expectedGenres));
         verify(categoryGateway, times(0)).existsByIds(eq(expectedCategories));
+        verify(mediaResourceGateway, times(0)).clearResources(any());
     }
 
     @Test
@@ -785,6 +795,7 @@ public class CreateVideoUseCaseTest extends UseCaseTest {
         verify(castMemberGateway).existsByIds(eq(expectedMembers));
         verify(genreGateway).existsByIds(eq(expectedGenres));
         verify(categoryGateway).existsByIds(eq(expectedCategories));
+        verify(mediaResourceGateway, times(0)).clearResources(any());
     }
 
     @Test
@@ -849,6 +860,7 @@ public class CreateVideoUseCaseTest extends UseCaseTest {
         verify(castMemberGateway).existsByIds(eq(expectedMembers));
         verify(genreGateway).existsByIds(eq(expectedGenres));
         verify(categoryGateway).existsByIds(eq(expectedCategories));
+        verify(mediaResourceGateway, times(0)).clearResources(any());
     }
 
     @Test
@@ -913,6 +925,7 @@ public class CreateVideoUseCaseTest extends UseCaseTest {
         verify(castMemberGateway).existsByIds(eq(expectedMembers));
         verify(genreGateway).existsByIds(eq(expectedGenres));
         verify(categoryGateway).existsByIds(eq(expectedCategories));
+        verify(mediaResourceGateway, times(0)).clearResources(any());
     }
 
     @Test
@@ -976,6 +989,7 @@ public class CreateVideoUseCaseTest extends UseCaseTest {
         verify(videoGateway, times(1)).create(any());
         verify(castMemberGateway).existsByIds(eq(expectedMembers));
         verify(genreGateway).existsByIds(eq(expectedGenres));
+        verify(mediaResourceGateway).clearResources(any());
         verify(categoryGateway).existsByIds(eq(expectedCategories));
     }
 

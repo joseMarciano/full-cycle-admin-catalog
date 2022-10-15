@@ -94,7 +94,7 @@ public final class Fixture {
 
     public static final class Videos {
 
-        public static Video systemDesign() {
+        public static Video video() {
             return Video.newVideo(
                     Fixture.title(),
                     description(),

@@ -61,7 +61,7 @@ public class UpdateVideoUseCaseTest extends UseCaseTest {
     @Test
     public void givenAValidCommand_whenCallsUpdateVideo_shouldReturnVideoId() {
 
-        final var aVideo = Fixture.Videos.systemDesign();
+        final var aVideo = Fixture.Videos.video();
 
         final var expectedTitle = title();
         final var expectedDescription = description();
@@ -157,7 +157,7 @@ public class UpdateVideoUseCaseTest extends UseCaseTest {
     @Test
     public void givenAValidCommandWithoutCategories_whenCallsUpdateVideo_shouldReturnVideoId() {
 
-        final var aVideo = Fixture.Videos.systemDesign();
+        final var aVideo = Fixture.Videos.video();
 
         final var expectedTitle = title();
         final var expectedDescription = description();
@@ -248,7 +248,7 @@ public class UpdateVideoUseCaseTest extends UseCaseTest {
 
     @Test
     public void givenAValidCommandWithoutGenres_whenCallsUpdateVideo_shouldReturnVideoId() {
-        final var aVideo = Fixture.Videos.systemDesign();
+        final var aVideo = Fixture.Videos.video();
         final var expectedTitle = title();
         final var expectedDescription = description();
         final var expectedLaunchYear = Year.of(year());
@@ -337,7 +337,7 @@ public class UpdateVideoUseCaseTest extends UseCaseTest {
 
     @Test
     public void givenAValidCommandWithoutMembers_whenCallsUpdateVideo_shouldReturnVideoId() {
-        final var aVideo = Fixture.Videos.systemDesign();
+        final var aVideo = Fixture.Videos.video();
         final var expectedTitle = title();
         final var expectedDescription = description();
         final var expectedLaunchYear = Year.of(year());
@@ -426,7 +426,7 @@ public class UpdateVideoUseCaseTest extends UseCaseTest {
 
     @Test
     public void givenAValidCommandWithoutResources_whenCallsUpdateVideo_shouldReturnVideoId() {
-        final var aVideo = Fixture.Videos.systemDesign();
+        final var aVideo = Fixture.Videos.video();
         final var expectedTitle = title();
         final var expectedDescription = description();
         final var expectedLaunchYear = Year.of(year());
@@ -514,7 +514,7 @@ public class UpdateVideoUseCaseTest extends UseCaseTest {
 
     @Test
     public void givenNullTitle_whenCallsUpdateVideo_shouldReturnDomainException() {
-        final var aVideo = Fixture.Videos.systemDesign();
+        final var aVideo = Fixture.Videos.video();
 
         final var expectedErrorMessage = "'title' should not be null";
         final var expectedErrorCount = 1;
@@ -573,7 +573,7 @@ public class UpdateVideoUseCaseTest extends UseCaseTest {
 
     @Test
     public void givenEmptyTitle_whenCallsUpdateVideo_shouldReturnDomainException() {
-        final var aVideo = Fixture.Videos.systemDesign();
+        final var aVideo = Fixture.Videos.video();
 
         final var expectedErrorMessage = "'title' should not be empty";
         final var expectedErrorCount = 1;
@@ -631,7 +631,7 @@ public class UpdateVideoUseCaseTest extends UseCaseTest {
 
     @Test
     public void givenNullRating_whenCallsUpdateVideo_shouldReturnDomainException() {
-        final var aVideo = Fixture.Videos.systemDesign();
+        final var aVideo = Fixture.Videos.video();
 
         final var expectedErrorMessage = "'rating' should not be null";
         final var expectedErrorCount = 1;
@@ -689,7 +689,7 @@ public class UpdateVideoUseCaseTest extends UseCaseTest {
 
     @Test
     public void givenAInvalidRating_whenCallsUpdateVideo_shouldReturnDomainException() {
-        final var aVideo = Fixture.Videos.systemDesign();
+        final var aVideo = Fixture.Videos.video();
 
         final var expectedErrorMessage = "'rating' should not be null";
         final var expectedErrorCount = 1;
@@ -747,7 +747,7 @@ public class UpdateVideoUseCaseTest extends UseCaseTest {
 
     @Test
     public void givenNullLaunchYear_whenCallsUpdateVideo_shouldReturnDomainException() {
-        final var aVideo = Fixture.Videos.systemDesign();
+        final var aVideo = Fixture.Videos.video();
 
         final var expectedErrorMessage = "'lauchedAt' should not be null";
         final var expectedErrorCount = 1;
@@ -805,7 +805,7 @@ public class UpdateVideoUseCaseTest extends UseCaseTest {
 
     @Test
     public void givenAValidCommand_whenCallsUpdateVideoAndSomeCategoriesDoesNotExists_shouldReturnDomainException() {
-        final var aVideo = Fixture.Videos.systemDesign();
+        final var aVideo = Fixture.Videos.video();
 
         final var actualInvalidCategoryId = Categories.aulas().getId();
         final var expectedErrorMessage = "Some categories could not be found: %s".formatted(actualInvalidCategoryId.getValue());
@@ -875,7 +875,7 @@ public class UpdateVideoUseCaseTest extends UseCaseTest {
 
     @Test
     public void givenAValidCommand_whenCallsUpdateVideoAndSomeGenresDoesNotExists_shouldReturnDomainException() {
-        final var aVideo = Fixture.Videos.systemDesign();
+        final var aVideo = Fixture.Videos.video();
 
         final var actualInvalidGenresId = Genres.tech().getId();
         final var expectedErrorMessage = "Some genres could not be found: %s".formatted(actualInvalidGenresId.getValue());
@@ -945,7 +945,7 @@ public class UpdateVideoUseCaseTest extends UseCaseTest {
 
     @Test
     public void givenAValidCommand_whenCallsUpdateVideoAndSomeCastMembersDoesNotExists_shouldReturnDomainException() {
-        final var aVideo = Fixture.Videos.systemDesign();
+        final var aVideo = Fixture.Videos.video();
 
         final var actualInvalidMembersId = CastMembers.wesley().getId();
         final var expectedErrorMessage = "Some cast members could not be found: %s".formatted(actualInvalidMembersId.getValue());
@@ -1015,7 +1015,7 @@ public class UpdateVideoUseCaseTest extends UseCaseTest {
 
     @Test
     public void givenAValidCommand_whenCallsCreateVideoAndSomeErrorOcurr_shouldReturnCallsClearResources() {
-        final var aVideo = Fixture.Videos.systemDesign();
+        final var aVideo = Fixture.Videos.video();
 
         final var expectedErrorMessage = "An error on update video was observed [videoId: ";
         final var expectedTitle = title();

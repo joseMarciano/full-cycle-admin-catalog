@@ -21,6 +21,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static com.fullcyle.admin.catalog.domain.utils.CollectionUtils.mapTo;
 import static java.util.Objects.requireNonNull;
 
 public class DefaultCreateVideoUseCase extends CreateVideoUseCase {
@@ -49,9 +50,9 @@ public class DefaultCreateVideoUseCase extends CreateVideoUseCase {
     public CreateVideoOutput execute(final CreateVideoCommand aCommand) {
         final var aRating = Rating.of(aCommand.rating()).orElse(null);
         final var aLaunchYear = aCommand.lauchedAt() != null ? Year.of(aCommand.lauchedAt()) : null;
-        final var categories = toIdentifier(aCommand.categories(), CategoryID::from);
-        final var genres = toIdentifier(aCommand.genres(), GenreID::from);
-        final var members = toIdentifier(aCommand.members(), CastMemberID::from);
+        final var categories = mapTo(aCommand.categories(), CategoryID::from);
+        final var genres = mapTo(aCommand.genres(), GenreID::from);
+        final var members = mapTo(aCommand.members(), CastMemberID::from);
 
         final var notification = Notification.create();
         notification.append(validateCategories(categories));
@@ -158,9 +159,5 @@ public class DefaultCreateVideoUseCase extends CreateVideoUseCase {
         }
 
         return notification;
-    }
-
-    private <T> Set<T> toIdentifier(final Set<String> ids, final Function<String, T> mapper) {
-        return ids.stream().map(mapper).collect(Collectors.toSet());
     }
 }

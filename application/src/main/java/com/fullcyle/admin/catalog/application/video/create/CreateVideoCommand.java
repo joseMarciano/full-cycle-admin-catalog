@@ -9,8 +9,8 @@ import java.util.Set;
 public record CreateVideoCommand(
         String title,
         String description,
-        int lauchedAt,
-        double duration,
+        Integer lauchedAt,
+        Double duration,
         boolean opened,
         boolean published,
         String rating,

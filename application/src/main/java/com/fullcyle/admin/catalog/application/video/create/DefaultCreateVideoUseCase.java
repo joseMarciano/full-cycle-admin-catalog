@@ -5,7 +5,6 @@ import com.fullcyle.admin.catalog.domain.castmember.CastMemberGateway;
 import com.fullcyle.admin.catalog.domain.castmember.CastMemberID;
 import com.fullcyle.admin.catalog.domain.category.CategoryGateway;
 import com.fullcyle.admin.catalog.domain.category.CategoryID;
-import com.fullcyle.admin.catalog.domain.exceptions.DomainException;
 import com.fullcyle.admin.catalog.domain.exceptions.InternalErrorException;
 import com.fullcyle.admin.catalog.domain.exceptions.NotificationException;
 import com.fullcyle.admin.catalog.domain.genre.GenreGateway;
@@ -20,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
@@ -49,7 +47,8 @@ public class DefaultCreateVideoUseCase extends CreateVideoUseCase {
 
     @Override
     public CreateVideoOutput execute(final CreateVideoCommand aCommand) {
-        final var aRating = Rating.of(aCommand.rating()).orElseThrow(invalidRating(aCommand.rating()));
+        final var aRating = Rating.of(aCommand.rating()).orElseThrow(null);
+        final var aLaunchYear = aCommand.lauchedAt() != null ? Year.of(aCommand.lauchedAt()) : null;
         final var categories = toIdentifier(aCommand.categories(), CategoryID::from);
         final var genres = toIdentifier(aCommand.genres(), GenreID::from);
         final var members = toIdentifier(aCommand.members(), CastMemberID::from);
@@ -63,7 +62,7 @@ public class DefaultCreateVideoUseCase extends CreateVideoUseCase {
         final var aVideo = Video.newVideo(
                 aCommand.title(),
                 aCommand.description(),
-                Year.of(aCommand.lauchedAt()),
+                aLaunchYear,
                 aCommand.duration(),
                 aCommand.opened(),
                 aCommand.published(),
@@ -159,10 +158,6 @@ public class DefaultCreateVideoUseCase extends CreateVideoUseCase {
         }
 
         return notification;
-    }
-
-    private Supplier<DomainException> invalidRating(final String rating) {
-        return () -> DomainException.with(new Error("Rating not found %s".formatted(rating)));
     }
 
     private <T> Set<T> toIdentifier(final Set<String> ids, final Function<String, T> mapper) {

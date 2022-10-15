@@ -47,7 +47,7 @@ public class DefaultCreateVideoUseCase extends CreateVideoUseCase {
 
     @Override
     public CreateVideoOutput execute(final CreateVideoCommand aCommand) {
-        final var aRating = Rating.of(aCommand.rating()).orElseThrow(null);
+        final var aRating = Rating.of(aCommand.rating()).orElse(null);
         final var aLaunchYear = aCommand.lauchedAt() != null ? Year.of(aCommand.lauchedAt()) : null;
         final var categories = toIdentifier(aCommand.categories(), CategoryID::from);
         final var genres = toIdentifier(aCommand.genres(), GenreID::from);

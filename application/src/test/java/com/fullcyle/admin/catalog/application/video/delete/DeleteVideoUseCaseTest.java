@@ -23,7 +23,7 @@ public class DeleteVideoUseCaseTest extends UseCaseTest {
 
     @Override
     protected List<Object> getMocks() {
-        return null;
+        return List.of(videoGateway);
     }
 
     @Test

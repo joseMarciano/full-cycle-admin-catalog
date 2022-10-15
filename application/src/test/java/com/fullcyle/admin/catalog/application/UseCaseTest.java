@@ -22,14 +22,14 @@ public abstract class UseCaseTest implements BeforeEachCallback {
     protected abstract List<Object> getMocks();
 
 
-    protected List<String> asString(final List<? extends Identifier> categories) {
-        return categories.stream()
+    protected List<String> asString(final List<? extends Identifier> ids) {
+        return ids.stream()
                 .map(Identifier::getValue)
                 .toList();
     }
 
-    protected Set<String> asString(final Set<? extends Identifier> categories) {
-        return categories.stream()
+    protected Set<String> asString(final Set<? extends Identifier> ids) {
+        return ids.stream()
                 .map(Identifier::getValue)
                 .collect(Collectors.toSet());
     }

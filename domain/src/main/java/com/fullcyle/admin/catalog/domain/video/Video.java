@@ -122,6 +122,49 @@ public class Video extends AggregateRoot<VideoID> {
     }
 
     public static Video with(
+            final VideoID anID,
+            final String aTitle,
+            final String aDescription,
+            final Year aLauchYear,
+            final double aDuration,
+            final boolean wasOpened,
+            final boolean wasPublished,
+            final Rating aRating,
+            final Instant aCreationDate,
+            final Instant aUpdateDate,
+            final ImageMedia aBanner,
+            final ImageMedia aThumb,
+            final ImageMedia aThumbHalf,
+            final AudioVideoMedia aTrailer,
+            final AudioVideoMedia aVideo,
+            final Set<CategoryID> categories,
+            final Set<GenreID> genres,
+            final Set<CastMemberID> members
+    ) {
+        return new Video(
+                anID,
+                aTitle,
+                aDescription,
+                aLauchYear,
+                aDuration,
+                wasOpened,
+                wasPublished,
+                aRating,
+                aCreationDate,
+                aUpdateDate,
+                aBanner,
+                aThumb,
+                aThumbHalf,
+                aTrailer,
+                aVideo,
+                categories,
+                genres,
+                members
+        );
+    }
+
+
+    public static Video with(
             final Video aVideo
     ) {
         return new Video(
@@ -145,6 +188,7 @@ public class Video extends AggregateRoot<VideoID> {
                 new HashSet<>(aVideo.getCastMembers())
         );
     }
+
 
     public Video update(final String aTitle,
                         final String aDescription,

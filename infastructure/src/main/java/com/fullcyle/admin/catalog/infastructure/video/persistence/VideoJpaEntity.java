@@ -2,6 +2,7 @@ package com.fullcyle.admin.catalog.infastructure.video.persistence;
 
 
 import com.fullcyle.admin.catalog.domain.category.CategoryID;
+import com.fullcyle.admin.catalog.domain.genre.GenreID;
 import com.fullcyle.admin.catalog.domain.video.Rating;
 import com.fullcyle.admin.catalog.domain.video.Video;
 import com.fullcyle.admin.catalog.domain.video.VideoID;
@@ -81,6 +82,9 @@ public class VideoJpaEntity {
     @OneToMany(mappedBy = "video", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<VideoCategoryJpaEntity> categories;
 
+    @OneToMany(mappedBy = "video", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<VideoGenreJpaEntity> genres;
+
     public VideoJpaEntity() {
     }
 
@@ -115,6 +119,7 @@ public class VideoJpaEntity {
         this.thumbnail = thumbnail;
         this.thumbnailHalf = thumbnailHalf;
         this.categories = new HashSet<>();
+        this.genres = new HashSet<>();
     }
 
     public static VideoJpaEntity from(final Video aVideo) {
@@ -138,12 +143,12 @@ public class VideoJpaEntity {
         ofNullable(aVideo.getCategories())
                 .ifPresent(categories -> categories.forEach(videoJpaEntity::addCategory));
 
+        ofNullable(aVideo.getGenres())
+                .ifPresent(genres -> genres.forEach(videoJpaEntity::addGenre));
+
         return videoJpaEntity;
     }
 
-    private void addCategory(final CategoryID categoryID) {
-        this.categories.add(VideoCategoryJpaEntity.from(this, categoryID));
-    }
 
     public Video toAggregate() {
         return Video.with(
@@ -163,7 +168,7 @@ public class VideoJpaEntity {
                 ofNullable(getTrailer()).map(AudioVideoMediaJpaEntity::toDomain).orElse(null),
                 ofNullable(getVideo()).map(AudioVideoMediaJpaEntity::toDomain).orElse(null),
                 getCategories().stream().map(it -> CategoryID.from(it.getId().getCategoryId())).collect(Collectors.toSet()),
-                null,
+                getGenres().stream().map(it -> GenreID.from(it.getId().getGenreId())).collect(Collectors.toSet()),
                 null
         );
     }
@@ -291,4 +296,17 @@ public class VideoJpaEntity {
     public Set<VideoCategoryJpaEntity> getCategories() {
         return categories;
     }
+
+    public Set<VideoGenreJpaEntity> getGenres() {
+        return genres;
+    }
+
+    private void addCategory(final CategoryID categoryID) {
+        this.categories.add(VideoCategoryJpaEntity.from(this, categoryID));
+    }
+
+    private void addGenre(final GenreID genreID) {
+        this.genres.add(VideoGenreJpaEntity.from(this, genreID));
+    }
+
 }

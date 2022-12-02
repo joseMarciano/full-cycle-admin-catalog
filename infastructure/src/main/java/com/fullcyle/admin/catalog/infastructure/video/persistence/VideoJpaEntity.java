@@ -14,7 +14,6 @@ import java.time.Year;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static java.util.Optional.ofNullable;
@@ -30,7 +29,7 @@ public class VideoJpaEntity {
      */
     @Id
     @Column(name = "ID")
-    private UUID id;
+    private String id;
 
     @Column(name = "TITLE", nullable = false)
     private String title;
@@ -92,7 +91,7 @@ public class VideoJpaEntity {
     public VideoJpaEntity() {
     }
 
-    private VideoJpaEntity(final UUID anId,
+    private VideoJpaEntity(final String anId,
                            final String aTitle,
                            final String aDescription,
                            final int yearLaunched,
@@ -103,10 +102,10 @@ public class VideoJpaEntity {
                            final Instant createdAt,
                            final Instant updatedAt,
                            final AudioVideoMediaJpaEntity video,
-                          final AudioVideoMediaJpaEntity trailer,
-                          final ImageMediaJpaEntity banner,
-                          final ImageMediaJpaEntity thumbnail,
-                          final ImageMediaJpaEntity thumbnailHalf) {
+                           final AudioVideoMediaJpaEntity trailer,
+                           final ImageMediaJpaEntity banner,
+                           final ImageMediaJpaEntity thumbnail,
+                           final ImageMediaJpaEntity thumbnailHalf) {
         this.id = anId;
         this.title = aTitle;
         this.description = aDescription;
@@ -129,7 +128,7 @@ public class VideoJpaEntity {
 
     public static VideoJpaEntity from(final Video aVideo) {
         final var videoJpaEntity = new VideoJpaEntity(
-                UUID.fromString(aVideo.getId().getValue()),
+                aVideo.getId().getValue(),
                 aVideo.getTitle(),
                 aVideo.getDescription(),
                 aVideo.getLauchedAt().getValue(),
@@ -175,17 +174,17 @@ public class VideoJpaEntity {
                 Optional.of(getThumbnailHalf()).map(ImageMediaJpaEntity::toDomain).orElse(null),
                 ofNullable(getTrailer()).map(AudioVideoMediaJpaEntity::toDomain).orElse(null),
                 ofNullable(getVideo()).map(AudioVideoMediaJpaEntity::toDomain).orElse(null),
-                getCategories().stream().map(it -> CategoryID.from(it.getId().getCategoryId())).collect(Collectors.toSet()),
+                getCategories().stream().map(it -> CategoryID.from(it.getId().getCategoryId().toString())).collect(Collectors.toSet()),
                 getGenres().stream().map(it -> GenreID.from(it.getId().getGenreId())).collect(Collectors.toSet()),
                 getCastMembers().stream().map(it -> CastMemberID.from(it.getId().getCastMemberId())).collect(Collectors.toSet())
         );
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
+    public void setId(final String id) {
         this.id = id;
     }
 

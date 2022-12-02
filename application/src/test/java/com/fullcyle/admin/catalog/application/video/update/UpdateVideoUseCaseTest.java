@@ -11,6 +11,7 @@ import com.fullcyle.admin.catalog.domain.exceptions.NotFoundException;
 import com.fullcyle.admin.catalog.domain.exceptions.NotificationException;
 import com.fullcyle.admin.catalog.domain.genre.GenreGateway;
 import com.fullcyle.admin.catalog.domain.genre.GenreID;
+import com.fullcyle.admin.catalog.domain.utils.IdUtils;
 import com.fullcyle.admin.catalog.domain.video.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -1142,7 +1143,7 @@ public class UpdateVideoUseCaseTest extends UseCaseTest {
         when(mediaResourceGateway.storeImage(any(), any()))
                 .thenAnswer(t -> {
                     final var resource = t.getArgument(1, Resource.class);
-                    return ImageMedia.with(UUID.randomUUID().toString(), resource.name(), "/img");
+                    return ImageMedia.with(IdUtils.uuid(), resource.name(), "/img");
                 });
     }
 
@@ -1151,7 +1152,7 @@ public class UpdateVideoUseCaseTest extends UseCaseTest {
                 .thenAnswer(t -> {
                     final var resource = t.getArgument(1, Resource.class);
                     return AudioVideoMedia
-                            .with(UUID.randomUUID().toString(), resource.name(), "/img", "", MediaStatus.PENDING);
+                            .with(IdUtils.uuid(), resource.name(), "/img", "", MediaStatus.PENDING);
                 });
     }
 }

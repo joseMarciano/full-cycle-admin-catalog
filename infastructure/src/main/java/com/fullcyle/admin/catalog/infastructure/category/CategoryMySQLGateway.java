@@ -92,6 +92,11 @@ public class CategoryMySQLGateway implements CategoryGateway {
                 .toList();
     }
 
+    @Override
+    public List<Category> findAllById(final Iterable<CategoryID> ids) {
+        return null;
+    }
+
     private Category save(Category aCategory) {
         return this.repository.save(CategoryJpaEntity.from(aCategory)).toAgregate();
     }

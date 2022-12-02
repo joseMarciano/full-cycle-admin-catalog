@@ -9,6 +9,7 @@ import com.fullcyle.admin.catalog.domain.exceptions.InternalErrorException;
 import com.fullcyle.admin.catalog.domain.exceptions.NotificationException;
 import com.fullcyle.admin.catalog.domain.genre.GenreGateway;
 import com.fullcyle.admin.catalog.domain.genre.GenreID;
+import com.fullcyle.admin.catalog.domain.utils.IdUtils;
 import com.fullcyle.admin.catalog.domain.video.*;
 import com.fullcyle.admin.catalog.domain.video.Resource.Type;
 import org.junit.jupiter.api.Assertions;
@@ -18,7 +19,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import java.time.Year;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 import static com.fullcyle.admin.catalog.application.Fixture.*;
 import static com.fullcyle.admin.catalog.application.Fixture.Videos.description;
@@ -998,7 +1002,7 @@ public class CreateVideoUseCaseTest extends UseCaseTest {
         when(mediaResourceGateway.storeImage(any(), any()))
                 .thenAnswer(t -> {
                     final var resource = t.getArgument(1, Resource.class);
-                    return ImageMedia.with(UUID.randomUUID().toString(), resource.name(), "/img");
+                    return ImageMedia.with(IdUtils.uuid(), resource.name(), "/img");
                 });
     }
 
@@ -1007,7 +1011,7 @@ public class CreateVideoUseCaseTest extends UseCaseTest {
                 .thenAnswer(t -> {
                     final var resource = t.getArgument(1, Resource.class);
                     return AudioVideoMedia
-                            .with(UUID.randomUUID().toString(), resource.name(), "/img", "", MediaStatus.PENDING);
+                            .with(IdUtils.uuid(), resource.name(), "/img", "", MediaStatus.PENDING);
                 });
     }
 

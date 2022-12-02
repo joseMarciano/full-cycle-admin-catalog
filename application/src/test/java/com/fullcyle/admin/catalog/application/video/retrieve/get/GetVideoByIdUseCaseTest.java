@@ -2,6 +2,7 @@ package com.fullcyle.admin.catalog.application.video.retrieve.get;
 
 import com.fullcyle.admin.catalog.application.UseCaseTest;
 import com.fullcyle.admin.catalog.domain.exceptions.NotFoundException;
+import com.fullcyle.admin.catalog.domain.utils.IdUtils;
 import com.fullcyle.admin.catalog.domain.video.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,6 @@ import java.time.Year;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 
 import static com.fullcyle.admin.catalog.application.Fixture.*;
 import static com.fullcyle.admin.catalog.application.Fixture.Videos.description;
@@ -119,7 +119,7 @@ public class GetVideoByIdUseCaseTest extends UseCaseTest {
     }
 
     private AudioVideoMedia audioVideo(final Resource.Type type) {
-        final var checksum = UUID.randomUUID().toString();
+        final var checksum = IdUtils.uuid();
         return AudioVideoMedia.with(
                 checksum,
                 type.name().toLowerCase(),
@@ -130,7 +130,7 @@ public class GetVideoByIdUseCaseTest extends UseCaseTest {
     }
 
     private ImageMedia imageMedia(final Resource.Type type) {
-        final var checksum = UUID.randomUUID().toString();
+        final var checksum = IdUtils.uuid();
         return ImageMedia.with(
                 checksum,
                 type.name().toLowerCase(),

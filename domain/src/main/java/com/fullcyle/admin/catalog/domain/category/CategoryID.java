@@ -1,9 +1,9 @@
 package com.fullcyle.admin.catalog.domain.category;
 
 import com.fullcyle.admin.catalog.domain.Identifier;
+import com.fullcyle.admin.catalog.domain.utils.IdUtils;
 
 import java.util.Objects;
-import java.util.UUID;
 
 public class CategoryID extends Identifier {
 
@@ -15,15 +15,11 @@ public class CategoryID extends Identifier {
     }
 
     public static CategoryID unique() {
-        return CategoryID.from(UUID.randomUUID());
+        return CategoryID.from(IdUtils.uuid());
     }
 
     public static CategoryID from(final String anId) {
         return new CategoryID(anId);
-    }
-
-    public static CategoryID from(final UUID anId) {
-        return new CategoryID(anId.toString().toLowerCase());
     }
 
     @Override

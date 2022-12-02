@@ -4,7 +4,6 @@ import com.fullcyle.admin.catalog.domain.category.CategoryID;
 
 import javax.persistence.*;
 import java.util.Objects;
-import java.util.UUID;
 
 @Table(name = "VIDEOS_CATEGORIES")
 @Entity(name = "VideoCategory")
@@ -26,7 +25,7 @@ public class VideoCategoryJpaEntity {
 
     public static VideoCategoryJpaEntity from(final VideoJpaEntity video, CategoryID categoryID) {
         return new VideoCategoryJpaEntity(
-                VideoCategoryId.from(video.getId(), UUID.fromString(categoryID.getValue())),
+                VideoCategoryId.from(video.getId(), categoryID.getValue()),
                 video
         );
     }

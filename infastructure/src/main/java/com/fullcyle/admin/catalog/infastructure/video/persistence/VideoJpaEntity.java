@@ -22,11 +22,6 @@ import static java.util.Optional.ofNullable;
 @Entity(name = "Video")
 public class VideoJpaEntity {
 
-    /**
-     * The entity video will be persistent many times, for this reason we will map the Id like a
-     * UUID and store the data in binary format instead of string, consequently taking up less disk space in
-     * database
-     */
     @Id
     @Column(name = "ID")
     private String id;
@@ -37,7 +32,7 @@ public class VideoJpaEntity {
     @Column(name = "DESCRIPTION", length = 4000)
     private String description;
 
-    @Column(name = "YEAR", nullable = false)
+    @Column(name = "YEAR_LAUNCHED", nullable = false)
     private int yearLaunched;
 
     @Column(name = "OPENED")

@@ -16,7 +16,7 @@ public class AudioVideoMediaJpaEntity {
     @Column(name = "NAME", nullable = false)
     private String name;
 
-    @Column(name = "FILE_PAHT", nullable = false)
+    @Column(name = "FILE_PATH", nullable = false)
     private String filePath;
 
     @Column(name = "ENCODED_PATH", nullable = false)

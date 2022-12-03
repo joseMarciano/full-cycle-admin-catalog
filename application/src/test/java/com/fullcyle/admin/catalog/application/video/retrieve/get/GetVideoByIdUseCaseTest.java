@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.fullcyle.admin.catalog.application.Fixture.*;
-import static com.fullcyle.admin.catalog.application.Fixture.Videos.description;
-import static com.fullcyle.admin.catalog.application.Fixture.Videos.rating;
+import static com.fullcyle.admin.catalog.domain.Fixture.*;
+import static com.fullcyle.admin.catalog.domain.Fixture.Videos.description;
+import static com.fullcyle.admin.catalog.domain.Fixture.Videos.rating;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 

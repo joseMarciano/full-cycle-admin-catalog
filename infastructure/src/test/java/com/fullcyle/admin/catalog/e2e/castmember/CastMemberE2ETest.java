@@ -19,8 +19,8 @@ import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import static com.fullcyle.admin.catalog.Fixture.CastMember.type;
-import static com.fullcyle.admin.catalog.Fixture.name;
+import static com.fullcyle.admin.catalog.domain.Fixture.CastMembers.type;
+import static com.fullcyle.admin.catalog.domain.Fixture.name;
 import static com.fullcyle.admin.catalog.domain.castmember.CastMemberType.ACTOR;
 import static com.fullcyle.admin.catalog.domain.castmember.CastMemberType.DIRECTOR;
 import static org.junit.jupiter.api.Assertions.*;

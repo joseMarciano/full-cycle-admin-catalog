@@ -1,7 +1,7 @@
 package com.fullcyle.admin.catalog.application.video.retrieve.list;
 
-import com.fullcyle.admin.catalog.application.Fixture;
 import com.fullcyle.admin.catalog.application.UseCaseTest;
+import com.fullcyle.admin.catalog.domain.Fixture;
 import com.fullcyle.admin.catalog.domain.category.CategoryGateway;
 import com.fullcyle.admin.catalog.domain.pagination.Pagination;
 import com.fullcyle.admin.catalog.domain.pagination.VideoSearchQuery;

@@ -1,4 +1,4 @@
-package com.fullcyle.admin.catalog.application;
+package com.fullcyle.admin.catalog.domain;
 
 import com.fullcyle.admin.catalog.domain.castmember.CastMember;
 import com.fullcyle.admin.catalog.domain.castmember.CastMemberType;

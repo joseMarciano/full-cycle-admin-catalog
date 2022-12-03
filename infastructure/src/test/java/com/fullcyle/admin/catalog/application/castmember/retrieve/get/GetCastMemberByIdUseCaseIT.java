@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static com.fullcyle.admin.catalog.Fixture.CastMember.type;
-import static com.fullcyle.admin.catalog.Fixture.name;
+import static com.fullcyle.admin.catalog.domain.Fixture.CastMembers.type;
+import static com.fullcyle.admin.catalog.domain.Fixture.name;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @IntegrationTest

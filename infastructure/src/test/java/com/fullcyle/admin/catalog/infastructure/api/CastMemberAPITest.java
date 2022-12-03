@@ -33,8 +33,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.List;
 import java.util.Objects;
 
-import static com.fullcyle.admin.catalog.Fixture.CastMember.type;
-import static com.fullcyle.admin.catalog.Fixture.name;
+import static com.fullcyle.admin.catalog.domain.Fixture.CastMembers.type;
+import static com.fullcyle.admin.catalog.domain.Fixture.name;
 import static com.fullcyle.admin.catalog.domain.castmember.CastMemberType.DIRECTOR;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;

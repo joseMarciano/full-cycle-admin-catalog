@@ -1,7 +1,7 @@
 package com.fullcyle.admin.catalog.application.video.update;
 
-import com.fullcyle.admin.catalog.application.Fixture;
 import com.fullcyle.admin.catalog.application.UseCaseTest;
+import com.fullcyle.admin.catalog.domain.Fixture;
 import com.fullcyle.admin.catalog.domain.castmember.CastMemberGateway;
 import com.fullcyle.admin.catalog.domain.castmember.CastMemberID;
 import com.fullcyle.admin.catalog.domain.category.CategoryGateway;
@@ -22,9 +22,9 @@ import org.mockito.Mock;
 import java.time.Year;
 import java.util.*;
 
-import static com.fullcyle.admin.catalog.application.Fixture.*;
-import static com.fullcyle.admin.catalog.application.Fixture.Videos.description;
-import static com.fullcyle.admin.catalog.application.Fixture.Videos.rating;
+import static com.fullcyle.admin.catalog.domain.Fixture.*;
+import static com.fullcyle.admin.catalog.domain.Fixture.Videos.description;
+import static com.fullcyle.admin.catalog.domain.Fixture.Videos.rating;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 

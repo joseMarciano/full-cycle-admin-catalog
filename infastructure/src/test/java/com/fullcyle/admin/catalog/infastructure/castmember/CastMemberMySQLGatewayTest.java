@@ -15,8 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static com.fullcyle.admin.catalog.Fixture.CastMember.type;
-import static com.fullcyle.admin.catalog.Fixture.name;
+import static com.fullcyle.admin.catalog.domain.Fixture.CastMembers.type;
+import static com.fullcyle.admin.catalog.domain.Fixture.name;
 import static org.junit.jupiter.api.Assertions.*;
 
 @MySQLGatewayTest

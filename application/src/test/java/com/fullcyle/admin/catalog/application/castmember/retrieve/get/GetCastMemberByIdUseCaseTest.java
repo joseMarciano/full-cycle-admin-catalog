@@ -1,7 +1,7 @@
 package com.fullcyle.admin.catalog.application.castmember.retrieve.get;
 
-import com.fullcyle.admin.catalog.application.Fixture;
 import com.fullcyle.admin.catalog.application.UseCaseTest;
+import com.fullcyle.admin.catalog.domain.Fixture;
 import com.fullcyle.admin.catalog.domain.castmember.CastMember;
 import com.fullcyle.admin.catalog.domain.castmember.CastMemberGateway;
 import com.fullcyle.admin.catalog.domain.castmember.CastMemberID;

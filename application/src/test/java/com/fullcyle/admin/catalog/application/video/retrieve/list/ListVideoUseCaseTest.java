@@ -4,7 +4,7 @@ import com.fullcyle.admin.catalog.application.Fixture;
 import com.fullcyle.admin.catalog.application.UseCaseTest;
 import com.fullcyle.admin.catalog.domain.category.CategoryGateway;
 import com.fullcyle.admin.catalog.domain.pagination.Pagination;
-import com.fullcyle.admin.catalog.domain.pagination.SearchQuery;
+import com.fullcyle.admin.catalog.domain.pagination.VideoSearchQuery;
 import com.fullcyle.admin.catalog.domain.video.Video;
 import com.fullcyle.admin.catalog.domain.video.VideoGateway;
 import org.junit.jupiter.api.Assertions;
@@ -61,7 +61,7 @@ public class ListVideoUseCaseTest extends UseCaseTest {
         when(categoryGateway.findAllById(any()))
                 .thenReturn(List.of(Fixture.Categories.aulas()));
 
-        final var aQuery = new SearchQuery(
+        final var aQuery = new VideoSearchQuery(
                 expectedPage,
                 expectedPerPage,
                 expectedTerms,
@@ -106,7 +106,7 @@ public class ListVideoUseCaseTest extends UseCaseTest {
         when(videoGateway.findAll(any()))
                 .thenReturn(expectedPagination);
 
-        final var aQuery = new SearchQuery(
+        final var aQuery = new VideoSearchQuery(
                 expectedPage,
                 expectedPerPage,
                 expectedTerms,
@@ -141,7 +141,7 @@ public class ListVideoUseCaseTest extends UseCaseTest {
         when(videoGateway.findAll(any()))
                 .thenThrow(new IllegalStateException(expectedErrorMessage));
 
-        final var aQuery = new SearchQuery(
+        final var aQuery = new VideoSearchQuery(
                 expectedPage,
                 expectedPerPage,
                 expectedTerms,

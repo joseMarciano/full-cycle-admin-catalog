@@ -1,7 +1,7 @@
 package com.fullcyle.admin.catalog.infastructure.video;
 
 import com.fullcyle.admin.catalog.domain.pagination.Pagination;
-import com.fullcyle.admin.catalog.domain.pagination.SearchQuery;
+import com.fullcyle.admin.catalog.domain.pagination.VideoSearchQuery;
 import com.fullcyle.admin.catalog.domain.video.Video;
 import com.fullcyle.admin.catalog.domain.video.VideoGateway;
 import com.fullcyle.admin.catalog.domain.video.VideoID;
@@ -47,7 +47,7 @@ public class DefaultVideoGateway implements VideoGateway {
     }
 
     @Override
-    public Pagination<Video> findAll(final SearchQuery aQuery) {
+    public Pagination<Video> findAll(final VideoSearchQuery aQuery) {
         return null;
     }
 

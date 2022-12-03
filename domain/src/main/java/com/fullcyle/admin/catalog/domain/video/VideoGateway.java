@@ -1,7 +1,7 @@
 package com.fullcyle.admin.catalog.domain.video;
 
 import com.fullcyle.admin.catalog.domain.pagination.Pagination;
-import com.fullcyle.admin.catalog.domain.pagination.SearchQuery;
+import com.fullcyle.admin.catalog.domain.pagination.VideoSearchQuery;
 
 import java.util.Optional;
 
@@ -15,5 +15,5 @@ public interface VideoGateway {
 
     Video update(Video aVideo);
 
-    Pagination<Video> findAll(SearchQuery aQuery);
+    Pagination<Video> findAll(VideoSearchQuery aQuery);
 }

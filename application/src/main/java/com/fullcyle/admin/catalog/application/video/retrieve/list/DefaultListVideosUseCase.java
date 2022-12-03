@@ -3,10 +3,7 @@ package com.fullcyle.admin.catalog.application.video.retrieve.list;
 import com.fullcyle.admin.catalog.domain.category.CategoryGateway;
 import com.fullcyle.admin.catalog.domain.pagination.Pagination;
 import com.fullcyle.admin.catalog.domain.pagination.VideoSearchQuery;
-import com.fullcyle.admin.catalog.domain.video.Video;
 import com.fullcyle.admin.catalog.domain.video.VideoGateway;
-
-import java.util.function.Function;
 
 public class DefaultListVideosUseCase extends ListVideoUseCase {
 
@@ -21,11 +18,6 @@ public class DefaultListVideosUseCase extends ListVideoUseCase {
 
     @Override
     public Pagination<VideoListOutput> execute(final VideoSearchQuery anIn) {
-        final Function<Video, VideoListOutput> buildListOutput = video -> {
-            final var categories = this.categoryGateway.findAllById(video.getCategories());
-            return VideoListOutput.from(video, categories);
-        };
-
-        return this.videoGateway.findAll(anIn).map(buildListOutput);
+        return this.videoGateway.findAll(anIn).map(VideoListOutput::from);
     }
 }

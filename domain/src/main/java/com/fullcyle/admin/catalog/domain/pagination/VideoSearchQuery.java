@@ -1,6 +1,8 @@
 package com.fullcyle.admin.catalog.domain.pagination;
 
 import com.fullcyle.admin.catalog.domain.castmember.CastMemberID;
+import com.fullcyle.admin.catalog.domain.category.CategoryID;
+import com.fullcyle.admin.catalog.domain.genre.GenreID;
 
 import java.util.Set;
 
@@ -11,7 +13,7 @@ public record VideoSearchQuery(
         String sort,
         String direction,
         Set<CastMemberID> castMembers,
-        Set<CastMemberID> categories,
-        Set<CastMemberID> genres
+        Set<CategoryID> categories,
+        Set<GenreID> genres
 ) {
 }

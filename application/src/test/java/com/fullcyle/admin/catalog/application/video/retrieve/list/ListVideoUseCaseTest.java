@@ -5,14 +5,15 @@ import com.fullcyle.admin.catalog.domain.Fixture;
 import com.fullcyle.admin.catalog.domain.category.CategoryGateway;
 import com.fullcyle.admin.catalog.domain.pagination.Pagination;
 import com.fullcyle.admin.catalog.domain.pagination.VideoSearchQuery;
-import com.fullcyle.admin.catalog.domain.video.Video;
 import com.fullcyle.admin.catalog.domain.video.VideoGateway;
+import com.fullcyle.admin.catalog.domain.video.VideoPreview;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -34,8 +35,8 @@ public class ListVideoUseCaseTest extends UseCaseTest {
     public void givenAValidQuery_whenCallsListVideos_shouldReturnGenres() {
         //given
         final var videos = List.of(
-                Fixture.Videos.video(),
-                Fixture.Videos.video()
+                new VideoPreview(Fixture.Videos.video()),
+                new VideoPreview(Fixture.Videos.video())
         );
 
         final var expectedPage = 0;
@@ -46,7 +47,7 @@ public class ListVideoUseCaseTest extends UseCaseTest {
         final var expectedTotal = 2;
 
         final var expectedItems = videos.stream()
-                .map((it) -> VideoListOutput.from(it, List.of(Fixture.Categories.aulas())))
+                .map(VideoListOutput::from)
                 .toList();
 
         final var expectedPagination = new Pagination<>(
@@ -58,15 +59,16 @@ public class ListVideoUseCaseTest extends UseCaseTest {
 
         when(videoGateway.findAll(any()))
                 .thenReturn(expectedPagination);
-        when(categoryGateway.findAllById(any()))
-                .thenReturn(List.of(Fixture.Categories.aulas()));
 
         final var aQuery = new VideoSearchQuery(
                 expectedPage,
                 expectedPerPage,
                 expectedTerms,
                 expectedSort,
-                expectedDirection
+                expectedDirection,
+                Set.of(),
+                Set.of(),
+                Set.of()
         );
 
         //when
@@ -85,7 +87,7 @@ public class ListVideoUseCaseTest extends UseCaseTest {
     @Test
     public void givenAValidQuery_whenCallsListVideosAndResultIsEmpty_shouldReturnGenres() {
         //given
-        final var genres = List.<Video>of();
+        final var videos = List.<VideoPreview>of();
 
         final var expectedPage = 0;
         final var expectedPerPage = 10;
@@ -100,7 +102,7 @@ public class ListVideoUseCaseTest extends UseCaseTest {
                 expectedPage,
                 expectedPerPage,
                 expectedTotal,
-                genres
+                videos
         );
 
         when(videoGateway.findAll(any()))
@@ -111,7 +113,10 @@ public class ListVideoUseCaseTest extends UseCaseTest {
                 expectedPerPage,
                 expectedTerms,
                 expectedSort,
-                expectedDirection
+                expectedDirection,
+                Set.of(),
+                Set.of(),
+                Set.of()
         );
 
         //when
@@ -146,7 +151,10 @@ public class ListVideoUseCaseTest extends UseCaseTest {
                 expectedPerPage,
                 expectedTerms,
                 expectedSort,
-                expectedDirection
+                expectedDirection,
+                Set.of(),
+                Set.of(),
+                Set.of()
         );
 
         //when

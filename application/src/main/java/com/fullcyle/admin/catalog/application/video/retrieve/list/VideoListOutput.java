@@ -1,29 +1,25 @@
 package com.fullcyle.admin.catalog.application.video.retrieve.list;
 
 import com.fullcyle.admin.catalog.domain.category.Category;
-import com.fullcyle.admin.catalog.domain.utils.CollectionUtils;
-import com.fullcyle.admin.catalog.domain.video.Video;
+import com.fullcyle.admin.catalog.domain.video.VideoPreview;
 
 import java.time.Instant;
-import java.util.List;
 
 public record VideoListOutput(
         String id,
         String title,
         String description,
-        List<CategoryVideoListOutput> categories,
         Instant createdAt,
         Instant updatedAt
 ) {
 
-    public static VideoListOutput from(final Video aVideo, final List<Category> categories) {
+    public static VideoListOutput from(final VideoPreview aVideo) {
         return new VideoListOutput(
-                aVideo.getId().getValue(),
-                aVideo.getTitle(),
-                aVideo.getDescription(),
-                CollectionUtils.mapTo(categories, CategoryVideoListOutput::from),
-                aVideo.getCreatedAt(),
-                aVideo.getUpdatedAt()
+                aVideo.id(),
+                aVideo.title(),
+                aVideo.description(),
+                aVideo.createdAt(),
+                aVideo.updatedAt()
         );
     }
 

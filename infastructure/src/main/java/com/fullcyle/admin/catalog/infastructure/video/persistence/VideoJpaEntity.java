@@ -4,6 +4,7 @@ package com.fullcyle.admin.catalog.infastructure.video.persistence;
 import com.fullcyle.admin.catalog.domain.castmember.CastMemberID;
 import com.fullcyle.admin.catalog.domain.category.CategoryID;
 import com.fullcyle.admin.catalog.domain.genre.GenreID;
+import com.fullcyle.admin.catalog.domain.utils.CollectionUtils;
 import com.fullcyle.admin.catalog.domain.video.Rating;
 import com.fullcyle.admin.catalog.domain.video.Video;
 import com.fullcyle.admin.catalog.domain.video.VideoID;
@@ -12,7 +13,6 @@ import javax.persistence.*;
 import java.time.Instant;
 import java.time.Year;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -166,7 +166,7 @@ public class VideoJpaEntity {
                 getUpdatedAt(),
                 ofNullable(getBanner()).map(ImageMediaJpaEntity::toDomain).orElse(null),
                 ofNullable(getThumbnail()).map(ImageMediaJpaEntity::toDomain).orElse(null),
-                Optional.of(getThumbnailHalf()).map(ImageMediaJpaEntity::toDomain).orElse(null),
+                ofNullable(getThumbnailHalf()).map(ImageMediaJpaEntity::toDomain).orElse(null),
                 ofNullable(getTrailer()).map(AudioVideoMediaJpaEntity::toDomain).orElse(null),
                 ofNullable(getVideo()).map(AudioVideoMediaJpaEntity::toDomain).orElse(null),
                 getCategories().stream().map(it -> CategoryID.from(it.getId().getCategoryId().toString())).collect(Collectors.toSet()),
@@ -305,6 +305,30 @@ public class VideoJpaEntity {
 
     public Set<VideoCastMemberJpaEntity> getCastMembers() {
         return castMembers;
+    }
+
+    public void setCategories(final Set<VideoCategoryJpaEntity> categories) {
+        this.categories = categories;
+    }
+
+    public void setGenres(final Set<VideoGenreJpaEntity> genres) {
+        this.genres = genres;
+    }
+
+    public void setCastMembers(final Set<VideoCastMemberJpaEntity> castMembers) {
+        this.castMembers = castMembers;
+    }
+
+    public Set<CategoryID> getCategoriesID() {
+        return CollectionUtils.mapTo(this.getCategories(), c -> CategoryID.from(c.getId().getCategoryId()));
+    }
+
+    public Set<GenreID> getGenresID() {
+        return CollectionUtils.mapTo(this.getGenres(), g -> GenreID.from(g.getId().getGenreId()));
+    }
+
+    public Set<CastMemberID> getCastMembersID() {
+        return CollectionUtils.mapTo(this.getCastMembers(), c -> CastMemberID.from(c.getId().getCastMemberId()));
     }
 
     private void addCategory(final CategoryID categoryID) {

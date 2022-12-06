@@ -13,7 +13,8 @@ public class VideoGenreJpaEntity {
     private VideoGenreId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("I_VIDEOS")
+    @MapsId("videoId")
+    @JoinColumn(name = "I_VIDEOS")
     private VideoJpaEntity video;
 
     public VideoGenreJpaEntity() {

@@ -10,6 +10,7 @@ class AudioVideoMediaTest {
 
     @Test
     public void givenAValidParams_whenCallsNewAudioVideoMedia_shouldReturnInstance() {
+        final var expectedId = "123";
         final var expectedCheckSum = "abc";
         final var expectedName = "Video.mp4";
         final var expectedRawLocation = "/123/videos";
@@ -17,6 +18,7 @@ class AudioVideoMediaTest {
         final var expectedMediaStatus = MediaStatus.COMPLETED;
 
         final var actualAudioVideo = AudioVideoMedia.with(
+                expectedId,
                 expectedCheckSum,
                 expectedName,
                 expectedRawLocation,
@@ -33,12 +35,14 @@ class AudioVideoMediaTest {
 
     @Test
     void givenTwoAudioVideoMediaWithSameChecksumAndRawLocation_shouldReturnTrue() {
+        final var expectedId = "123";
         final var expectedCheckSum = "abc";
         final var expectedRawLocation = "/123/videos";
         final var expectedEncodedLocation = "dkfmsfdlkf==21239890832@#2423";
         final var expectedMediaStatus = MediaStatus.COMPLETED;
 
         final var audioVideoMediaOne = AudioVideoMedia.with(
+                expectedId,
                 expectedCheckSum,
                 "Random",
                 expectedRawLocation,
@@ -47,6 +51,7 @@ class AudioVideoMediaTest {
         );
 
         final var audioVideoMediaTwo = AudioVideoMedia.with(
+                expectedId,
                 expectedCheckSum,
                 "Sample",
                 expectedRawLocation,
@@ -63,6 +68,7 @@ class AudioVideoMediaTest {
         Assertions.assertThrows(NullPointerException.class, () ->
                 AudioVideoMedia.with(
                         null,
+                        "asAD",
                         "Sample",
                         "/123/videos",
                         "231sdssfe3ef",
@@ -72,7 +78,8 @@ class AudioVideoMediaTest {
 
         Assertions.assertThrows(NullPointerException.class, () ->
                 AudioVideoMedia.with(
-                        "abc",
+                        "123",
+                        null,
                         null,
                         "/123/videos",
                         "231sdssfe3ef",
@@ -82,6 +89,7 @@ class AudioVideoMediaTest {
 
         Assertions.assertThrows(NullPointerException.class, () ->
                 AudioVideoMedia.with(
+                        "1234",
                         "abc",
                         "Sample",
                         null,
@@ -92,6 +100,7 @@ class AudioVideoMediaTest {
 
         Assertions.assertThrows(NullPointerException.class, () ->
                 AudioVideoMedia.with(
+                        "123",
                         "abc",
                         "Sample",
                         "/123/videos",
@@ -102,6 +111,7 @@ class AudioVideoMediaTest {
 
         Assertions.assertThrows(NullPointerException.class, () ->
                 AudioVideoMedia.with(
+                        "123",
                         "abc",
                         "Sample",
                         "/123/videos",

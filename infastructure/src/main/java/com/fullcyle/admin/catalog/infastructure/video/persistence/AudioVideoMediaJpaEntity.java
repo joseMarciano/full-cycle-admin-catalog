@@ -13,6 +13,9 @@ public class AudioVideoMediaJpaEntity {
     @Column(name = "ID", updatable = false)
     private String id;
 
+    @Column(name = "CHECKSUM", nullable = false)
+    private String checksum;
+
     @Column(name = "NAME", nullable = false)
     private String name;
 
@@ -22,7 +25,7 @@ public class AudioVideoMediaJpaEntity {
     @Column(name = "ENCODED_PATH", nullable = false)
     private String encodedPath;
 
-    @Column(name = "STATUS", nullable = false)
+    @Column(name = "MEDIA_STATUS", nullable = false)
     @Enumerated(EnumType.STRING)
     private MediaStatus status;
 
@@ -30,12 +33,14 @@ public class AudioVideoMediaJpaEntity {
     }
 
     public AudioVideoMediaJpaEntity(final String anId,
+                                    final String aChecksum,
                                     final String aName,
                                     final String aFilePath,
                                     final String anEncodedPath,
                                     final MediaStatus aStatus
     ) {
         this.id = anId;
+        this.checksum = aChecksum;
         this.name = aName;
         this.filePath = aFilePath;
         this.encodedPath = anEncodedPath;
@@ -44,6 +49,7 @@ public class AudioVideoMediaJpaEntity {
 
     public static AudioVideoMediaJpaEntity from(final AudioVideoMedia audioVideoMedia) {
         return new AudioVideoMediaJpaEntity(
+                audioVideoMedia.id(),
                 audioVideoMedia.checksum(),
                 audioVideoMedia.name(),
                 audioVideoMedia.rawLocation(),
@@ -55,6 +61,7 @@ public class AudioVideoMediaJpaEntity {
     public AudioVideoMedia toDomain() {
         return AudioVideoMedia.with(
                 getId(),
+                getChecksum(),
                 getName(),
                 getFilePath(),
                 getEncodedPath(),
@@ -100,5 +107,13 @@ public class AudioVideoMediaJpaEntity {
 
     public void setStatus(final MediaStatus status) {
         this.status = status;
+    }
+
+    public String getChecksum() {
+        return checksum;
+    }
+
+    public void setChecksum(final String checksum) {
+        this.checksum = checksum;
     }
 }

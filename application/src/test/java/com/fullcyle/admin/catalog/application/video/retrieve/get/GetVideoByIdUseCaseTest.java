@@ -123,9 +123,7 @@ public class GetVideoByIdUseCaseTest extends UseCaseTest {
         return AudioVideoMedia.with(
                 checksum,
                 type.name().toLowerCase(),
-                "/videos/" + checksum,
-                "",
-                MediaStatus.PENDING
+                "/videos/" + checksum
         );
     }
 

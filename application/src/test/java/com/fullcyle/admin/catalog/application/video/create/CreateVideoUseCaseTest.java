@@ -1011,7 +1011,7 @@ public class CreateVideoUseCaseTest extends UseCaseTest {
                 .thenAnswer(t -> {
                     final var resource = t.getArgument(1, Resource.class);
                     return AudioVideoMedia
-                            .with(IdUtils.uuid(), resource.name(), "/img", "", MediaStatus.PENDING);
+                            .with(IdUtils.uuid(), "31231DAS DFEDF", resource.name(), "/img", "", MediaStatus.PENDING);
                 });
     }
 

@@ -177,9 +177,7 @@ public class VideoTest {
         final var aVideoMedia = AudioVideoMedia.with(
                 "abc",
                 "Video.mp4",
-                "/123/videos",
-                "",
-                MediaStatus.PENDING
+                "/123/videos"
         );
 
         final var actualVideo =
@@ -247,9 +245,7 @@ public class VideoTest {
         final var aTrailer = AudioVideoMedia.with(
                 "abc",
                 "Video.mp4",
-                "/123/videos",
-                "",
-                MediaStatus.PENDING
+                "/123/videos"
         );
 
         final var actualVideo =

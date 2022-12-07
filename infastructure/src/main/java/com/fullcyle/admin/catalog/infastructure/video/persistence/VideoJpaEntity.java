@@ -42,7 +42,6 @@ public class VideoJpaEntity {
     private boolean published;
 
     @Column(name = "RATING")
-    @Enumerated(EnumType.STRING)
     private Rating rating;
 
     @Column(name = "DURATION", precision = 2)

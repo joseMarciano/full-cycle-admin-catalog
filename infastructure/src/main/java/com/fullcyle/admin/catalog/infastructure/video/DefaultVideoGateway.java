@@ -66,7 +66,7 @@ public class DefaultVideoGateway implements VideoGateway {
         );
 
         final var actualPage = this.videoRepository.findAll(
-                SQLUtils.like(aQuery.terms()),
+                SQLUtils.like(SQLUtils.upper(aQuery.terms())),
                 toString(aQuery.castMembers()),
                 toString(aQuery.categories()),
                 toString(aQuery.genres()),

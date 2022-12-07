@@ -7,6 +7,11 @@ public final class SQLUtils {
     private SQLUtils() {
     }
 
+    public static String upper(final String term) {
+        if (isNull(term)) return null;
+        return term.toUpperCase();
+    }
+
     public static String like(final String term) {
         if (isNull(term)) return null;
         return "%" + term + "%";

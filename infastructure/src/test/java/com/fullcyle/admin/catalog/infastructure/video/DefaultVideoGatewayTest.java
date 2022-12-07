@@ -11,6 +11,7 @@ import com.fullcyle.admin.catalog.domain.genre.GenreID;
 import com.fullcyle.admin.catalog.domain.video.AudioVideoMedia;
 import com.fullcyle.admin.catalog.domain.video.ImageMedia;
 import com.fullcyle.admin.catalog.domain.video.Video;
+import com.fullcyle.admin.catalog.domain.video.VideoID;
 import com.fullcyle.admin.catalog.infastructure.video.persistence.VideoRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -427,6 +428,117 @@ public class DefaultVideoGatewayTest {
         Assertions.assertNull(persistedVideo.getBanner());
         Assertions.assertNull(persistedVideo.getThumbnail());
         Assertions.assertNull(persistedVideo.getThumbnailHalf());
+    }
+
+    @Test
+    @Transactional
+    public void givenAValidVideoId_whenCallsDeleteById_shouldDeleteIt() {
+        final var wesley = castMemberGateway.create(CastMembers.wesley());
+        final var aulas = categoryGateway.create(Categories.aulas());
+        final var tech = genreGateway.create(Fixture.Genres.tech());
+
+        final var expectedTitle = title();
+        final var expectedDescription = description();
+        final var expectedLaunchYear = Year.of(year());
+        final var expectedDuration = duration();
+        final var expectedOpened = bool();
+        final var expectedPublished = bool();
+        final var expectedRating = rating();
+        final var expectedCategories = Set.<CategoryID>of(aulas.getId());
+        final var expectedGenres = Set.of(tech.getId());
+        final var expectedMembers = Set.of(wesley.getId());
+
+        final var expectedVideo = AudioVideoMedia.with("123", "video", "/media/video");
+        final var expectedTrailer = AudioVideoMedia.with("123", "trailer", "/media/trailer");
+        final var expectedBanner = ImageMedia.with("123", "banner", "/media/banner");
+        final var expectedThumb = ImageMedia.with("123", "thumb", "/media/thumb");
+        final var expectedThumbHalf = ImageMedia.with("123", "thumbHalf", "/media/thumbHalf");
+
+
+        final var aVideo = Video.newVideo(
+                        expectedTitle,
+                        expectedDescription,
+                        expectedLaunchYear,
+                        expectedDuration,
+                        expectedOpened,
+                        expectedPublished,
+                        expectedRating,
+                        expectedCategories,
+                        expectedGenres,
+                        expectedMembers
+                )
+                .setVideo(expectedVideo)
+                .setTrailer(expectedTrailer)
+                .setBanner(expectedBanner)
+                .setThumbnail(expectedThumb)
+                .setThumbnailHalf(expectedThumbHalf);
+
+
+        Assertions.assertEquals(videoRepository.count(), 0L);
+
+        final var actualVideo = videoGateway.create(aVideo);
+        final var anId = actualVideo.getId();
+
+        Assertions.assertEquals(videoRepository.count(), 1L);
+
+        videoGateway.deleteById(anId);
+
+        Assertions.assertEquals(videoRepository.count(), 0L);
+    }
+
+    @Test
+    public void givenAnInvalidVideoId_whenCallsDeleteById_shouldBeOk() {
+        final var wesley = castMemberGateway.create(CastMembers.wesley());
+        final var aulas = categoryGateway.create(Categories.aulas());
+        final var tech = genreGateway.create(Fixture.Genres.tech());
+
+        final var expectedTitle = title();
+        final var expectedDescription = description();
+        final var expectedLaunchYear = Year.of(year());
+        final var expectedDuration = duration();
+        final var expectedOpened = bool();
+        final var expectedPublished = bool();
+        final var expectedRating = rating();
+        final var expectedCategories = Set.<CategoryID>of(aulas.getId());
+        final var expectedGenres = Set.of(tech.getId());
+        final var expectedMembers = Set.of(wesley.getId());
+
+        final var expectedVideo = AudioVideoMedia.with("123", "video", "/media/video");
+        final var expectedTrailer = AudioVideoMedia.with("123", "trailer", "/media/trailer");
+        final var expectedBanner = ImageMedia.with("123", "banner", "/media/banner");
+        final var expectedThumb = ImageMedia.with("123", "thumb", "/media/thumb");
+        final var expectedThumbHalf = ImageMedia.with("123", "thumbHalf", "/media/thumbHalf");
+
+
+        final var aVideo = Video.newVideo(
+                        expectedTitle,
+                        expectedDescription,
+                        expectedLaunchYear,
+                        expectedDuration,
+                        expectedOpened,
+                        expectedPublished,
+                        expectedRating,
+                        expectedCategories,
+                        expectedGenres,
+                        expectedMembers
+                )
+                .setVideo(expectedVideo)
+                .setTrailer(expectedTrailer)
+                .setBanner(expectedBanner)
+                .setThumbnail(expectedThumb)
+                .setThumbnailHalf(expectedThumbHalf);
+
+
+        Assertions.assertEquals(videoRepository.count(), 0L);
+
+        videoGateway.create(aVideo);
+        final var anId = VideoID.unique();
+
+        Assertions.assertEquals(videoRepository.count(), 1L);
+
+        videoGateway.deleteById(anId);
+
+        Assertions.assertEquals(videoRepository.count(), 1L);
     }
 
 

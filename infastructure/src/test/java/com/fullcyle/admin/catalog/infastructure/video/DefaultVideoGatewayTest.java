@@ -2,18 +2,25 @@ package com.fullcyle.admin.catalog.infastructure.video;
 
 import com.fullcyle.admin.catalog.IntegrationTest;
 import com.fullcyle.admin.catalog.domain.Fixture;
+import com.fullcyle.admin.catalog.domain.castmember.CastMember;
 import com.fullcyle.admin.catalog.domain.castmember.CastMemberGateway;
 import com.fullcyle.admin.catalog.domain.castmember.CastMemberID;
+import com.fullcyle.admin.catalog.domain.category.Category;
 import com.fullcyle.admin.catalog.domain.category.CategoryGateway;
 import com.fullcyle.admin.catalog.domain.category.CategoryID;
+import com.fullcyle.admin.catalog.domain.genre.Genre;
 import com.fullcyle.admin.catalog.domain.genre.GenreGateway;
 import com.fullcyle.admin.catalog.domain.genre.GenreID;
+import com.fullcyle.admin.catalog.domain.pagination.VideoSearchQuery;
 import com.fullcyle.admin.catalog.domain.video.AudioVideoMedia;
 import com.fullcyle.admin.catalog.domain.video.ImageMedia;
 import com.fullcyle.admin.catalog.domain.video.Video;
 import com.fullcyle.admin.catalog.domain.video.VideoID;
 import com.fullcyle.admin.catalog.infastructure.video.persistence.VideoRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +49,27 @@ public class DefaultVideoGatewayTest {
 
     @Autowired
     private VideoRepository videoRepository;
+
+    private CastMember wesley;
+    private CastMember gabriel;
+
+    private Category aulas;
+    private Category lives;
+
+    private Genre tech;
+    private Genre business;
+
+    @BeforeEach
+    public void setUp() {
+        wesley = castMemberGateway.create(Fixture.CastMembers.wesley());
+        gabriel = castMemberGateway.create(Fixture.CastMembers.gabriel());
+
+        aulas = categoryGateway.create(Fixture.Categories.aulas());
+        lives = categoryGateway.create(Fixture.Categories.lives());
+
+        tech = genreGateway.create(Fixture.Genres.tech());
+        business = genreGateway.create(Fixture.Genres.business());
+    }
 
     @Test
     public void testInjection() {
@@ -615,4 +643,421 @@ public class DefaultVideoGatewayTest {
         assertTrue(videoGateway.findById(anId).isEmpty());
     }
 
+    @Test
+    public void givenAInvalidVideoId_whenCallsFindById_shouldEmpty() {
+        // given
+        videoGateway.create(Video.newVideo(
+                Fixture.title(),
+                Fixture.Videos.description(),
+                Year.of(Fixture.year()),
+                Fixture.duration(),
+                Fixture.bool(),
+                Fixture.bool(),
+                Fixture.Videos.rating(),
+                Set.of(),
+                Set.of(),
+                Set.of()
+        ));
+
+        final var anId = VideoID.unique();
+
+        // when
+        final var actualVideo = videoGateway.findById(anId);
+
+        // then
+        assertTrue(actualVideo.isEmpty());
+    }
+
+    @Test
+    public void givenEmptyParams_whenCallFindAll_shouldReturnAllList() {
+        // given
+        mockVideos();
+
+        final var expectedPage = 0;
+        final var expectedPerPage = 10;
+        final var expectedTerms = "";
+        final var expectedSort = "title";
+        final var expectedDirection = "asc";
+        final var expectedTotal = 4;
+
+        final var aQuery = new VideoSearchQuery(
+                expectedPage,
+                expectedPerPage,
+                expectedTerms,
+                expectedSort,
+                expectedDirection,
+                Set.of(),
+                Set.of(),
+                Set.of()
+        );
+
+        // when
+        final var actualPage = videoGateway.findAll(aQuery);
+
+        // then
+        assertEquals(expectedPage, actualPage.currentPage());
+        assertEquals(expectedPerPage, actualPage.perPage());
+        assertEquals(expectedTotal, actualPage.total());
+        assertEquals(expectedTotal, actualPage.items().size());
+    }
+
+    @Test
+    public void givenEmptyVideos_whenCallFindAll_shouldReturnEmptyList() {
+        // given
+        final var expectedPage = 0;
+        final var expectedPerPage = 10;
+        final var expectedTerms = "";
+        final var expectedSort = "title";
+        final var expectedDirection = "asc";
+        final var expectedTotal = 0;
+
+        final var aQuery = new VideoSearchQuery(
+                expectedPage,
+                expectedPerPage,
+                expectedTerms,
+                expectedSort,
+                expectedDirection,
+                Set.of(),
+                Set.of(),
+                Set.of()
+        );
+
+        // when
+        final var actualPage = videoGateway.findAll(aQuery);
+
+        // then
+        assertEquals(expectedPage, actualPage.currentPage());
+        assertEquals(expectedPerPage, actualPage.perPage());
+        assertEquals(expectedTotal, actualPage.total());
+        assertEquals(expectedTotal, actualPage.items().size());
+    }
+
+    @Test
+    public void givenAValidCategory_whenCallFindAll_shouldReturnFilteredList() {
+        // given
+        mockVideos();
+
+        final var expectedPage = 0;
+        final var expectedPerPage = 10;
+        final var expectedTerms = "";
+        final var expectedSort = "title";
+        final var expectedDirection = "asc";
+        final var expectedTotal = 2;
+
+        final var aQuery = new VideoSearchQuery(
+                expectedPage,
+                expectedPerPage,
+                expectedTerms,
+                expectedSort,
+                expectedDirection,
+                Set.of(),
+                Set.of(aulas.getId()),
+                Set.of()
+        );
+
+        // when
+        final var actualPage = videoGateway.findAll(aQuery);
+
+        // then
+        assertEquals(expectedPage, actualPage.currentPage());
+        assertEquals(expectedPerPage, actualPage.perPage());
+        assertEquals(expectedTotal, actualPage.total());
+        assertEquals(expectedTotal, actualPage.items().size());
+
+        assertEquals("21.1 Implementação dos testes integrados do findAll", actualPage.items().get(0).title());
+        assertEquals("Aula de empreendedorismo", actualPage.items().get(1).title());
+    }
+
+    @Test
+    public void givenAValidCastMember_whenCallFindAll_shouldReturnFilteredList() {
+        // given
+        mockVideos();
+
+        final var expectedPage = 0;
+        final var expectedPerPage = 10;
+        final var expectedTerms = "";
+        final var expectedSort = "title";
+        final var expectedDirection = "asc";
+        final var expectedTotal = 2;
+
+        final var aQuery = new VideoSearchQuery(
+                expectedPage,
+                expectedPerPage,
+                expectedTerms,
+                expectedSort,
+                expectedDirection,
+                Set.of(wesley.getId()),
+                Set.of(),
+                Set.of()
+        );
+
+        // when
+        final var actualPage = videoGateway.findAll(aQuery);
+
+        // then
+        assertEquals(expectedPage, actualPage.currentPage());
+        assertEquals(expectedPerPage, actualPage.perPage());
+        assertEquals(expectedTotal, actualPage.total());
+        assertEquals(expectedTotal, actualPage.items().size());
+
+        assertEquals("Aula de empreendedorismo", actualPage.items().get(0).title());
+        assertEquals("System Design no Mercado Livre na prática", actualPage.items().get(1).title());
+    }
+
+    @Test
+    public void givenAValidGenre_whenCallFindAll_shouldReturnFilteredList() {
+        // given
+        mockVideos();
+
+        final var expectedPage = 0;
+        final var expectedPerPage = 10;
+        final var expectedTerms = "";
+        final var expectedSort = "title";
+        final var expectedDirection = "asc";
+        final var expectedTotal = 1;
+
+        final var aQuery = new VideoSearchQuery(
+                expectedPage,
+                expectedPerPage,
+                expectedTerms,
+                expectedSort,
+                expectedDirection,
+                Set.of(),
+                Set.of(),
+                Set.of(business.getId())
+        );
+
+        // when
+        final var actualPage = videoGateway.findAll(aQuery);
+
+        // then
+        assertEquals(expectedPage, actualPage.currentPage());
+        assertEquals(expectedPerPage, actualPage.perPage());
+        assertEquals(expectedTotal, actualPage.total());
+        assertEquals(expectedTotal, actualPage.items().size());
+
+        assertEquals("Aula de empreendedorismo", actualPage.items().get(0).title());
+    }
+
+    @Test
+    public void givenAllParameters_whenCallFindAll_shouldReturnFilteredList() {
+        // given
+        mockVideos();
+
+        final var expectedPage = 0;
+        final var expectedPerPage = 10;
+        final var expectedTerms = "empreendedorismo";
+        final var expectedSort = "title";
+        final var expectedDirection = "asc";
+        final var expectedTotal = 1;
+
+        final var aQuery = new VideoSearchQuery(
+                expectedPage,
+                expectedPerPage,
+                expectedTerms,
+                expectedSort,
+                expectedDirection,
+                Set.of(wesley.getId()),
+                Set.of(aulas.getId()),
+                Set.of(business.getId())
+        );
+
+        // when
+        final var actualPage = videoGateway.findAll(aQuery);
+
+        // then
+        assertEquals(expectedPage, actualPage.currentPage());
+        assertEquals(expectedPerPage, actualPage.perPage());
+        assertEquals(expectedTotal, actualPage.total());
+        assertEquals(expectedTotal, actualPage.items().size());
+
+        assertEquals("Aula de empreendedorismo", actualPage.items().get(0).title());
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "0,2,2,4,21.1 Implementação dos testes integrados do findAll;Aula de empreendedorismo",
+            "1,2,2,4,Não cometa esses erros ao trabalhar com Microsserviços;System Design no Mercado Livre na prática",
+    })
+    public void givenAValidPaging_whenCallsFindAll_shouldReturnPaged(
+            final int expectedPage,
+            final int expectedPerPage,
+            final int expectedItemsCount,
+            final long expectedTotal,
+            final String expectedVideos
+    ) {
+        // given
+        mockVideos();
+
+        final var expectedTerms = "";
+        final var expectedSort = "title";
+        final var expectedDirection = "asc";
+
+        final var aQuery = new VideoSearchQuery(
+                expectedPage,
+                expectedPerPage,
+                expectedTerms,
+                expectedSort,
+                expectedDirection,
+                Set.of(),
+                Set.of(),
+                Set.of()
+        );
+
+        // when
+        final var actualPage = videoGateway.findAll(aQuery);
+
+        // then
+        assertEquals(expectedPage, actualPage.currentPage());
+        assertEquals(expectedPerPage, actualPage.perPage());
+        assertEquals(expectedTotal, actualPage.total());
+        assertEquals(expectedItemsCount, actualPage.items().size());
+
+        int index = 0;
+        for (final var expectedTitle : expectedVideos.split(";")) {
+            final var actualTitle = actualPage.items().get(index).title();
+            assertEquals(expectedTitle, actualTitle);
+            index++;
+        }
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "system,0,10,1,1,System Design no Mercado Livre na prática",
+            "microsser,0,10,1,1,Não cometa esses erros ao trabalhar com Microsserviços",
+            "empreendedorismo,0,10,1,1,Aula de empreendedorismo",
+            "21,0,10,1,1,21.1 Implementação dos testes integrados do findAll",
+    })
+    public void givenAValidTerm_whenCallsFindAll_shouldReturnFiltered(
+            final String expectedTerms,
+            final int expectedPage,
+            final int expectedPerPage,
+            final int expectedItemsCount,
+            final long expectedTotal,
+            final String expectedVideo
+    ) {
+        // given
+        mockVideos();
+
+        final var expectedSort = "title";
+        final var expectedDirection = "asc";
+
+        final var aQuery = new VideoSearchQuery(
+                expectedPage,
+                expectedPerPage,
+                expectedTerms,
+                expectedSort,
+                expectedDirection,
+                Set.of(),
+                Set.of(),
+                Set.of()
+        );
+
+        // when
+        final var actualPage = videoGateway.findAll(aQuery);
+
+        // then
+        assertEquals(expectedPage, actualPage.currentPage());
+        assertEquals(expectedPerPage, actualPage.perPage());
+        assertEquals(expectedTotal, actualPage.total());
+        assertEquals(expectedItemsCount, actualPage.items().size());
+        assertEquals(expectedVideo, actualPage.items().get(0).title());
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "title,asc,0,10,4,4,21.1 Implementação dos testes integrados do findAll",
+            "title,desc,0,10,4,4,System Design no Mercado Livre na prática",
+            "createdAt,asc,0,10,4,4,System Design no Mercado Livre na prática",
+            "createdAt,desc,0,10,4,4,Aula de empreendedorismo",
+    })
+    public void givenAValidSortAndDirection_whenCallsFindAll_shouldReturnOrdered(
+            final String expectedSort,
+            final String expectedDirection,
+            final int expectedPage,
+            final int expectedPerPage,
+            final int expectedItemsCount,
+            final long expectedTotal,
+            final String expectedVideo
+    ) {
+        // given
+        mockVideos();
+
+        final var expectedTerms = "";
+
+        final var aQuery = new VideoSearchQuery(
+                expectedPage,
+                expectedPerPage,
+                expectedTerms,
+                expectedSort,
+                expectedDirection,
+                Set.of(),
+                Set.of(),
+                Set.of()
+        );
+
+        // when
+        final var actualPage = videoGateway.findAll(aQuery);
+
+        // then
+        assertEquals(expectedPage, actualPage.currentPage());
+        assertEquals(expectedPerPage, actualPage.perPage());
+        assertEquals(expectedTotal, actualPage.total());
+        assertEquals(expectedItemsCount, actualPage.items().size());
+        assertEquals(expectedVideo, actualPage.items().get(0).title());
+    }
+
+    private void mockVideos() {
+        videoGateway.create(Video.newVideo(
+                "System Design no Mercado Livre na prática",
+                Fixture.Videos.description(),
+                Year.of(2022),
+                Fixture.duration(),
+                Fixture.bool(),
+                Fixture.bool(),
+                Fixture.Videos.rating(),
+                Set.of(lives.getId()),
+                Set.of(tech.getId()),
+                Set.of(wesley.getId(), gabriel.getId())
+        ));
+
+        videoGateway.create(Video.newVideo(
+                "Não cometa esses erros ao trabalhar com Microsserviços",
+                Fixture.Videos.description(),
+                Year.of(Fixture.year()),
+                Fixture.duration(),
+                Fixture.bool(),
+                Fixture.bool(),
+                Fixture.Videos.rating(),
+                Set.of(),
+                Set.of(),
+                Set.of()
+        ));
+
+        videoGateway.create(Video.newVideo(
+                "21.1 Implementação dos testes integrados do findAll",
+                Fixture.Videos.description(),
+                Year.of(Fixture.year()),
+                Fixture.duration(),
+                Fixture.bool(),
+                Fixture.bool(),
+                Fixture.Videos.rating(),
+                Set.of(aulas.getId()),
+                Set.of(tech.getId()),
+                Set.of(gabriel.getId())
+        ));
+
+        videoGateway.create(Video.newVideo(
+                "Aula de empreendedorismo",
+                Fixture.Videos.description(),
+                Year.of(Fixture.year()),
+                Fixture.duration(),
+                Fixture.bool(),
+                Fixture.bool(),
+                Fixture.Videos.rating(),
+                Set.of(aulas.getId()),
+                Set.of(business.getId()),
+                Set.of(wesley.getId())
+        ));
+    }
 }

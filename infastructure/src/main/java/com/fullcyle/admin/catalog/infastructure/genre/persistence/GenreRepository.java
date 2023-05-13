@@ -13,6 +13,6 @@ public interface GenreRepository extends JpaRepository<GenreJpaEntity, String> {
 
     Page<GenreJpaEntity> findAll(Specification<GenreJpaEntity> whereClause, Pageable page);
 
-    @Query(value = "select c.id from Genre g where g.id in :ids")
+    @Query(value = "select g.id from Genre g where g.id in :ids")
     List<String> existsByIds(@Param("ids") List<String> ids);
 }

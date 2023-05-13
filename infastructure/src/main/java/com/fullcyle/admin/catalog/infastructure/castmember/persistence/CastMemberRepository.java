@@ -13,6 +13,6 @@ public interface CastMemberRepository extends JpaRepository<CastMemberJpaEntity,
 
     Page<CastMemberJpaEntity> findAll(Specification<CastMemberJpaEntity> specification, Pageable page);
 
-    @Query(value = "select c.id from CastMember g where g.id in :ids")
+    @Query(value = "select cm.id from CastMember cm where cm.id in :ids")
     List<String> existsByIds(@Param("ids") List<String> ids);
 }

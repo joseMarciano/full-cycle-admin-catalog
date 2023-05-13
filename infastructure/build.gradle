@@ -32,6 +32,10 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":application"))
 
+    implementation("com.amazonaws:aws-java-sdk:1.12.468")
+    implementation("com.google.guava:guava:31.1-jre")
+
+
     implementation("mysql:mysql-connector-java")
     implementation('io.vavr:vavr:0.10.4')
 

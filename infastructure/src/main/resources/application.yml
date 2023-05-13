@@ -35,5 +35,10 @@ spring:
       "[hibernate.generate_statistics]": true
       "[hibernate.connection.provider_disables_autocommit]": true # https://vladmihalcea.com/why-you-should-always-use-hibernate-connection-provider_disables_autocommit-for-resource-local-jpa-transactions/
 
-
-
+cloud-provider:
+  aws:
+    accessKey: ${AWS_ACCESS_KEY}
+    secretKey: ${AWS_SECRET_KEY}
+    s3:
+      bucketName: admin-catalog
+      bucketRegion: us-east-1

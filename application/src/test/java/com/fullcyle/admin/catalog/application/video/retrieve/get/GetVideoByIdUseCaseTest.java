@@ -49,11 +49,11 @@ public class GetVideoByIdUseCaseTest extends UseCaseTest {
                 CastMembers.gabriel().getId(),
                 CastMembers.wesley().getId()
         );
-        final AudioVideoMedia expectedVideo = audioVideo(Resource.Type.VIDEO);
-        final AudioVideoMedia expectedTrailer = audioVideo(Resource.Type.VIDEO);
-        final ImageMedia expectedBanner = imageMedia(Resource.Type.BANNER);
-        final ImageMedia expectedThumb = imageMedia(Resource.Type.THUMBNAIL);
-        final ImageMedia expectedThumbHalf = imageMedia(Resource.Type.THUMBNAIL_HALF);
+        final AudioVideoMedia expectedVideo = audioVideo(VideoMediaType.VIDEO);
+        final AudioVideoMedia expectedTrailer = audioVideo(VideoMediaType.VIDEO);
+        final ImageMedia expectedBanner = imageMedia(VideoMediaType.BANNER);
+        final ImageMedia expectedThumb = imageMedia(VideoMediaType.THUMBNAIL);
+        final ImageMedia expectedThumbHalf = imageMedia(VideoMediaType.THUMBNAIL_HALF);
 
         final var aVideo = Video.newVideo(
                         expectedTitle,
@@ -118,7 +118,7 @@ public class GetVideoByIdUseCaseTest extends UseCaseTest {
 
     }
 
-    private AudioVideoMedia audioVideo(final Resource.Type type) {
+    private AudioVideoMedia audioVideo(final VideoMediaType type) {
         final var checksum = IdUtils.uuid();
         return AudioVideoMedia.with(
                 checksum,
@@ -127,7 +127,7 @@ public class GetVideoByIdUseCaseTest extends UseCaseTest {
         );
     }
 
-    private ImageMedia imageMedia(final Resource.Type type) {
+    private ImageMedia imageMedia(final VideoMediaType type) {
         final var checksum = IdUtils.uuid();
         return ImageMedia.with(
                 checksum,

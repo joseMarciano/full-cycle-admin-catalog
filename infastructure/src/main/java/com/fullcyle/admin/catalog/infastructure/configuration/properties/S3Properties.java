@@ -2,9 +2,11 @@ package com.fullcyle.admin.catalog.infastructure.configuration.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
 @ConfigurationProperties(prefix = "cloud-provider.aws.s3")
+@Profile({"development", "production"})
 public class S3Properties {
 
     private String bucketName;

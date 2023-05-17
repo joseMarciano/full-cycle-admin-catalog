@@ -24,6 +24,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static com.fullcyle.admin.catalog.domain.utils.CollectionUtils.mapTo;
+import static com.fullcyle.admin.catalog.domain.video.VideoMediaType.*;
 import static java.util.Objects.requireNonNull;
 
 public class DefaultUpdateVideoUseCase extends UpdateVideoUseCase {
@@ -91,27 +92,25 @@ public class DefaultUpdateVideoUseCase extends UpdateVideoUseCase {
     private Video update(final UpdateVideoCommand aCommand, final Video aVideo) {
         final var anId = aVideo.getId();
         try {
-            Function<Resource, AudioVideoMedia> storeAudioVideo = it -> this.mediaResourceGateway.storeAudioVideo(anId, it);
-            Function<Resource, ImageMedia> storeImage = it -> this.mediaResourceGateway.storeImage(anId, it);
 
             final var aVideoMedia = aCommand.getVideo()
-                    .map(storeAudioVideo)
+                    .map(storeAudioVideo(anId, VIDEO))
                     .orElse(null);
 
             final var aTrailerMedia = aCommand.getTrailer()
-                    .map(storeAudioVideo)
+                    .map(storeAudioVideo(anId, TRAILER))
                     .orElse(null);
 
             final var aBannerMedia = aCommand.getBanner()
-                    .map(storeImage)
+                    .map(storeImage(anId, BANNER))
                     .orElse(null);
 
             final var aThumbnailMedia = aCommand.getThumbnail()
-                    .map(storeImage)
+                    .map(storeImage(anId, THUMBNAIL))
                     .orElse(null);
 
             final var aThumbHalfMedia = aCommand.getThumbnailHalf()
-                    .map(storeImage)
+                    .map(storeImage(anId, THUMBNAIL_HALF))
                     .orElse(null);
 
 
@@ -126,6 +125,14 @@ public class DefaultUpdateVideoUseCase extends UpdateVideoUseCase {
         } catch (final Throwable t) {
             throw InternalErrorException.with("An error on update video was observed [videoId: %s]".formatted(anId.getValue()), t);
         }
+    }
+
+    private Function<Resource, AudioVideoMedia> storeAudioVideo(final VideoID anId, final VideoMediaType type) {
+        return it -> this.mediaResourceGateway.storeAudioVideo(anId, VideoResource.with(it, type));
+    }
+
+    private Function<Resource, ImageMedia> storeImage(final VideoID anId, final VideoMediaType type) {
+        return it -> this.mediaResourceGateway.storeImage(anId, VideoResource.with(it, type));
     }
 
 

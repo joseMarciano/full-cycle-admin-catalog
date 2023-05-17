@@ -5,8 +5,10 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.fullcyle.admin.catalog.infastructure.configuration.properties.AwsProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
+@Profile({"development", "production"})
 public class AwsCredentialsConfig {
 
     private final AwsProperties awsProperties;

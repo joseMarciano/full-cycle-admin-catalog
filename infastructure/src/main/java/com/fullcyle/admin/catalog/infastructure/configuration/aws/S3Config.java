@@ -8,8 +8,10 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.fullcyle.admin.catalog.infastructure.configuration.properties.S3Properties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
+@Profile({"development", "production"})
 public class S3Config {
 
     private final S3Properties s3Properties;

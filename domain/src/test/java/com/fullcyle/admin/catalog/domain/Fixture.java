@@ -7,6 +7,7 @@ import com.fullcyle.admin.catalog.domain.genre.Genre;
 import com.fullcyle.admin.catalog.domain.video.Rating;
 import com.fullcyle.admin.catalog.domain.video.Resource;
 import com.fullcyle.admin.catalog.domain.video.Video;
+import com.fullcyle.admin.catalog.domain.video.VideoMediaType;
 import com.github.javafaker.Faker;
 import io.vavr.API;
 
@@ -140,15 +141,16 @@ public final class Fixture {
                     .option(Rating.values());
         }
 
-        public static Resource resource(final Resource.Type type) {
+        public static Resource resource(final VideoMediaType type) {
             final String contentType = API.Match(type).of(
-                    API.Case(API.$(API.List(Resource.Type.VIDEO, Resource.Type.TRAILER)::contains), "video/mp4"),
+                    API.Case(API.$(API.List(VideoMediaType.VIDEO, VideoMediaType.TRAILER)::contains), "video/mp4"),
                     API.Case(API.$(), "image/jpg")
             );
 
+            final var checksum = "checksum";
             final byte[] content = "Conteudo".getBytes();
 
-            return Resource.with(content, contentType, type.name().toLowerCase(), type);
+            return Resource.with(checksum, content, contentType, type.name().toLowerCase());
         }
 
 

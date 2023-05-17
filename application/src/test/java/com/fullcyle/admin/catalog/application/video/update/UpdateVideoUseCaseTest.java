@@ -77,11 +77,11 @@ public class UpdateVideoUseCaseTest extends UseCaseTest {
                 CastMembers.gabriel().getId(),
                 CastMembers.wesley().getId()
         );
-        final Resource expectedVideo = Videos.resource(Resource.Type.VIDEO);
-        final Resource expectedTrailer = Videos.resource(Resource.Type.TRAILER);
-        final Resource expectedBanner = Videos.resource(Resource.Type.BANNER);
-        final Resource expectedThumb = Videos.resource(Resource.Type.THUMBNAIL);
-        final Resource expectedThumbHalf = Videos.resource(Resource.Type.THUMBNAIL_HALF);
+        final Resource expectedVideo = Videos.resource(VideoMediaType.VIDEO);
+        final Resource expectedTrailer = Videos.resource(VideoMediaType.TRAILER);
+        final Resource expectedBanner = Videos.resource(VideoMediaType.BANNER);
+        final Resource expectedThumb = Videos.resource(VideoMediaType.THUMBNAIL);
+        final Resource expectedThumbHalf = Videos.resource(VideoMediaType.THUMBNAIL_HALF);
 
 
         final var aCommand = UpdateVideoCommand.with(
@@ -173,11 +173,11 @@ public class UpdateVideoUseCaseTest extends UseCaseTest {
                 CastMembers.gabriel().getId(),
                 CastMembers.wesley().getId()
         );
-        final Resource expectedVideo = Videos.resource(Resource.Type.VIDEO);
-        final Resource expectedTrailer = Videos.resource(Resource.Type.TRAILER);
-        final Resource expectedBanner = Videos.resource(Resource.Type.BANNER);
-        final Resource expectedThumb = Videos.resource(Resource.Type.THUMBNAIL);
-        final Resource expectedThumbHalf = Videos.resource(Resource.Type.THUMBNAIL_HALF);
+        final Resource expectedVideo = Videos.resource(VideoMediaType.VIDEO);
+        final Resource expectedTrailer = Videos.resource(VideoMediaType.TRAILER);
+        final Resource expectedBanner = Videos.resource(VideoMediaType.BANNER);
+        final Resource expectedThumb = Videos.resource(VideoMediaType.THUMBNAIL);
+        final Resource expectedThumbHalf = Videos.resource(VideoMediaType.THUMBNAIL_HALF);
 
         final var aCommand = UpdateVideoCommand.with(
                 aVideo.getId().getValue(),
@@ -263,11 +263,11 @@ public class UpdateVideoUseCaseTest extends UseCaseTest {
                 CastMembers.gabriel().getId(),
                 CastMembers.wesley().getId()
         );
-        final Resource expectedVideo = Videos.resource(Resource.Type.VIDEO);
-        final Resource expectedTrailer = Videos.resource(Resource.Type.TRAILER);
-        final Resource expectedBanner = Videos.resource(Resource.Type.BANNER);
-        final Resource expectedThumb = Videos.resource(Resource.Type.THUMBNAIL);
-        final Resource expectedThumbHalf = Videos.resource(Resource.Type.THUMBNAIL_HALF);
+        final Resource expectedVideo = Videos.resource(VideoMediaType.VIDEO);
+        final Resource expectedTrailer = Videos.resource(VideoMediaType.TRAILER);
+        final Resource expectedBanner = Videos.resource(VideoMediaType.BANNER);
+        final Resource expectedThumb = Videos.resource(VideoMediaType.THUMBNAIL);
+        final Resource expectedThumbHalf = Videos.resource(VideoMediaType.THUMBNAIL_HALF);
 
         final var aCommand = UpdateVideoCommand.with(
                 aVideo.getId().getValue(),
@@ -349,11 +349,11 @@ public class UpdateVideoUseCaseTest extends UseCaseTest {
         final var expectedCategories = Set.of(Categories.aulas().getId());
         final var expectedGenres = Set.of(Genres.tech().getId());
         final var expectedMembers = Set.<CastMemberID>of();
-        final Resource expectedVideo = Videos.resource(Resource.Type.VIDEO);
-        final Resource expectedTrailer = Videos.resource(Resource.Type.TRAILER);
-        final Resource expectedBanner = Videos.resource(Resource.Type.BANNER);
-        final Resource expectedThumb = Videos.resource(Resource.Type.THUMBNAIL);
-        final Resource expectedThumbHalf = Videos.resource(Resource.Type.THUMBNAIL_HALF);
+        final Resource expectedVideo = Videos.resource(VideoMediaType.VIDEO);
+        final Resource expectedTrailer = Videos.resource(VideoMediaType.TRAILER);
+        final Resource expectedBanner = Videos.resource(VideoMediaType.BANNER);
+        final Resource expectedThumb = Videos.resource(VideoMediaType.THUMBNAIL);
+        final Resource expectedThumbHalf = Videos.resource(VideoMediaType.THUMBNAIL_HALF);
 
         final var aCommand = UpdateVideoCommand.with(
                 aVideo.getId().getValue(),
@@ -1139,20 +1139,20 @@ public class UpdateVideoUseCaseTest extends UseCaseTest {
         verify(categoryGateway, times(0)).existsByIds(eq(expectedCategories));
     }
 
-    private void mockAudioVideoMedia() {
+    private void mockImageMedia() {
         when(mediaResourceGateway.storeImage(any(), any()))
                 .thenAnswer(t -> {
-                    final var resource = t.getArgument(1, Resource.class);
-                    return ImageMedia.with(IdUtils.uuid(), resource.name(), "/img");
+                    final var videoResource = t.getArgument(1, VideoResource.class);
+                    return ImageMedia.with(IdUtils.uuid(), videoResource.resource().name(), "/img");
                 });
     }
 
-    private void mockImageMedia() {
+    private void mockAudioVideoMedia() {
         when(mediaResourceGateway.storeAudioVideo(any(), any()))
                 .thenAnswer(t -> {
-                    final var resource = t.getArgument(1, Resource.class);
+                    final var videoResource = t.getArgument(1, VideoResource.class);
                     return AudioVideoMedia
-                            .with(IdUtils.uuid(), "SDASF SD", resource.name(), "/img", "", MediaStatus.PENDING);
+                            .with(IdUtils.uuid(), "SDASF SD", videoResource.resource().name(), "/img", "", MediaStatus.PENDING);
                 });
     }
 }

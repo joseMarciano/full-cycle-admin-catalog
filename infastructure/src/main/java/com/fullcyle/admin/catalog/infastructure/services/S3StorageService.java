@@ -6,6 +6,7 @@ import com.fullcyle.admin.catalog.domain.video.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
@@ -18,6 +19,7 @@ import static java.util.Optional.empty;
 import static java.util.Optional.of;
 
 @Service
+@Profile({"development", "production"})
 public class S3StorageService implements StorageService {
 
     private static Logger LOGGER = LoggerFactory.getLogger(S3StorageService.class);
@@ -43,7 +45,7 @@ public class S3StorageService implements StorageService {
         try {
             final var s3Object = this.amazonS3.getObject(this.bucketName, name);
             final var content = getContent(s3Object);
-            return of(Resource.with(content, s3Object.getObjectMetadata().getContentType(), s3Object.getKey(), null));
+            return of(Resource.with("COLOCAR CHECKSUM", content, s3Object.getObjectMetadata().getContentType(), s3Object.getKey()));
         } catch (AmazonS3Exception e) {
             LOGGER.error("Error on get {} in bucket {} message: {}", name, this.bucketName, e.getMessage());
             return empty();

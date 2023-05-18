@@ -40,5 +40,10 @@ cloud-provider:
     accessKey: ${AWS_ACCESS_KEY}
     secretKey: ${AWS_SECRET_KEY}
     s3:
-      bucketName: admin-catalog
+      bucketName: catologo-videos
       bucketRegion: us-east-1
+
+storage:
+  catalogo-videos:
+    filename-pattern: type-{type}
+    location-pattern: videoId-{videoId}

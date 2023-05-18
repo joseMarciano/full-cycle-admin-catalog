@@ -3,9 +3,9 @@ package com.fullcyle.admin.catalog.infastructure.services;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
 import com.fullcyle.admin.catalog.domain.video.Resource;
+import com.fullcyle.admin.catalog.infastructure.configuration.properties.S3Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -27,8 +27,8 @@ public class S3StorageService implements StorageService {
     private final String bucketName;
     private final AmazonS3 amazonS3;
 
-    public S3StorageService(final @Value("${cloud-provider.aws.s3.bucketName}") String bucketName, final AmazonS3 amazonS3) {
-        this.bucketName = bucketName;
+    public S3StorageService(final S3Properties s3Properties, final AmazonS3 amazonS3) {
+        this.bucketName = s3Properties.getBucketName();
         this.amazonS3 = amazonS3;
     }
 

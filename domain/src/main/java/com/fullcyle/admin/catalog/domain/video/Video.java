@@ -328,4 +328,24 @@ public class Video extends AggregateRoot<VideoID> {
         this.castMembers = Objects.nonNull(castMembers) ? new HashSet<>(castMembers) : emptySet();
         return this;
     }
+
+    public Video completed(final VideoMediaType aType, final String encodedPath) {
+        if (VideoMediaType.VIDEO.equals(aType))
+            getVideo().ifPresent(it -> setVideo(this.video.completed(encodedPath)));
+
+        if (VideoMediaType.TRAILER.equals(aType))
+            getTrailer().ifPresent(it -> setTrailer(this.trailer.completed(encodedPath)));
+
+        return this;
+    }
+
+    public Video processing(final VideoMediaType aType) {
+        if (VideoMediaType.VIDEO.equals(aType))
+            getVideo().ifPresent(it -> setVideo(this.video.processing()));
+
+        if (VideoMediaType.TRAILER.equals(aType))
+            getTrailer().ifPresent(it -> setTrailer(this.trailer.processing()));
+
+        return this;
+    }
 }

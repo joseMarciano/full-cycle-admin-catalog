@@ -2,6 +2,7 @@ package com.fullcyle.admin.catalog.application.video.delete;
 
 import com.fullcyle.admin.catalog.application.UseCaseTest;
 import com.fullcyle.admin.catalog.domain.exceptions.InternalErrorException;
+import com.fullcyle.admin.catalog.domain.video.MediaResourceGateway;
 import com.fullcyle.admin.catalog.domain.video.VideoGateway;
 import com.fullcyle.admin.catalog.domain.video.VideoID;
 import org.junit.jupiter.api.Assertions;
@@ -20,6 +21,9 @@ public class DeleteVideoUseCaseTest extends UseCaseTest {
 
     @Mock
     private VideoGateway videoGateway;
+    @Mock
+    private MediaResourceGateway mediaResourceGateway;
+
 
     @Override
     protected List<Object> getMocks() {

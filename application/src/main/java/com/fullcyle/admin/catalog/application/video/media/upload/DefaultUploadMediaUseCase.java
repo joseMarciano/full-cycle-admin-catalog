@@ -8,12 +8,12 @@ import com.fullcyle.admin.catalog.domain.video.VideoID;
 
 import static java.util.Objects.requireNonNull;
 
-public class DefaultMediaUseCase extends UploadMediaUseCase {
+public class DefaultUploadMediaUseCase extends UploadMediaUseCase {
 
     private final VideoGateway videoGateway;
     private final MediaResourceGateway mediaResourceGateway;
 
-    public DefaultMediaUseCase(final VideoGateway videoGateway, final MediaResourceGateway mediaResourceGateway) {
+    public DefaultUploadMediaUseCase(final VideoGateway videoGateway, final MediaResourceGateway mediaResourceGateway) {
         this.videoGateway = requireNonNull(videoGateway);
         this.mediaResourceGateway = requireNonNull(mediaResourceGateway);
     }

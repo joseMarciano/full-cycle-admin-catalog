@@ -5,6 +5,8 @@ import com.fullcyle.admin.catalog.infastructure.configuration.properties.Storage
 import com.fullcyle.admin.catalog.infastructure.services.StorageService;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class DefaultMediaResourceGateway implements MediaResourceGateway {
 
@@ -38,6 +40,11 @@ public class DefaultMediaResourceGateway implements MediaResourceGateway {
     public void clearResources(final VideoID anId) {
         final var ids = this.storageService.list(folder(anId));
         this.storageService.deleteAll(ids);
+    }
+
+    @Override
+    public Optional<Resource> getResource(final VideoID anId, final VideoMediaType aType) {
+        return null;
     }
 
     private String filename(final VideoMediaType type) {

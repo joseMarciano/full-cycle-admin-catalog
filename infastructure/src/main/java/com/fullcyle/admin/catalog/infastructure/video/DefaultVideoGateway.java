@@ -7,26 +7,33 @@ import com.fullcyle.admin.catalog.domain.video.Video;
 import com.fullcyle.admin.catalog.domain.video.VideoGateway;
 import com.fullcyle.admin.catalog.domain.video.VideoID;
 import com.fullcyle.admin.catalog.domain.video.VideoPreview;
+import com.fullcyle.admin.catalog.infastructure.services.EventsService;
 import com.fullcyle.admin.catalog.infastructure.utils.SQLUtils;
 import com.fullcyle.admin.catalog.infastructure.video.persistence.VideoJpaEntity;
 import com.fullcyle.admin.catalog.infastructure.video.persistence.VideoRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static java.util.Objects.isNull;
+import static java.util.Objects.requireNonNull;
 
 @Component
 public class DefaultVideoGateway implements VideoGateway {
 
     private final VideoRepository videoRepository;
+    private final EventsService eventsService;
 
-    public DefaultVideoGateway(final VideoRepository videoRepository) {
-        this.videoRepository = videoRepository;
+    public DefaultVideoGateway(final VideoRepository videoRepository,
+                               @Qualifier("videoCreatedEventService") final EventsService eventsService) {
+        this.videoRepository = requireNonNull(videoRepository);
+        this.eventsService = requireNonNull(eventsService);
     }
 
     @Override
@@ -82,7 +89,7 @@ public class DefaultVideoGateway implements VideoGateway {
     }
 
     private static Set<String> toString(final Set<? extends Identifier> ids) {
-        if (Objects.isNull(ids) || ids.isEmpty()) {
+        if (isNull(ids) || ids.isEmpty()) {
             return null;
         }
 
@@ -90,7 +97,11 @@ public class DefaultVideoGateway implements VideoGateway {
     }
 
     private Video save(final Video aVideo) {
-        return this.videoRepository.save(VideoJpaEntity.from(aVideo))
+        final var result = this.videoRepository.save(VideoJpaEntity.from(aVideo))
                 .toAggregate();
+
+        aVideo.publishDomainEvents(this.eventsService::send);
+
+        return result;
     }
 }

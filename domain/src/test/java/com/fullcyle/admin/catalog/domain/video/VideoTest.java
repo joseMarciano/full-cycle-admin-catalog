@@ -182,7 +182,7 @@ public class VideoTest {
 
         final var actualVideo =
                 Video.with(aVideo)
-                        .setVideo(aVideoMedia);
+                        .updateVideoMedia(aVideoMedia);
 
 
         assertNotNull(actualVideo);
@@ -250,7 +250,7 @@ public class VideoTest {
 
         final var actualVideo =
                 Video.with(aVideo)
-                        .setTrailer(aTrailer);
+                        .updateTrailerMedia(aTrailer);
 
 
         assertNotNull(actualVideo);
@@ -317,7 +317,7 @@ public class VideoTest {
 
         final var actualVideo =
                 Video.with(aVideo)
-                        .setBanner(aBanner);
+                        .updateBannerMedia(aBanner);
 
 
         assertNotNull(actualVideo);
@@ -385,7 +385,7 @@ public class VideoTest {
 
         final var actualVideo =
                 Video.with(aVideo)
-                        .setThumbnail(aThumbNail);
+                        .updateThumbnailMedia(aThumbNail);
 
 
         assertNotNull(actualVideo);
@@ -453,7 +453,7 @@ public class VideoTest {
 
         final var actualVideo =
                 Video.with(aVideo)
-                        .setThumbnailHalf(aThumbNailHalf);
+                        .updateThumbnailHalfMedia(aThumbNailHalf);
 
 
         assertNotNull(actualVideo);

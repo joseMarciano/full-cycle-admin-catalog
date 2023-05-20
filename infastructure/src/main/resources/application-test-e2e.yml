@@ -1,5 +1,16 @@
 mysql:
-    url: localhost:${mysql.port}
-    username: root
-    password: 123456
-    schema: adm_videos
+  url: localhost:${mysql.port}
+  username: root
+  password: 123456
+  schema: adm_videos
+
+amqp:
+  host: localhost
+  port: 5672
+  username: admin_videos
+  password: 123456
+
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration

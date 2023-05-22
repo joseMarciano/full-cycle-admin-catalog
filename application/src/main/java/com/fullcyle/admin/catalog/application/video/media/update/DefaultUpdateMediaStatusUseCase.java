@@ -6,11 +6,11 @@ import com.fullcyle.admin.catalog.domain.video.*;
 import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
 
-public class UpdateMediaStatusUseCaseImpl extends UpdateMediaStatusUseCase {
+public class DefaultUpdateMediaStatusUseCase extends UpdateMediaStatusUseCase {
 
     private final VideoGateway videoGateway;
 
-    public UpdateMediaStatusUseCaseImpl(final VideoGateway videoGateway) {
+    public DefaultUpdateMediaStatusUseCase(final VideoGateway videoGateway) {
         this.videoGateway = requireNonNull(videoGateway);
     }
 

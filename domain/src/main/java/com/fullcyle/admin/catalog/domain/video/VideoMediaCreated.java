@@ -17,7 +17,15 @@ public class VideoMediaCreated implements DomainEvent {
     }
 
     @Override
-    public Instant occuredOn() {
+    public Instant getOccuredOn() {
         return this.occuredOn;
+    }
+
+    public String getVideoId() {
+        return videoId;
+    }
+
+    public String getRawLocation() {
+        return rawLocation;
     }
 }

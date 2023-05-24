@@ -1,4 +1,4 @@
-package com.fullcyle.admin.catalog.infastructure.video.persistence.models;
+package com.fullcyle.admin.catalog.infastructure.video.models;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 

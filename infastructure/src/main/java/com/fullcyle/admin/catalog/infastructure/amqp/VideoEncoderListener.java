@@ -4,9 +4,9 @@ import com.fullcyle.admin.catalog.application.video.media.update.UpdateMediaStat
 import com.fullcyle.admin.catalog.application.video.media.update.UpdateMediaStatusUseCase;
 import com.fullcyle.admin.catalog.domain.video.MediaStatus;
 import com.fullcyle.admin.catalog.infastructure.configuration.json.Json;
-import com.fullcyle.admin.catalog.infastructure.video.persistence.models.VideoEncoderCompleted;
-import com.fullcyle.admin.catalog.infastructure.video.persistence.models.VideoEncoderError;
-import com.fullcyle.admin.catalog.infastructure.video.persistence.models.VideoEncoderResult;
+import com.fullcyle.admin.catalog.infastructure.video.models.VideoEncoderCompleted;
+import com.fullcyle.admin.catalog.infastructure.video.models.VideoEncoderError;
+import com.fullcyle.admin.catalog.infastructure.video.models.VideoEncoderResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;

@@ -2,10 +2,12 @@ package com.fullcyle.admin.catalog.infastructure.api.controllers;
 
 import com.fullcyle.admin.catalog.application.video.create.CreateVideoCommand;
 import com.fullcyle.admin.catalog.application.video.create.CreateVideoUseCase;
+import com.fullcyle.admin.catalog.application.video.retrieve.get.GetVideoByIdUseCase;
 import com.fullcyle.admin.catalog.domain.video.Resource;
 import com.fullcyle.admin.catalog.infastructure.api.VideoAPI;
 import com.fullcyle.admin.catalog.infastructure.utils.HashingUtils;
 import com.fullcyle.admin.catalog.infastructure.video.models.CreateVideoRequest;
+import com.fullcyle.admin.catalog.infastructure.video.presenters.VideoApiPresenter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,9 +21,12 @@ import java.util.Set;
 public class VideoController implements VideoAPI {
 
     private final CreateVideoUseCase createVideoUseCase;
+    private final GetVideoByIdUseCase getVideoByIdUseCase;
 
-    public VideoController(final CreateVideoUseCase createVideoUseCase) {
+    public VideoController(final CreateVideoUseCase createVideoUseCase,
+                           final GetVideoByIdUseCase getVideoByIdUseCase) {
         this.createVideoUseCase = createVideoUseCase;
+        this.getVideoByIdUseCase = getVideoByIdUseCase;
     }
 
 
@@ -85,6 +90,12 @@ public class VideoController implements VideoAPI {
         final var output = this.createVideoUseCase.execute(aCommand);
 
         return ResponseEntity.created(URI.create("/videos/" + output.id())).body(output);
+    }
+
+
+    @Override
+    public ResponseEntity<?> getyId(final String id) {
+        return ResponseEntity.ok(VideoApiPresenter.present(this.getVideoByIdUseCase.execute(id)));
     }
 
     private Resource resourceOf(final MultipartFile part) {

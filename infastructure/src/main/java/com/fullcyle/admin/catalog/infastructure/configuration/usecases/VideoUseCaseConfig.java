@@ -4,6 +4,8 @@ import com.fullcyle.admin.catalog.application.video.create.CreateVideoUseCase;
 import com.fullcyle.admin.catalog.application.video.create.DefaultCreateVideoUseCase;
 import com.fullcyle.admin.catalog.application.video.media.update.DefaultUpdateMediaStatusUseCase;
 import com.fullcyle.admin.catalog.application.video.media.update.UpdateMediaStatusUseCase;
+import com.fullcyle.admin.catalog.application.video.retrieve.get.DefaultGetVideoByIdUseCase;
+import com.fullcyle.admin.catalog.application.video.retrieve.get.GetVideoByIdUseCase;
 import com.fullcyle.admin.catalog.domain.castmember.CastMemberGateway;
 import com.fullcyle.admin.catalog.domain.category.CategoryGateway;
 import com.fullcyle.admin.catalog.domain.genre.GenreGateway;
@@ -47,5 +49,11 @@ public class VideoUseCaseConfig {
                 this.videoGateway,
                 this.mediaResourceGateway
         );
+    }
+
+    //create a bean of GetVideoByIdUseCase
+    @Bean
+    public GetVideoByIdUseCase getVideoByIdUseCase() {
+        return new DefaultGetVideoByIdUseCase(this.videoGateway);
     }
 }

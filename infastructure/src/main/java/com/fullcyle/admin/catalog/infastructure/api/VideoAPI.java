@@ -119,4 +119,16 @@ public interface VideoAPI {
             @PathVariable("id") String id,
             @PathVariable("type") String type);
 
+    @GetMapping(value = "{id}/medias/{type}")
+    @Operation(summary = "Upload a Video media by it's type")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Media updated successfully"),
+            @ApiResponse(responseCode = "404", description = "Media was not found"),
+            @ApiResponse(responseCode = "500", description = "An internal server error was thrown"),
+    })
+    ResponseEntity<?> uploadMediaByType(
+            @PathVariable("id") String id,
+            @PathVariable("type") String type,
+            @RequestParam("media_file") MultipartFile media);
+
 }

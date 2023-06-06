@@ -1,5 +1,6 @@
 package com.fullcyle.admin.catalog.infastructure.video.presenters;
 
+import com.fullcyle.admin.catalog.application.video.media.upload.UploadMediaOuput;
 import com.fullcyle.admin.catalog.application.video.retrieve.get.GetVideoByIdOutput;
 import com.fullcyle.admin.catalog.application.video.retrieve.list.VideoListOutput;
 import com.fullcyle.admin.catalog.application.video.update.UpdateVideoOutput;
@@ -68,5 +69,9 @@ public interface VideoApiPresenter {
 
     static Pagination<VideoListResponse> present(final Pagination<VideoListOutput> page) {
         return page.map(VideoListResponse::from);
+    }
+
+    static UploadVideoResponse present(final UploadMediaOuput output) {
+        return new UploadVideoResponse(output.videoId(), output.mediaType());
     }
 }

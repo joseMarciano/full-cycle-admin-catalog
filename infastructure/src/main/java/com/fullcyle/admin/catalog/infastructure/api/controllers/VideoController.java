@@ -5,16 +5,22 @@ import com.fullcyle.admin.catalog.application.video.create.CreateVideoUseCase;
 import com.fullcyle.admin.catalog.application.video.delete.DeleteVideoUseCase;
 import com.fullcyle.admin.catalog.application.video.media.get.GetMediaCommand;
 import com.fullcyle.admin.catalog.application.video.media.get.GetMediaUseCase;
+import com.fullcyle.admin.catalog.application.video.media.upload.UploadMediaCommand;
+import com.fullcyle.admin.catalog.application.video.media.upload.UploadMediaUseCase;
 import com.fullcyle.admin.catalog.application.video.retrieve.get.GetVideoByIdUseCase;
 import com.fullcyle.admin.catalog.application.video.retrieve.list.ListVideoUseCase;
 import com.fullcyle.admin.catalog.application.video.update.UpdateVideoCommand;
 import com.fullcyle.admin.catalog.application.video.update.UpdateVideoUseCase;
 import com.fullcyle.admin.catalog.domain.castmember.CastMemberID;
 import com.fullcyle.admin.catalog.domain.category.CategoryID;
+import com.fullcyle.admin.catalog.domain.exceptions.NotificationException;
 import com.fullcyle.admin.catalog.domain.genre.GenreID;
 import com.fullcyle.admin.catalog.domain.pagination.Pagination;
 import com.fullcyle.admin.catalog.domain.pagination.VideoSearchQuery;
+import com.fullcyle.admin.catalog.domain.validation.Error;
 import com.fullcyle.admin.catalog.domain.video.Resource;
+import com.fullcyle.admin.catalog.domain.video.VideoMediaType;
+import com.fullcyle.admin.catalog.domain.video.VideoResource;
 import com.fullcyle.admin.catalog.infastructure.api.VideoAPI;
 import com.fullcyle.admin.catalog.infastructure.utils.HashingUtils;
 import com.fullcyle.admin.catalog.infastructure.video.models.CreateVideoRequest;
@@ -43,19 +49,22 @@ public class VideoController implements VideoAPI {
     private final DeleteVideoUseCase deleteVideoUseCase;
     private final ListVideoUseCase listVideoUseCase;
     private final GetMediaUseCase getMediaUseCase;
+    private final UploadMediaUseCase uploadMediaUseCase;
 
     public VideoController(final CreateVideoUseCase createVideoUseCase,
                            final GetVideoByIdUseCase getVideoByIdUseCase,
                            final UpdateVideoUseCase updateVideoUseCase,
                            final DeleteVideoUseCase deleteVideoUseCase,
                            final ListVideoUseCase listVideoUseCase,
-                           final GetMediaUseCase getMediaUseCase) {
+                           final GetMediaUseCase getMediaUseCase,
+                           final UploadMediaUseCase uploadMediaUseCase) {
         this.createVideoUseCase = createVideoUseCase;
         this.getVideoByIdUseCase = getVideoByIdUseCase;
         this.updateVideoUseCase = updateVideoUseCase;
         this.deleteVideoUseCase = deleteVideoUseCase;
         this.listVideoUseCase = listVideoUseCase;
         this.getMediaUseCase = getMediaUseCase;
+        this.uploadMediaUseCase = uploadMediaUseCase;
     }
 
 
@@ -127,22 +136,6 @@ public class VideoController implements VideoAPI {
         return ResponseEntity.ok(VideoApiPresenter.present(this.getVideoByIdUseCase.execute(id)));
     }
 
-    private Resource resourceOf(final MultipartFile part) {
-        if (Objects.isNull(part)) return null;
-
-        try {
-            final byte[] content = part.getBytes();
-            return Resource.with(
-                    HashingUtils.checksum(content),
-                    content,
-                    part.getContentType(),
-                    part.getOriginalFilename()
-            );
-        } catch (Throwable t) {
-            throw new RuntimeException(t);
-        }
-    }
-
     @Override
     public ResponseEntity<?> update(final UpdateVideoRequest payload) {
         final var aCommand = UpdateVideoCommand.with(
@@ -201,5 +194,36 @@ public class VideoController implements VideoAPI {
                 .contentLength(aMedia.content().length)
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=%s" .formatted(aMedia.name()))
                 .body(aMedia.content());
+    }
+
+    @Override
+    public ResponseEntity<?> uploadMediaByType(final String id,
+                                               final String type,
+                                               final MultipartFile media) {
+        final var aType = VideoMediaType.of(type)
+                .orElseThrow(() -> NotificationException.with(new Error("Invalid media type")));
+
+        final var aCommand = UploadMediaCommand.with(id, VideoResource.with(resourceOf(media), aType));
+        final var output = this.uploadMediaUseCase.execute(aCommand);
+
+        return ResponseEntity
+                .created(URI.create("/videos/%s/medias/%s" .formatted(id, type)))
+                .body(VideoApiPresenter.present(output));
+    }
+
+    private Resource resourceOf(final MultipartFile part) {
+        if (Objects.isNull(part)) return null;
+
+        try {
+            final byte[] content = part.getBytes();
+            return Resource.with(
+                    HashingUtils.checksum(content),
+                    content,
+                    part.getContentType(),
+                    part.getOriginalFilename()
+            );
+        } catch (Throwable t) {
+            throw new RuntimeException(t);
+        }
     }
 }

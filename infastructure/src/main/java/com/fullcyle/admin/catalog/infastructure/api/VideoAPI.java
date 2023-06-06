@@ -31,7 +31,7 @@ public interface VideoAPI {
             @RequestParam(required = false, defaultValue = "") String search,
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int perPage,
-            @RequestParam(required = false, defaultValue = "name") String sort,
+            @RequestParam(required = false, defaultValue = "title") String sort,
             @RequestParam(name = "dir", required = false, defaultValue = "asc") String direction,
             @RequestParam(name = "cast_members_ids", required = false, defaultValue = "") Set<String> castMembers,
             @RequestParam(name = "categories_ids", required = false, defaultValue = "") Set<String> categories,

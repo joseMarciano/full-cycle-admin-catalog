@@ -172,11 +172,12 @@ public class VideoController implements VideoAPI {
                                               final Set<String> castMembers,
                                               final Set<String> categories,
                                               final Set<String> genres) {
-        final var searchQuery = new VideoSearchQuery(page,
+        final var searchQuery = new VideoSearchQuery(
+                page,
                 perPage,
+                search,
                 sort,
                 direction,
-                search,
                 mapTo(castMembers, CastMemberID::from),
                 mapTo(categories, CategoryID::from),
                 mapTo(genres, GenreID::from));

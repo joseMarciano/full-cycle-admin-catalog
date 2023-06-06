@@ -3,6 +3,8 @@ package com.fullcyle.admin.catalog.infastructure.api.controllers;
 import com.fullcyle.admin.catalog.application.video.create.CreateVideoCommand;
 import com.fullcyle.admin.catalog.application.video.create.CreateVideoUseCase;
 import com.fullcyle.admin.catalog.application.video.delete.DeleteVideoUseCase;
+import com.fullcyle.admin.catalog.application.video.media.get.GetMediaCommand;
+import com.fullcyle.admin.catalog.application.video.media.get.GetMediaUseCase;
 import com.fullcyle.admin.catalog.application.video.retrieve.get.GetVideoByIdUseCase;
 import com.fullcyle.admin.catalog.application.video.retrieve.list.ListVideoUseCase;
 import com.fullcyle.admin.catalog.application.video.update.UpdateVideoCommand;
@@ -19,6 +21,8 @@ import com.fullcyle.admin.catalog.infastructure.video.models.CreateVideoRequest;
 import com.fullcyle.admin.catalog.infastructure.video.models.UpdateVideoRequest;
 import com.fullcyle.admin.catalog.infastructure.video.models.VideoListResponse;
 import com.fullcyle.admin.catalog.infastructure.video.presenters.VideoApiPresenter;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,21 +40,22 @@ public class VideoController implements VideoAPI {
     private final CreateVideoUseCase createVideoUseCase;
     private final GetVideoByIdUseCase getVideoByIdUseCase;
     private final UpdateVideoUseCase updateVideoUseCase;
-
     private final DeleteVideoUseCase deleteVideoUseCase;
-
     private final ListVideoUseCase listVideoUseCase;
+    private final GetMediaUseCase getMediaUseCase;
 
     public VideoController(final CreateVideoUseCase createVideoUseCase,
                            final GetVideoByIdUseCase getVideoByIdUseCase,
                            final UpdateVideoUseCase updateVideoUseCase,
                            final DeleteVideoUseCase deleteVideoUseCase,
-                           final ListVideoUseCase listVideoUseCase) {
+                           final ListVideoUseCase listVideoUseCase,
+                           final GetMediaUseCase getMediaUseCase) {
         this.createVideoUseCase = createVideoUseCase;
         this.getVideoByIdUseCase = getVideoByIdUseCase;
         this.updateVideoUseCase = updateVideoUseCase;
         this.deleteVideoUseCase = deleteVideoUseCase;
         this.listVideoUseCase = listVideoUseCase;
+        this.getMediaUseCase = getMediaUseCase;
     }
 
 
@@ -185,5 +190,16 @@ public class VideoController implements VideoAPI {
 
 
         return VideoApiPresenter.present(this.listVideoUseCase.execute(searchQuery));
+    }
+
+    @Override
+    public ResponseEntity<byte[]> getMediaByType(final String id, final String type) {
+        final var aMedia = this.getMediaUseCase.execute(GetMediaCommand.with(id, type));
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.valueOf(aMedia.contentType()))
+                .contentLength(aMedia.content().length)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=%s" .formatted(aMedia.name()))
+                .body(aMedia.content());
     }
 }

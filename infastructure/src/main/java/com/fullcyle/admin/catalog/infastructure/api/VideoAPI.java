@@ -119,7 +119,7 @@ public interface VideoAPI {
             @PathVariable("id") String id,
             @PathVariable("type") String type);
 
-    @GetMapping(value = "{id}/medias/{type}")
+    @PutMapping(value = "{id}/medias/{type}")
     @Operation(summary = "Upload a Video media by it's type")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Media updated successfully"),

@@ -2,10 +2,20 @@ package com.fullcyle.admin.catalog.infastructure.configuration.usecases;
 
 import com.fullcyle.admin.catalog.application.video.create.CreateVideoUseCase;
 import com.fullcyle.admin.catalog.application.video.create.DefaultCreateVideoUseCase;
+import com.fullcyle.admin.catalog.application.video.delete.DefaultDeleteVideoUseCase;
+import com.fullcyle.admin.catalog.application.video.delete.DeleteVideoUseCase;
+import com.fullcyle.admin.catalog.application.video.media.get.DefaultGetMediaUseCase;
+import com.fullcyle.admin.catalog.application.video.media.get.GetMediaUseCase;
 import com.fullcyle.admin.catalog.application.video.media.update.DefaultUpdateMediaStatusUseCase;
 import com.fullcyle.admin.catalog.application.video.media.update.UpdateMediaStatusUseCase;
+import com.fullcyle.admin.catalog.application.video.media.upload.DefaultUploadMediaUseCase;
+import com.fullcyle.admin.catalog.application.video.media.upload.UploadMediaUseCase;
 import com.fullcyle.admin.catalog.application.video.retrieve.get.DefaultGetVideoByIdUseCase;
 import com.fullcyle.admin.catalog.application.video.retrieve.get.GetVideoByIdUseCase;
+import com.fullcyle.admin.catalog.application.video.retrieve.list.DefaultListVideosUseCase;
+import com.fullcyle.admin.catalog.application.video.retrieve.list.ListVideoUseCase;
+import com.fullcyle.admin.catalog.application.video.update.DefaultUpdateVideoUseCase;
+import com.fullcyle.admin.catalog.application.video.update.UpdateVideoUseCase;
 import com.fullcyle.admin.catalog.domain.castmember.CastMemberGateway;
 import com.fullcyle.admin.catalog.domain.category.CategoryGateway;
 import com.fullcyle.admin.catalog.domain.genre.GenreGateway;
@@ -51,9 +61,34 @@ public class VideoUseCaseConfig {
         );
     }
 
-    //create a bean of GetVideoByIdUseCase
     @Bean
     public GetVideoByIdUseCase getVideoByIdUseCase() {
         return new DefaultGetVideoByIdUseCase(this.videoGateway);
     }
+
+    @Bean
+    public UpdateVideoUseCase updateVideoUseCase() {
+        return new DefaultUpdateVideoUseCase(categoryGateway, genreGateway, castMemberGateway, videoGateway, mediaResourceGateway);
+    }
+
+    @Bean
+    public DeleteVideoUseCase deleteVideoUseCase() {
+        return new DefaultDeleteVideoUseCase(videoGateway, mediaResourceGateway);
+    }
+
+    @Bean
+    public ListVideoUseCase listVideoUseCase() {
+        return new DefaultListVideosUseCase(videoGateway);
+    }
+
+    @Bean
+    public GetMediaUseCase getMediaUseCase() {
+        return new DefaultGetMediaUseCase(mediaResourceGateway);
+    }
+
+    @Bean
+    public UploadMediaUseCase uploadMediaUseCase() {
+        return new DefaultUploadMediaUseCase(videoGateway, mediaResourceGateway);
+    }
+
 }

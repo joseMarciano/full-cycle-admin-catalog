@@ -2,6 +2,7 @@ package com.fullcyle.admin.catalog.infastructure.api.controllers;
 
 import com.fullcyle.admin.catalog.application.video.create.CreateVideoCommand;
 import com.fullcyle.admin.catalog.application.video.create.CreateVideoUseCase;
+import com.fullcyle.admin.catalog.application.video.delete.DeleteVideoUseCase;
 import com.fullcyle.admin.catalog.application.video.retrieve.get.GetVideoByIdUseCase;
 import com.fullcyle.admin.catalog.application.video.update.UpdateVideoCommand;
 import com.fullcyle.admin.catalog.application.video.update.UpdateVideoUseCase;
@@ -27,12 +28,16 @@ public class VideoController implements VideoAPI {
     private final GetVideoByIdUseCase getVideoByIdUseCase;
     private final UpdateVideoUseCase updateVideoUseCase;
 
+    private final DeleteVideoUseCase deleteVideoUseCase;
+
     public VideoController(final CreateVideoUseCase createVideoUseCase,
                            final GetVideoByIdUseCase getVideoByIdUseCase,
-                           final UpdateVideoUseCase updateVideoUseCase) {
+                           final UpdateVideoUseCase updateVideoUseCase,
+                           final DeleteVideoUseCase deleteVideoUseCase) {
         this.createVideoUseCase = createVideoUseCase;
         this.getVideoByIdUseCase = getVideoByIdUseCase;
         this.updateVideoUseCase = updateVideoUseCase;
+        this.deleteVideoUseCase = deleteVideoUseCase;
     }
 
 
@@ -140,5 +145,10 @@ public class VideoController implements VideoAPI {
         final var output = this.updateVideoUseCase.execute(aCommand);
 
         return ResponseEntity.ok(VideoApiPresenter.present(output));
+    }
+
+    @Override
+    public void deleteById(final String id) {
+        this.deleteVideoUseCase.execute(id);
     }
 }

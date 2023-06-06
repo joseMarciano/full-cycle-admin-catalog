@@ -64,6 +64,32 @@ public record UpdateVideoCommand(
 
     }
 
+    public static UpdateVideoCommand with(final String id,
+                                          final String title,
+                                          final String description,
+                                          final Year launchedYear,
+                                          final Double duration,
+                                          final Boolean opened,
+                                          final Boolean published,
+                                          final String rating,
+                                          final Set<String> categories,
+                                          final Set<String> genres,
+                                          final Set<String> castMembers) {
+        return with(
+                id,
+                title,
+                description,
+                launchedYear,
+                duration,
+                opened,
+                published,
+                rating,
+                categories,
+                genres,
+                castMembers
+        );
+    }
+
     public Optional<Resource> getVideo() {
         return Optional.ofNullable(video);
     }

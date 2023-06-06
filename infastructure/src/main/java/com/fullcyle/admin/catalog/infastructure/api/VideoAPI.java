@@ -1,6 +1,7 @@
 package com.fullcyle.admin.catalog.infastructure.api;
 
 import com.fullcyle.admin.catalog.infastructure.video.models.CreateVideoRequest;
+import com.fullcyle.admin.catalog.infastructure.video.models.UpdateVideoRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -53,6 +54,19 @@ public interface VideoAPI {
             @ApiResponse(responseCode = "500", description = "An internal server error was thrown"),
     })
     ResponseEntity<?> createPartial(@RequestBody CreateVideoRequest payload);
+
+    @PutMapping(
+            value = "{id}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Update a video by it's identifier")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Updated successfully"),
+            @ApiResponse(responseCode = "404", description = "Video was not found"),
+            @ApiResponse(responseCode = "422", description = "A validation error was thrown"),
+            @ApiResponse(responseCode = "500", description = "An internal server error was thrown"),
+    })
+    ResponseEntity<?> update(@RequestBody UpdateVideoRequest payload);
 
     @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Get a Video by it's identifier")

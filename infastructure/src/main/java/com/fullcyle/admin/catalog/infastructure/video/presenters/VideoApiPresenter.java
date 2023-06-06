@@ -1,10 +1,12 @@
 package com.fullcyle.admin.catalog.infastructure.video.presenters;
 
 import com.fullcyle.admin.catalog.application.video.retrieve.get.GetVideoByIdOutput;
+import com.fullcyle.admin.catalog.application.video.update.UpdateVideoOutput;
 import com.fullcyle.admin.catalog.domain.video.AudioVideoMedia;
 import com.fullcyle.admin.catalog.domain.video.ImageMedia;
 import com.fullcyle.admin.catalog.infastructure.video.models.AudioVideoMediaResponse;
 import com.fullcyle.admin.catalog.infastructure.video.models.ImageMediaResponse;
+import com.fullcyle.admin.catalog.infastructure.video.models.UpdateVideoResponse;
 import com.fullcyle.admin.catalog.infastructure.video.models.VideoResponse;
 
 import java.util.Objects;
@@ -61,4 +63,7 @@ public interface VideoApiPresenter {
     }
 
 
+    static UpdateVideoResponse present(final UpdateVideoOutput output) {
+        return new UpdateVideoResponse(output.id());
+    }
 }

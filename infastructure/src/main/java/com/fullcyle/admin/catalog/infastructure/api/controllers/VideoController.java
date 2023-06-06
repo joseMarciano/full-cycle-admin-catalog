@@ -3,10 +3,13 @@ package com.fullcyle.admin.catalog.infastructure.api.controllers;
 import com.fullcyle.admin.catalog.application.video.create.CreateVideoCommand;
 import com.fullcyle.admin.catalog.application.video.create.CreateVideoUseCase;
 import com.fullcyle.admin.catalog.application.video.retrieve.get.GetVideoByIdUseCase;
+import com.fullcyle.admin.catalog.application.video.update.UpdateVideoCommand;
+import com.fullcyle.admin.catalog.application.video.update.UpdateVideoUseCase;
 import com.fullcyle.admin.catalog.domain.video.Resource;
 import com.fullcyle.admin.catalog.infastructure.api.VideoAPI;
 import com.fullcyle.admin.catalog.infastructure.utils.HashingUtils;
 import com.fullcyle.admin.catalog.infastructure.video.models.CreateVideoRequest;
+import com.fullcyle.admin.catalog.infastructure.video.models.UpdateVideoRequest;
 import com.fullcyle.admin.catalog.infastructure.video.presenters.VideoApiPresenter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,11 +25,14 @@ public class VideoController implements VideoAPI {
 
     private final CreateVideoUseCase createVideoUseCase;
     private final GetVideoByIdUseCase getVideoByIdUseCase;
+    private final UpdateVideoUseCase updateVideoUseCase;
 
     public VideoController(final CreateVideoUseCase createVideoUseCase,
-                           final GetVideoByIdUseCase getVideoByIdUseCase) {
+                           final GetVideoByIdUseCase getVideoByIdUseCase,
+                           final UpdateVideoUseCase updateVideoUseCase) {
         this.createVideoUseCase = createVideoUseCase;
         this.getVideoByIdUseCase = getVideoByIdUseCase;
+        this.updateVideoUseCase = updateVideoUseCase;
     }
 
 
@@ -112,5 +118,27 @@ public class VideoController implements VideoAPI {
         } catch (Throwable t) {
             throw new RuntimeException(t);
         }
+    }
+
+    @Override
+    public ResponseEntity<?> update(final UpdateVideoRequest payload) {
+        final var aCommand = UpdateVideoCommand.with(
+                payload.id(),
+                payload.title(),
+                payload.description(),
+                Year.of(payload.yearLauched()),
+                payload.duration(),
+                payload.opened(),
+                payload.published(),
+                payload.rating(),
+                payload.categories(),
+                payload.genres(),
+                payload.castMembers()
+        );
+
+
+        final var output = this.updateVideoUseCase.execute(aCommand);
+
+        return ResponseEntity.ok(VideoApiPresenter.present(output));
     }
 }

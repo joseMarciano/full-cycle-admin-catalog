@@ -1,0 +1,24 @@
+name: CI Pipeline
+
+on:
+  push:
+  #    Enable manual trigger through Github Actions interface
+  workflow_dispatch:
+
+
+jobs:
+  tests:
+    name: Tests runner
+    runs-on: ubuntu-latest
+    steps:
+      #      1. Checkout to branch
+      - uses: actions/checkout@v3
+      #      2. Configure JDK of machine
+      - name: Set up JDK@17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+
+      - name: Run application tests
+        run: ./gradlew test

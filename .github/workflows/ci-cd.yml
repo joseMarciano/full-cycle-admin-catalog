@@ -1,0 +1,76 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - 'main'
+      - 'master'
+      - 'develop'
+      - 'features/**'
+      - 'hotfix/**'
+      - 'bugfix/**'
+  # Enable manual trigger through Github Actions interface
+  workflow_dispatch:
+
+env:
+  IMAGE_NAME: marcianojosepaulo/full-cycle-admin-catalog
+
+jobs:
+  #  TODO: try to use ci.yml in this step
+  tests:
+    name: Tests runner
+    runs-on: ubuntu-latest
+    steps:
+      #      1. Checkout to branch
+      - uses: actions/checkout@v3
+      #      2. Configure JDK of machine
+      - name: Set up JDK@17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+
+      - name: Run application tests
+        run: ./gradlew test
+
+  build:
+    name: Building application
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+      #     1. Checkout to branch
+      - uses: actions/checkout@v3
+      #     2. Configure JDK of machine
+      - name: Set up JDK@17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+      #     3. Validate ./gradlew
+      - name: Validate ./gradlew
+        uses: gradle/wrapper-validation-action@v1
+      #     4. Building application
+      - name: Building application
+        run: ./gradlew bootJar
+
+      - name: Set BUILD_TAG
+        run: |
+          echo BUILD_TAG=$(echo ${{github.head_ref || github.ref_name}} | sed "s,/,_,g")-${{github.run_number}} >> $GITHUB_ENV
+      - name: Printing BUILD_TAG
+        run: |
+          echo "BUILD_TAG ---> ${{env.BUILD_TAG}}"
+
+
+      - name: Log in to Dockerhub
+        uses: docker/login-action@v2
+        with:
+          username: ${{secrets.DOCKER_HUB_USER}}
+          password: ${{secrets.DOCKER_HUB_PWD}}
+
+      - name: Build & Image's deploy
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          build-args: VERSION=${{env.BUILD_TAG}}
+          tags: ${{env.IMAGE_NAME}}:${{env.BUILD_TAG}}

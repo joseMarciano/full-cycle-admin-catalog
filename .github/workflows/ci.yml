@@ -2,7 +2,11 @@ name: CI Pipeline
 
 on:
   push:
-  #    Enable manual trigger through Github Actions interface
+    branches:
+      - 'features/**'
+      - 'hotfix/**'
+      - 'bugfix/**'
+  #      Enable manual trigger through Github Actions interface
   workflow_dispatch:
 
 

@@ -1,3 +1,7 @@
+keycloak:
+  host: ${KEYCLOAK_HOST:http://localhost:8443}
+  realm: ${KEYCLOAK_REALM:fc3-codeflix}
+
 mysql:
   url: ${DATABASE_MYSQL_URL:localhost:3306}
   username: ${DATABASE_MYSQL_USERNAME:root}

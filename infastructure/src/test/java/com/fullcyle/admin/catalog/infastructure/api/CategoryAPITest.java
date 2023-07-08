@@ -1,6 +1,7 @@
 package com.fullcyle.admin.catalog.infastructure.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fullcyle.admin.catalog.ApiTest;
 import com.fullcyle.admin.catalog.ControllerTest;
 import com.fullcyle.admin.catalog.application.category.create.CreateCategoryOutput;
 import com.fullcyle.admin.catalog.application.category.create.CreateCategoryUseCase;
@@ -35,7 +36,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static java.lang.String.valueOf;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -77,6 +77,7 @@ public class CategoryAPITest {
 
         //when
         final var request = MockMvcRequestBuilders.post("/categories")
+                .with(ApiTest.CATEGORIES_JWT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(this.mapper.writeValueAsString(aCommand));
@@ -115,6 +116,7 @@ public class CategoryAPITest {
 
         // when
         final var request = MockMvcRequestBuilders.post("/categories")
+                .with(ApiTest.CATEGORIES_JWT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(this.mapper.writeValueAsString(aCommand));
@@ -154,6 +156,7 @@ public class CategoryAPITest {
 
         //when
         final var request = MockMvcRequestBuilders.post("/categories")
+                .with(ApiTest.CATEGORIES_JWT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(this.mapper.writeValueAsString(aCommand));
@@ -198,6 +201,7 @@ public class CategoryAPITest {
 
         //when
         final var request = MockMvcRequestBuilders.get("/categories/{id}", expectedId)
+                .with(ApiTest.CATEGORIES_JWT)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -232,6 +236,7 @@ public class CategoryAPITest {
 
         //when
         final var request = MockMvcRequestBuilders.get("/categories/{id}", expectedId.getValue())
+                .with(ApiTest.CATEGORIES_JWT)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -266,6 +271,7 @@ public class CategoryAPITest {
 
         //when
         final var request = MockMvcRequestBuilders.put("/categories/{id}", expectedId)
+                .with(ApiTest.CATEGORIES_JWT)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(aCommand));
@@ -301,6 +307,7 @@ public class CategoryAPITest {
 
         //when
         final var request = MockMvcRequestBuilders.put("/categories/{id}", expectedId)
+                .with(ApiTest.CATEGORIES_JWT)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(aCommand));
@@ -338,6 +345,7 @@ public class CategoryAPITest {
 
         //when
         final var request = MockMvcRequestBuilders.put("/categories/{id}", expectedId)
+                .with(ApiTest.CATEGORIES_JWT)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(aCommand));
@@ -367,6 +375,7 @@ public class CategoryAPITest {
 
         //when
         final var request = MockMvcRequestBuilders.delete("/categories/{id}", expectedId)
+                .with(ApiTest.CATEGORIES_JWT)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -398,6 +407,7 @@ public class CategoryAPITest {
 
         //when
         final var request = MockMvcRequestBuilders.get("/categories")
+                .with(ApiTest.CATEGORIES_JWT)
                 .queryParam("page", valueOf(expectedPage))
                 .queryParam("perPage", valueOf(expectedPerPage))
                 .queryParam("sort", expectedSort)

@@ -1,6 +1,7 @@
 package com.fullcyle.admin.catalog.infastructure.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fullcyle.admin.catalog.ApiTest;
 import com.fullcyle.admin.catalog.ControllerTest;
 import com.fullcyle.admin.catalog.application.castmember.create.CreateCastMemberOutput;
 import com.fullcyle.admin.catalog.application.castmember.create.DefaultCreateCastMemberUseCase;
@@ -76,6 +77,8 @@ public class CastMemberAPITest {
 
         //when
         final var request = MockMvcRequestBuilders.post("/cast_members")
+                .with(ApiTest.CAST_MEMBERS_JWT)
+                .with(ApiTest.CAST_MEMBERS_JWT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(this.mapper.writeValueAsString(aCommand));
@@ -113,6 +116,7 @@ public class CastMemberAPITest {
 
         //when
         final var request = MockMvcRequestBuilders.post("/cast_members")
+                .with(ApiTest.CAST_MEMBERS_JWT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(this.mapper.writeValueAsString(aCommand));
@@ -151,6 +155,7 @@ public class CastMemberAPITest {
 
         // when
         final var aRequest = MockMvcRequestBuilders.get("/cast_members/{id}", expectedId)
+                .with(ApiTest.CAST_MEMBERS_JWT)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -183,6 +188,7 @@ public class CastMemberAPITest {
 
         // when
         final var aRequest = MockMvcRequestBuilders.get("/cast_members/{id}", expectedId.getValue())
+                .with(ApiTest.CAST_MEMBERS_JWT)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -215,6 +221,7 @@ public class CastMemberAPITest {
 
         // when
         final var aRequest = MockMvcRequestBuilders.put("/cast_members/{id}", expectedId)
+                .with(ApiTest.CAST_MEMBERS_JWT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.mapper.writeValueAsString(aCommand));
 
@@ -251,6 +258,7 @@ public class CastMemberAPITest {
 
         // when
         final var aRequest = MockMvcRequestBuilders.put("/cast_members/{id}", expectedId)
+                .with(ApiTest.CAST_MEMBERS_JWT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.mapper.writeValueAsString(aCommand));
 
@@ -282,6 +290,7 @@ public class CastMemberAPITest {
                 .when(deleteCastMemberUseCase).execute(expectedId);
 
         final var aRequest = MockMvcRequestBuilders.delete("/cast_members/{id}", expectedId)
+                .with(ApiTest.CAST_MEMBERS_JWT)
                 .accept(MediaType.APPLICATION_JSON);
 
         final var aResponse = this.mvc.perform(aRequest);
@@ -310,6 +319,7 @@ public class CastMemberAPITest {
                 .thenReturn(new Pagination<>(expectedPage, expectedPerPage, expectedTotal, expectedItems));
         // when
         final var aRequest = MockMvcRequestBuilders.get("/cast_members/")
+                .with(ApiTest.CAST_MEMBERS_JWT)
                 .queryParam("page", String.valueOf(expectedPage))
                 .queryParam("perPage", String.valueOf(expectedPerPage))
                 .queryParam("sort", expectedSort)

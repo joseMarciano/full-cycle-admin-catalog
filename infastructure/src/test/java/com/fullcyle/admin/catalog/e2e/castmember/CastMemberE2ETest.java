@@ -1,5 +1,6 @@
 package com.fullcyle.admin.catalog.e2e.castmember;
 
+import com.fullcyle.admin.catalog.ApiTest;
 import com.fullcyle.admin.catalog.E2ETest;
 import com.fullcyle.admin.catalog.domain.castmember.CastMemberID;
 import com.fullcyle.admin.catalog.e2e.MockDsl;
@@ -195,6 +196,7 @@ public class CastMemberE2ETest implements MockDsl {
 
         final var aRequest =
                 MockMvcRequestBuilders.get("/cast_members/{id}", "123")
+                        .with(ApiTest.CAST_MEMBERS_JWT)
                         .contentType(MediaType.APPLICATION_JSON);
 
         this.mvc.perform(aRequest)

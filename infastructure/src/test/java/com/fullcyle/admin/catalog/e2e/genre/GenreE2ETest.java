@@ -1,6 +1,7 @@
 package com.fullcyle.admin.catalog.e2e.genre;
 
 
+import com.fullcyle.admin.catalog.ApiTest;
 import com.fullcyle.admin.catalog.E2ETest;
 import com.fullcyle.admin.catalog.domain.category.CategoryID;
 import com.fullcyle.admin.catalog.domain.genre.GenreID;
@@ -216,6 +217,7 @@ public class GenreE2ETest implements MockDsl {
 
         final var aRequest =
                 MockMvcRequestBuilders.get("/genres/{id}", "123")
+                        .with(ApiTest.GENRES_JWT)
                         .contentType(MediaType.APPLICATION_JSON);
 
         this.mvc.perform(aRequest)

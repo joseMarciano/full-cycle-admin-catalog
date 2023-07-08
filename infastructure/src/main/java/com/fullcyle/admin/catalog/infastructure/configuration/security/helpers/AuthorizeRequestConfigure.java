@@ -15,10 +15,11 @@ public class AuthorizeRequestConfigure implements Customizer<ExpressionUrlAuthor
     @Override
     public void customize(final ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry authorize) {
         authorize
-                .antMatchers("/cast_members*").hasAnyRole(ROLE_ADMIN, CATALOGO_CAST_MEMBERS)
-                .antMatchers("/categories*").hasAnyRole(ROLE_ADMIN, CATALOGO_CATEGORIES)
-                .antMatchers("/genres*").hasAnyRole(ROLE_ADMIN, CATALOGO_GENRES)
-                .antMatchers("/videos*").hasAnyRole(ROLE_ADMIN, CATALOGO_VIDEOS)
-                .anyRequest().hasRole(ROLE_ADMIN);
+                .antMatchers("/cast_members*", "/cast_members/*").hasAnyRole(ROLE_ADMIN, CATALOGO_CAST_MEMBERS)
+                .antMatchers("/categories*", "/categories/*").hasAnyRole(ROLE_ADMIN, CATALOGO_CATEGORIES)
+                .antMatchers("/genres*", "/genres/*").hasAnyRole(ROLE_ADMIN, CATALOGO_GENRES)
+                .antMatchers("/videos*", "/videos/*").hasAnyRole(ROLE_ADMIN, CATALOGO_VIDEOS)
+                .anyRequest()
+                .hasRole(ROLE_ADMIN);
     }
 }

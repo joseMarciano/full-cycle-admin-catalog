@@ -1,5 +1,6 @@
 package com.fullcyle.admin.catalog.e2e.category;
 
+import com.fullcyle.admin.catalog.ApiTest;
 import com.fullcyle.admin.catalog.E2ETest;
 import com.fullcyle.admin.catalog.domain.category.CategoryID;
 import com.fullcyle.admin.catalog.e2e.MockDsl;
@@ -177,6 +178,7 @@ public class CategoryE2ETest implements MockDsl {
 
         final var aRequest =
                 MockMvcRequestBuilders.get("/categories/{id}", "123")
+                        .with(ApiTest.CATEGORIES_JWT)
                         .contentType(MediaType.APPLICATION_JSON);
 
         final var json = this.mvc.perform(aRequest)

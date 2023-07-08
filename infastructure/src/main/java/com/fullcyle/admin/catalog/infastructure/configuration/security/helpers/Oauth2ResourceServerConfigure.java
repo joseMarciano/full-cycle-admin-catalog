@@ -23,6 +23,7 @@ public class Oauth2ResourceServerConfigure implements Customizer<OAuth2ResourceS
     private static final String ROLES = "roles";
     private static final String RESOURCE_ACCESS = "resource_access";
     private static final String SEPARATOR = "_";
+    private static final String ROLE = "ROLE_";
 
     @Override
     public void customize(final OAuth2ResourceServerConfigurer<HttpSecurity> httpSecurityOAuth2ResourceServerConfigurer) {
@@ -60,6 +61,7 @@ public class Oauth2ResourceServerConfigure implements Customizer<OAuth2ResourceS
 
             return Stream.concat(realmRoles, resourceRoles)
                     .map(String::toUpperCase)
+                    .map(str -> ROLE + str)
                     .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toSet());
         }
